@@ -6,7 +6,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext, gettext_lazy as _
 
-from accounts.models import User
+from accounts.models import Role, User
 
 
 class UserCreationForm(forms.ModelForm):
@@ -63,7 +63,7 @@ class UserAdmin(BaseUserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     list_display = ('phone', 'email', 'first_name', 'last_name', 'is_staff')
-    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups','role')
     search_fields = ('phone', 'first_name', 'last_name', 'email')
     ordering = ('phone',)
     filter_horizontal = ('groups', 'user_permissions',)
@@ -71,7 +71,7 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields': ('phone','email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name',)}),
         (_('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions','role'),
         }),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
@@ -86,6 +86,7 @@ class UserAdmin(BaseUserAdmin):
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
 admin.site.register(Permission)
+admin.site.register(Role)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 # admin.site.unregister(Group)

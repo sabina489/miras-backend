@@ -68,12 +68,51 @@ class UserManager(BaseUserManager):
             )
         return self.none()
 
+class Role(models.Model):
+    '''
+    The Role entries are managed by the system,
+    automatically created via a Django data migration.
+    '''
+    STUDENT = 1
+    TEACHER = 2
+    STAFF = 3
+    ADMIN = 4
+    ROLE_CHOICES = (
+        (STUDENT, 'student'),
+        (TEACHER, 'teacher'),
+        (STAFF, 'staff'),
+        (ADMIN, 'admin'),
+    )
+
+    id = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True)
+
+    def __str__(self):
+      return self.get_id_display()
+
+
 class User(AbstractUser):
     username = None
     phone_regex = RegexValidator(
         regex=r'^9\d{9}', message="Enter a valid phonenumber 9XXXXXXXXX")
     phone = models.CharField(validators=[phone_regex], max_length=10, unique=True)
+    role = models.ManyToManyField(Role, blank=True)
 
     USERNAME_FIELD = "phone"
     
     objects = UserManager()
+
+    @property
+    def is_student(self):
+        return self.role.id == Role.STUDENT
+
+    @property
+    def is_teacher(self):
+        return self.role.id == Role.TEACHER
+
+    @property
+    def is_manager(self):
+        return self.role.id == Role.STAFF
+
+    @property
+    def is_admin(self):
+        return self.role.id == Role.ADMIN

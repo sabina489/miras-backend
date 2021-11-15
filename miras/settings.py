@@ -158,3 +158,5 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'Access-Control-Allow-Origin',
     'Access-Control-Allow-Headers',
 ]
+
+APPEND_SLASH=False

@@ -1,6 +1,7 @@
-from django.db.models import fields
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+
+from accounts.models import Role
 
 User = get_user_model()
 
@@ -14,6 +15,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
+        user.role.add(Role.objects.get(id=1))
+        user.save()
         return user
 
 
@@ -28,4 +31,5 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'phone')
+        fields = ('id','first_name', 'last_name', 'phone')
+        extra_kwargs = {'id': {'read_only': True}}
