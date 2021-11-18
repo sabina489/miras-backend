@@ -11,6 +11,9 @@ class CourseCategory(models.Model):
     """Model definition for CourseCategory."""
 
     name = models.CharField(_("name"), max_length=100)
+    parent = models.ForeignKey(
+        "self", null=True, blank=True, related_name="children", on_delete=models.CASCADE
+    )
 
     class Meta:
         """Meta definition for CourseCategory."""
@@ -20,7 +23,7 @@ class CourseCategory(models.Model):
 
     def __str__(self):
         """Unicode representation of CourseCategory."""
-        pass
+        return self.name
 
 
 class CourseStatus:
@@ -57,4 +60,4 @@ class Course(models.Model):
 
     def __str__(self):
         """Unicode representation of Course."""
-        pass
+        return self.name
