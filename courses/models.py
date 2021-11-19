@@ -58,7 +58,8 @@ class Course(models.Model):
     password = models.CharField(_("password"), max_length=128, help_text=_(
         "Use'[algo]$[salt]$[hexdigest]' or use the < a href=\"password/\">change password form</a>."))
     status = models.CharField(
-        _("status"), max_length=32, default=CourseStatus.UPCOMING)
+        _("status"), max_length=32, choices=CourseStatus.CHOICES,
+        default=CourseStatus.UPCOMING)
 
     class Meta:
         """Meta definition for Course."""
