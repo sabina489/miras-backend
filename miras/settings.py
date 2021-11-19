@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import environ
-from corsheaders.defaults import default_headers, default_methods
+from corsheaders.defaults import default_methods, default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'corsheaders',
-    
     'accounts',
 ]
 
@@ -159,4 +158,4 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'Access-Control-Allow-Headers',
 ]
 
-APPEND_SLASH=False
+APPEND_SLASH = False
