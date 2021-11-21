@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.db.models.enums import Choices
+from django.utils.translation import gettext_lazy as _
+
 # Create your models here.
 
 
@@ -50,8 +51,10 @@ class Course(models.Model):
     """Model definition for Course."""
 
     name = models.CharField(_("name"), max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(CourseCategory, verbose_name=_(
-        "category"), related_name="courses", on_delete=models.CASCADE)
+        "category"), related_name="courses", on_delete=models.CASCADE,
+        blank=True, null=True)
     instructor = models.ForeignKey(User, verbose_name=_(
         "instructor"), related_name="courses", on_delete=models.CASCADE)
     link = models.URLField(_("link"), max_length=200)
@@ -60,12 +63,15 @@ class Course(models.Model):
     status = models.CharField(
         _("status"), max_length=32, choices=CourseStatus.CHOICES,
         default=CourseStatus.UPCOMING)
+    detail = models.TextField(_("detail"), null=True, blank=True)
+    video = models.URLField(_("video"), max_length=200, null=True, blank=True)
 
     class Meta:
         """Meta definition for Course."""
 
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
+        ordering = ['created_at']
 
     def __str__(self):
         """Unicode representation of Course."""
