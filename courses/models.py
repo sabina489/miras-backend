@@ -64,7 +64,10 @@ class Course(models.Model):
         _("status"), max_length=32, choices=CourseStatus.CHOICES,
         default=CourseStatus.UPCOMING)
     detail = models.TextField(_("detail"), null=True, blank=True)
+    detail1 = models.TextField(_("detail"), null=True, blank=True)
     video = models.URLField(_("video"), max_length=200, null=True, blank=True)
+    price = models.FloatField(_("price"), default=0.0)
+    count = models.IntegerField(_("count"), default=0)
 
     class Meta:
         """Meta definition for Course."""
