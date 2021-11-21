@@ -116,3 +116,17 @@ class User(AbstractUser):
     @property
     def is_admin(self):
         return self.role.id == Role.ADMIN
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date_of_birth = models.DateField(null=True, blank=True)
+    college_name = models.CharField(max_length=100, null=True, blank=True)
+    faculty = models.CharField(max_length=100, null=True, blank=True)
+    admission_year = models.DateField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['user']
+
+    def __str__(self):
+        return self.user.phone
