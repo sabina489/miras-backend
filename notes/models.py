@@ -32,6 +32,10 @@ class Note(models.Model):
     class Meta:
         """Meta definition for Note"""
 
+        verbose_name = 'Note'
+        verbose_name_plural = 'Notes'
+        ordering = ['-created_at']
+
     def __str__(self):
         """Unicode representation of Note"""
         return self.title
