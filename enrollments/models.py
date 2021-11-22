@@ -25,7 +25,8 @@ class Enrollment(models.Model):
         "student"), related_name="enrollments", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
-        _("status"), max_length=32, choices=EnrollmentStatus)
+        _("status"), max_length=32, choices=EnrollmentStatus, 
+        default=EnrollmentStatus.PENDING)
     # TODO: Add one to one field to payment
 
     class Meta:
