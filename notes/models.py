@@ -24,10 +24,11 @@ class Note(models.Model):
     body = models.TextField()
     type = models.CharField(_("Type"), max_length=10, choices=NoteType.CHOICES, default=NoteType.TEXT)
     file = models.FileField(upload_to='notes/files/', blank=True, null=True)
+    free = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notes')
-    # Erollment or course linking to the note
+    # Erollment or course or part linking to the note
 
     class Meta:
         """Meta definition for Note"""
