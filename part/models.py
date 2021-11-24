@@ -15,7 +15,7 @@ class Part(models.Model):
     course = models.ForeignKey(Course, verbose_name=_("course"),
                                related_name="parts", on_delete=models.CASCADE)
     enrolls = models.ManyToManyField(Enrollment, verbose_name=_(
-        "enrolls"), related_name="parts")
+        "enrolls"), related_name="parts", blank=True)
     detail = models.TextField(_("detail"), null=True, blank=True)
     price = models.FloatField(_("price"), default=0.0)
     # TODO: Add field for count
