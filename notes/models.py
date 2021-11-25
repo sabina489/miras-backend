@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
+from enrollments.models import Enrollment
+from courses.models import Course
 
 User = get_user_model()
 
@@ -28,6 +30,9 @@ class Note(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notes')
+
+    enrolls = models.ManyToManyField(Enrollment, verbose_name=_("enrolls"), related_name="notes", blank=True)
+    courses = models.ForeignKey(Course,verbose_name=_("courses"), on_delete=models.CASCADE, related_name='notes')
     # Erollment or course or part linking to the note
 
     class Meta:
