@@ -12,9 +12,9 @@ class EnrollmentStatus:
     PENDING = "pending"  # enrollment is awaiting admin verification
     CANCELLED = "cancelled"  # enrollment is abruply expired
     CHOICES = [
-        (ACTIVE, "active")
-        (INACTIVE, "inactive")
-        (PENDING, "pending")
+        (ACTIVE, "active"),
+        (INACTIVE, "inactive"),
+        (PENDING, "pending"),
         (CANCELLED, "cancelled")
     ]
 
@@ -25,7 +25,7 @@ class Enrollment(models.Model):
         "student"), related_name="enrollments", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
-        _("status"), max_length=32, choices=EnrollmentStatus, 
+        _("status"), max_length=32, choices=EnrollmentStatus.CHOICES,
         default=EnrollmentStatus.PENDING)
     # TODO: Add one to one field to payment
 
