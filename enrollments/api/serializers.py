@@ -4,18 +4,6 @@ from enrollments.models import Enrollment
 
 from part.models import Part
 
-
-class EnrollmentType():
-    PART = "part"
-    NOTE = "note"
-    TEST = "test"
-    CHOICES = [
-        (PART, 'part'),
-        (NOTE, 'note'),
-        (TEST, 'test'),
-    ]
-
-
 class EnrollmentCreateSerializer(serializers.ModelSerializer):
     # object_id = serializers.IntegerField()
     # object_type = serializers.ChoiceField(choices=EnrollmentType.CHOICES)
@@ -47,3 +35,20 @@ class EnrollmentCreateSerializer(serializers.ModelSerializer):
     #         pass
     #     return validated_data
 
+class EnrollmentDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enrollment
+        fields = (
+            'id'
+        )
+
+class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enrollment
+        fields = (
+            'id',
+            'student',
+            'status',
+            'parts',
+            'created_at',
+        )
