@@ -2,7 +2,7 @@ from django.db.models import fields
 from rest_framework import serializers
 
 from courses.models import Course, CourseCategory, CourseStatus
-
+from enrollments.api.utils import count_enrollments
 class CourseCreateSerialzer(serializers.ModelSerializer):
     class Meta:
         model = Course
@@ -29,6 +29,14 @@ class CourseCreateSerialzer(serializers.ModelSerializer):
 
 
 class CourseRetrieveSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        """Count the number of course enrollments."""
+        count = 0
+        for part in instance.parts.all():
+            count += count_enrollments(part)
+        ret = super().to_representation(instance)
+        ret['count'] = count
+        return ret
     class Meta:
         model = Course
         fields = (
