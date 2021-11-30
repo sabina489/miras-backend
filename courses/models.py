@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import RegexValidator
 
 # Create your models here.
 
@@ -79,3 +80,36 @@ class Course(models.Model):
     def __str__(self):
         """Unicode representation of Course."""
         return self.name
+
+
+class CourseRequestStatus:
+    APPROVED = "Approved"
+    REQUEST = "Request"
+    DENIED = "Denied"
+
+    CHOICES = [
+        (APPROVED, "Approved"),
+        (REQUEST, "Request"),
+        (DENIED, "Denied")
+    ]
+
+
+class CourseRequest(models.Model):
+    """Model definition for CourseRequest."""
+
+    course_name = models.CharField(_("Course Name"), max_length=200)
+    course_category = models.CharField(_("Course Category"), max_length=200)
+    requester_name = models.CharField(_("Requester Name"), max_length=200)
+    requester_email = models.EmailField(_("Requester Email"))
+    requester_phone = RegexValidator(
+        regex=r'^9\d{9}', message="Enter a valid phonenumber 9XXXXXXXXX")
+    status = models.CharField(choices=CourseRequestStatus.CHOICES,
+                              default=CourseRequestStatus.REQUEST, max_length=32)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        """Unicode representation of CourseRequest."""
+        return self.course_name
