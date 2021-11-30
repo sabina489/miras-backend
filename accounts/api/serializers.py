@@ -9,7 +9,7 @@ User = get_user_model()
 class ProfileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('faculty','college_name','admission_year')
+        fields = ('faculty', 'college_name', 'admission_year', 'interests')
 
 
 class UserCreateSerializer(serializers.ModelSerializer):

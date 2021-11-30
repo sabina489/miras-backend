@@ -20,7 +20,8 @@ class UserManager(BaseUserManager):
         # Lookup the real model class from the global app registry so this
         # manager method can be used in migrations. This is fine because
         # managers are by definition working on the real model.
-        GlobalUserModel = apps.get_model(self.model._meta.app_label, self.model._meta.object_name)
+        GlobalUserModel = apps.get_model(
+            self.model._meta.app_label, self.model._meta.object_name)
         user = self.model(phone=phone, email=email, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
@@ -68,6 +69,7 @@ class UserManager(BaseUserManager):
             )
         return self.none()
 
+
 class Role(models.Model):
     '''
     The Role entries are managed by the system,
@@ -84,21 +86,23 @@ class Role(models.Model):
         (ADMIN, 'admin'),
     )
 
-    id = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True)
+    id = models.PositiveSmallIntegerField(
+        choices=ROLE_CHOICES, primary_key=True)
 
     def __str__(self):
-      return self.get_id_display()
+        return self.get_id_display()
 
 
 class User(AbstractUser):
     username = None
     phone_regex = RegexValidator(
         regex=r'^9\d{9}', message="Enter a valid phonenumber 9XXXXXXXXX")
-    phone = models.CharField(validators=[phone_regex], max_length=10, unique=True)
+    phone = models.CharField(
+        validators=[phone_regex], max_length=10, unique=True)
     role = models.ManyToManyField(Role, blank=True)
 
     USERNAME_FIELD = "phone"
-    
+
     objects = UserManager()
 
     @property
@@ -119,11 +123,15 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
+    # it is imported here due to the ciruclar dependency
+    # Course model contains user get which is imported above this import.
+    from courses.models import CourseCategory
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_of_birth = models.DateField(null=True, blank=True)
     college_name = models.CharField(max_length=100, null=True, blank=True)
     faculty = models.CharField(max_length=100, null=True, blank=True)
     admission_year = models.DateField(null=True, blank=True)
+    interests = models.ManyToManyField(CourseCategory, blank=True)
 
     class Meta:
         ordering = ['user']
