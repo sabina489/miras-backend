@@ -15,7 +15,8 @@ class CourseCreateSerialzer(serializers.ModelSerializer):
             'password',
             'status',
             'detail',
-            'video'
+            'detail1',
+            'video',
         )
         extra_kwargs = {'password': {
             'write_only': True
@@ -31,6 +32,7 @@ class CourseRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = (
+            'id',
             'name',
             'created_at',
             'category',

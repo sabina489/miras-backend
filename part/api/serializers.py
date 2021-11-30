@@ -6,9 +6,9 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Part
         fields = (
+            "id",
             "name",
             "course",
-            "enrolls",
             "detail",
             "price"
         )
