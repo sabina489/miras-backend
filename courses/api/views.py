@@ -34,7 +34,10 @@ class CourseDeleteAPIView(DestroyAPIView):
 class CourseListAPIView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = CourseRetrieveSerializer
-    queryset = Course.objects.all()
+    def get_queryset(self):
+        queryset = Course.objects.all()
+        category_id = self.kwargs['catid']
+        return queryset.filter(category=category_id)
 
 class CourseRetrieveAPIView(RetrieveAPIView):
     permission_classes = [AllowAny]

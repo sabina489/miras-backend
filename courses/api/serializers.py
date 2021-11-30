@@ -48,6 +48,7 @@ class CourseCategoryRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseCategory
         fields = (
+            'id',
             'name',
             'parent'
         )
