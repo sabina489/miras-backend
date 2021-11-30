@@ -13,7 +13,7 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    profile = ProfileCreateSerializer()
+    profile = ProfileCreateSerializer(required=False)
 
     class Meta:
         model = User
@@ -22,11 +22,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        profile = validated_data.pop('profile')
+        profile = None
+        if 'profile' in validated_data:
+            profile = validated_data.pop('profile')
         user = User.objects.create_user(**validated_data)
         user.role.add(Role.objects.get(id=1))
-        for attr, value in profile.items():
-            setattr(user.profile, attr, value)
+        if profile:
+            for attr, value in profile.items():
+                setattr(user.profile, attr, value)
         user.save()
         return user
 
@@ -39,11 +42,14 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'profile')
 
     def update(self, instance, validated_data):
-        profile = validated_data.pop('profile')
+        profile = None
+        if 'profile' in validated_data:
+            profile = validated_data.pop('profile')
         instance = super().update(instance, validated_data)
-        for attr, value in profile.items():
-            setattr(instance.profile, attr, value)
-        instance.profile.save()
+        if profile:
+            for attr, value in profile.items():
+                setattr(instance.profile, attr, value)
+            instance.profile.save()
         return instance
 
 
