@@ -4,6 +4,7 @@ from enrollments.models import Enrollment
 
 from part.models import Part
 
+
 class EnrollmentCreateSerializer(serializers.ModelSerializer):
     # object_id = serializers.IntegerField()
     # object_type = serializers.ChoiceField(choices=EnrollmentType.CHOICES)
@@ -35,6 +36,7 @@ class EnrollmentCreateSerializer(serializers.ModelSerializer):
     #         pass
     #     return validated_data
 
+
 class EnrollmentDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
@@ -42,7 +44,28 @@ class EnrollmentDeleteSerializer(serializers.ModelSerializer):
             'id'
         )
 
+
 class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['parts'] = [{
+            'name': part.name,
+            'id': part.id
+        }
+            for part in instance.parts.all()]
+        part_0 = instance.parts.first()
+        if part_0:
+            course = part_0.course
+            all_parts = course.parts.all()
+
+            ret['course'] = course.name
+            ret['all_parts'] = [{
+                'name': part.name,
+                'id': part.id
+            } for part in all_parts]
+
+        return ret
+
     class Meta:
         model = Enrollment
         fields = (
