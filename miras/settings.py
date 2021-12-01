@@ -162,3 +162,10 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 ]
 
 APPEND_SLASH = False
+
+
+# Email configuration
+EMAIL_CONFIG = env.email_url(
+    'EMAIL_URL', default='consolemail://test@example.com:password@localhost:25')
+vars().update(EMAIL_CONFIG)
+# Email configuration end
