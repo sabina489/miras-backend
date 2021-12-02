@@ -3,6 +3,9 @@ from rest_framework import serializers
 
 from courses.models import Course, CourseCategory, CourseStatus
 from enrollments.api.utils import count_enrollments
+from part.api.serializers import PartSerializer
+
+
 class CourseCreateSerialzer(serializers.ModelSerializer):
     class Meta:
         model = Course
@@ -37,6 +40,7 @@ class CourseRetrieveSerializer(serializers.ModelSerializer):
         ret = super().to_representation(instance)
         ret['count'] = count
         return ret
+
     class Meta:
         model = Course
         fields = (
@@ -52,6 +56,7 @@ class CourseRetrieveSerializer(serializers.ModelSerializer):
             'video'
         )
 
+
 class CourseCategoryRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseCategory
@@ -60,3 +65,10 @@ class CourseCategoryRetrieveSerializer(serializers.ModelSerializer):
             'name',
             'parent'
         )
+
+class CourseSerializer(serializers.ModelSerializer):
+    parts = PartSerializer(many=True)
+
+    class Meta:
+        model = Course
+        fields = ("id","name", "parts")

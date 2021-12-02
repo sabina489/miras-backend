@@ -1,6 +1,8 @@
 from rest_framework import serializers
+from courses.api.serializers import CourseSerializer
 
 from enrollments.models import Enrollment
+from part.api.serializers import PartSerializer
 
 from part.models import Part
 
@@ -47,25 +49,8 @@ class EnrollmentDeleteSerializer(serializers.ModelSerializer):
 
 
 class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        ret['parts'] = [{
-            'name': part.name,
-            'id': part.id
-        }
-            for part in instance.parts.all()]
-        part_0 = instance.parts.first()
-        if part_0:
-            course = part_0.course
-            all_parts = course.parts.all()
-
-            ret['course'] = course.name
-            ret['all_parts'] = [{
-                'name': part.name,
-                'id': part.id
-            } for part in all_parts]
-
-        return ret
+    parts = PartSerializer(many=True)
+    course = serializers.SerializerMethodField()
 
     class Meta:
         model = Enrollment
@@ -74,5 +59,9 @@ class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
             'student',
             'status',
             'parts',
+            'course',
             'created_at',
         )
+
+    def get_course(self, obj):
+        return CourseSerializer(obj.parts.first().course).data
