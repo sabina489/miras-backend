@@ -132,6 +132,7 @@ class Profile(models.Model):
     faculty = models.CharField(max_length=100, null=True, blank=True)
     admission_year = models.DateField(null=True, blank=True)
     interests = models.ManyToManyField(CourseCategory, blank=True)
+    extra_content = models.JSONField(default=dict)
 
     class Meta:
         ordering = ['user']
