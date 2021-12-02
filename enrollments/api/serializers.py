@@ -41,7 +41,8 @@ class EnrollmentDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
         fields = (
-            'id'
+            'id',
+            'status'
         )
 
 
