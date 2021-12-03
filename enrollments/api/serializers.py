@@ -49,6 +49,7 @@ class EnrollmentDeleteSerializer(serializers.ModelSerializer):
 
 
 class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
+    
     parts = PartSerializer(many=True)
     course = serializers.SerializerMethodField()
 
@@ -68,4 +69,7 @@ class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
         Get the course of the enrollment
         obj is the enrollment object
         """
-        return CourseSerializer(obj.parts.first().course).data
+        part_0 = obj.parts.first()
+        if part_0:
+            return CourseSerializer(part_0.course).data
+        return None
