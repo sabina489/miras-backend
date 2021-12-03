@@ -34,8 +34,10 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
         Get the enrollment status of the user for the part.
         obj: Part object
         """
-        enrollments = obj.enrolls.all().filter(
-            student=self.context['request'].user, status=EnrollmentStatus.ACTIVE)
+        enrollments = []
+        if self.context["request"].user.is_authenticated:
+            enrollments = obj.enrolls.all().filter(
+                student=self.context['request'].user, status=EnrollmentStatus.ACTIVE)
         if len(enrollments) > 0:
             return True
         return False
