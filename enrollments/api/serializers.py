@@ -64,4 +64,8 @@ class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
         )
 
     def get_course(self, obj):
+        """
+        Get the course of the enrollment
+        obj is the enrollment object
+        """
         return CourseSerializer(obj.parts.first().course).data

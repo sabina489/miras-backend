@@ -23,12 +23,20 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
         )
 
     def get_count(self, obj):
+        """
+        Get the number of enrollments for the part.
+        obj: Part object
+        """
         return count_enrollments(obj)
 
     def get_is_enrolled(self, obj):
-        enrollements = obj.enrolls.all().filter(
+        """
+        Get the enrollment status of the user for the part.
+        obj: Part object
+        """
+        enrollments = obj.enrolls.all().filter(
             student=self.context['request'].user, status=EnrollmentStatus.ACTIVE)
-        if len(enrollements) > 0:
+        if len(enrollments) > 0:
             return True
         return False
 
