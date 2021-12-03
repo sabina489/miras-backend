@@ -15,7 +15,7 @@ User = get_user_model()
 class ProfileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('faculty','college_name','admission_year')
+        fields = ('faculty', 'college_name', 'admission_year', 'interests', 'extra_content')
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -74,7 +74,7 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'phone')
+        fields = ('id', 'first_name', 'last_name', 'phone', 'email')
         extra_kwargs = {'id': {'read_only': True}}
 
 
