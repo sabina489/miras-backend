@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    container_name: miras-api
+    image: miras-api:0.1
+    command: gunicorn miras.wsgi:application --bind 0.0.0.0:8001
+    restart: unless-stopped
+    env_file:
+      - .env.backend
+    networks:
+      - miras-network
+    volumes:
+      - miras-media:/home/app/web/media
+      - miras-static:/home/app/web/static-live
+    depends_on: 
+      - db
+
+  db:
+    image: postgres
+    container_name: miras-db
+    env_file:
+      - .env.db
+    volumes:
+      - miras-db:/var/lib/postgresql/data
+    networks:
+      - miras-network
+
+  nginx:
+    image: nginx:1.15-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api
+      - db
+    volumes:
+      - miras-static:/home/app/web/static-live
+      - miras-media:/home/app/web/media
+      - ./nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    networks:
+      - miras-network
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
+networks:
+  miras-network:
+    driver: bridge
+
+volumes:
+  miras-db:
+  miras-media:
+  miras-static:
