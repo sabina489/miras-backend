@@ -10,5 +10,6 @@ class GatewayFactory:
         if not gateway:
             raise ValueError('{} is not registered.'.format(key))
         return gateway(**kwargs)
+
     def get_gateways(self):
         return self._gateways.keys()

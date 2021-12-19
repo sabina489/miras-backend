@@ -1,8 +1,6 @@
 from payments.gateways.base import BasicGateway
 
 
-from ..base import BasicGateway
-
 from payments import PaymentStatus
 
 class EsewaGateway(BasicGateway):
