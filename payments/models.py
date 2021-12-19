@@ -35,7 +35,7 @@ class Payment(models.Model):
 
     def change_status(self, new_status):
         self.status = new_status
-        self.save(update_fields=["status"])
+        self.save()
 
     class Meta:
         """Meta definition for Payment."""
@@ -76,6 +76,7 @@ class OnlinePayment(Payment):
         if status == PaymentStatus.PAID:
             status = gateway.capture(self, amount)
         self.change_status(status)
+        print('******', self)
 
 
 

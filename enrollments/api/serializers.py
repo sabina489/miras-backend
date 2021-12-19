@@ -14,6 +14,7 @@ class EnrollmentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
         fields = (
+            'id',
             'student',
             'parts',
         )

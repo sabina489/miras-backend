@@ -24,7 +24,6 @@ class OnlinePaymentCreateSerializer(serializers.ModelSerializer):
             'id',
             'amount',
             'enrollment',
-            'status',
             'variant',
             'tax_amount',
             'service_charge',
