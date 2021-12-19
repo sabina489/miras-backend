@@ -53,8 +53,7 @@ class Course(models.Model):
     name = models.CharField(_("name"), max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(CourseCategory, verbose_name=_(
-        "category"), related_name="courses", on_delete=models.CASCADE,
-        blank=True, null=True)
+        "category"), related_name="courses", on_delete=models.CASCADE)
     instructor = models.ForeignKey(User, verbose_name=_(
         "instructor"), related_name="courses", on_delete=models.CASCADE)
     link = models.URLField(_("link"), max_length=200)
