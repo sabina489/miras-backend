@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.db.models.fields.related import ManyToManyField
 from django.utils.translation import gettext_lazy as _
 
 from part.models import Part
@@ -19,6 +20,13 @@ class EnrollmentStatus:
         (CANCELLED, "cancelled")
     ]
 
+# TODO: make this
+# class EnrolledObjectStatus(models.Model):
+
+#     class Meta:
+#         abstract = True
+# class EnrolledPartStatus(EnrolledObjectStatus):
+
 
 class Enrollment(models.Model):
     """Model definition for Enrollment."""
@@ -30,7 +38,10 @@ class Enrollment(models.Model):
         default=EnrollmentStatus.PENDING)
     parts = models.ManyToManyField(Part, verbose_name=_(
         "parts"), related_name="enrolls", blank=True)
-    # TODO: Add one to one field to payment
+    exams = models.ManyToManyField("exams.Exam", verbose_name=_("exams"),
+                                   related_name="enrolls", blank=True)
+    notes = models.ManyToManyField("notes.Note", verbose_name=_("notes"),
+                                   related_name="enrolls", blank=True)
 
     class Meta:
         """Meta definition for Enrollment."""
