@@ -25,6 +25,17 @@ class ExamCategory(models.Model):
         return self.name
 
 
+class ExamType:
+    MOCK = "mock"
+    MCQ = "mcq"
+    GORKHA = "gorkha"
+    CHOICES = [
+        (MOCK, "mock"),
+        (MCQ, "mcq"),
+        (GORKHA, "gorkha"),
+    ]
+
+
 class Exam(models.Model):
     """Model definition for Exam."""
 
@@ -34,6 +45,15 @@ class Exam(models.Model):
                                       related_name="%(app_label)s_%(class)s_related",
                                       related_query_name="%(app_label)s_%(class)ss")
     created_at = models.DateField(_("created_at"), auto_now_add=True)
+    kind = models.CharField(_("kind"), max_length=32,
+                            choices=ExamType.CHOICES, default=ExamType.MOCK)
+
+    def save(self, *args, **kwargs):
+        if isinstance(self, MCQExam):
+            self.kind = ExamType.MCQ
+        elif isinstance(self, GorkhapatraExam):
+            self.kind = ExamType.GORKHA
+        super().save(*args, **kwargs)
 
     class Meta:
         """Meta definition for Exam."""
@@ -56,7 +76,7 @@ class MCQExam(Exam):
         verbose_name_plural = 'MCQExams'
 
 
-class MockExam(models.Model):
+class MockExam(Exam):
     """Model definition for MockExam."""
 
     timer = models.TimeField(_("timer"))
@@ -68,7 +88,7 @@ class MockExam(models.Model):
         verbose_name_plural = 'MockExams'
 
 
-class GorkhapatraExam(models.Model):
+class GorkhapatraExam(Exam):
     """Model definition for GorkhapatraExam."""
 
     content = models.FileField(
