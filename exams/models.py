@@ -5,26 +5,6 @@ from django.conf import settings
 
 # Create your models here.
 
-
-class ExamCategory(models.Model):
-    """Model definition for ExamCategory."""
-
-    name = models.CharField(_("name"), max_length=128)
-    parent = models.ForeignKey(
-        "self", null=True, blank=True, related_name="children", on_delete=models.CASCADE
-    )
-
-    class Meta:
-        """Meta definition for ExamCategory."""
-
-        verbose_name = 'ExamCategory'
-        verbose_name_plural = 'ExamCategorys'
-
-    def __str__(self):
-        """Unicode representation of ExamCategory."""
-        return self.name
-
-
 class ExamType:
     MOCK = "mock"
     MCQ = "mcq"
@@ -40,13 +20,20 @@ class Exam(models.Model):
     """Model definition for Exam."""
 
     name = models.CharField(_("name"), max_length=128)
-    category = models.ManyToManyField(ExamCategory,
+    category = models.ManyToManyField("courses.CourseCategory",
                                       verbose_name=_("categories"),
                                       related_name="%(app_label)s_%(class)s_related",
                                       related_query_name="%(app_label)s_%(class)ss")
     created_at = models.DateField(_("created_at"), auto_now_add=True)
     kind = models.CharField(_("kind"), max_length=32,
                             choices=ExamType.CHOICES, default=ExamType.MOCK)
+    course = models.ForeignKey("courses.Course",
+                               verbose_name=_("course"),
+                               related_name="%(app_label)s_%(class)s_related",
+                               related_query_name="%(app_label)s_%(class)ss",
+                               on_delete=models.SET_NULL,
+                               null=True,
+                               blank=True)
 
     def save(self, *args, **kwargs):
         if isinstance(self, MCQExam):
@@ -127,7 +114,7 @@ class Option(models.Model):
     correct = models.BooleanField(_("correct"), default=False)
     question = models.ForeignKey(Question, verbose_name=_(
         "question"), related_name=_("options"), on_delete=models.CASCADE)
-    feedback = models.TextField(_("feedback"))
+    feedback = models.TextField(_("feedback"), blank=True, null=True)
     img = models.ImageField(
         _("img"), upload_to='options/', null=True, blank=True)
 
