@@ -37,3 +37,22 @@ def end_enrollment(ended_class):
             enroll.save()
             cancelled_enrolls.append(enroll)
     return cancelled_enrolls
+
+
+def is_enrolled(enrolled_obj, user):
+    """Return enrollment status of the user for that obj.
+
+    Args:
+        enrolled_obj (part/note/exam): obj to which user is enrolled into
+        user (user): whose enrollment is to be checked
+
+    Returns:
+        bool: state of enrollment of user to that obj
+    """
+    enrollments = []
+    if user.is_authenticated:
+        enrollments = enrolled_obj.enrolls.all().filter(
+            student=user, status=EnrollmentStatus.ACTIVE)
+    if len(enrollments) > 0:
+        return True
+    return False
