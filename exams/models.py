@@ -47,6 +47,7 @@ class Exam(models.Model):
 
         verbose_name = 'Exam'
         verbose_name_plural = 'Exams'
+        ordering = ['-created_at']
 
     def __str__(self):
         """Unicode representation of Exam."""
@@ -102,6 +103,7 @@ class Question(models.Model):
 
         verbose_name = 'Question'
         verbose_name_plural = 'Questions'
+        ordering = ['exam']
 
     def __str__(self):
         """Unicode representation of Question."""
@@ -123,6 +125,7 @@ class Option(models.Model):
 
         verbose_name = 'Option'
         verbose_name_plural = 'Options'
+        ordering = ['question']
 
     def __str__(self):
         """Unicode representation of Option."""
@@ -145,6 +148,7 @@ class QuestionStatus(models.Model):
 
         verbose_name = 'QuestionStatus'
         verbose_name_plural = 'QuestionStatuss'
+        ordering = ['-updated_at']
 
     def __str__(self):
         """Unicode representation of QuestionStatus."""

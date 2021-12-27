@@ -24,7 +24,7 @@ class QuestionInLine(nested_admin.NestedStackedInline):
         OptionsInLine,
     ]
 class ExamAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', )
+    readonly_fields = ('id', 'created_at')
 class ExamCategoryAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
 class QuestionAdmin(admin.ModelAdmin):
@@ -33,19 +33,19 @@ class QuestionAdmin(admin.ModelAdmin):
         OptionsInLine,
     ]
 class QuestionStatusAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', )
+    readonly_fields = ('id', 'updated_at')
 class MockExamAdmin(nested_admin.NestedModelAdmin):
-    readonly_fields = ('id', )
+    readonly_fields = ('id', 'created_at')
     inlines = [
         QuestionInLine,
     ]
 class MCQExamAdmin(nested_admin.NestedModelAdmin):
-    readonly_fields = ('id', )
+    readonly_fields = ('id', 'created_at')
     inlines = [
         QuestionInLine,
     ]
 class GorkhapatraExamAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', )
+    readonly_fields = ('id', 'created_at')
 class OptionAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
 
