@@ -100,6 +100,9 @@ class User(AbstractUser):
     phone = models.CharField(
         validators=[phone_regex], max_length=10, unique=True)
     role = models.ManyToManyField(Role, blank=True)
+    
+    otp = models.CharField(max_length=6, blank=True)
+    otp_expiry = models.DateTimeField(blank=True, null=True)
 
     USERNAME_FIELD = "phone"
 
