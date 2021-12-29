@@ -1,13 +1,15 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from accounts.models import Role, Profile
-from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.http import urlsafe_base64_encode
-from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
+
+from common.utils import send_mail_common, send_otp
+from random import randrange
 
 User = get_user_model()
 
@@ -15,7 +17,8 @@ User = get_user_model()
 class ProfileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('faculty', 'college_name', 'admission_year', 'interests', 'extra_content')
+        fields = ('faculty', 'college_name', 'admission_year',
+                  'interests', 'extra_content')
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -33,21 +36,20 @@ class UserCreateSerializer(serializers.ModelSerializer):
             profile = validated_data.pop('profile')
         user = User.objects.create_user(**validated_data)
         user.role.add(Role.objects.get(id=1))
-        user.is_active = False
+        user.is_active = True
         if profile:
             for attr, value in profile.items():
                 setattr(user.profile, attr, value)
+        user.otp = randrange(100000, 999999)
+        user.otp_expiry = timezone.datetime.now()+timezone.timedelta(days=settings.OTP_EXPIRY_DAYS)
         user.save()
-        # send email to activate user
-        mail_subject = 'Activate your account.'
-        message = render_to_string('accounts/email/activate.html', {
+        send_mail_common('accounts/email/activate.html', {
             'user': user,
-            'domain': 'http://localhost:3000',
+            'domain': 'localhost:3000',
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': default_token_generator.make_token(user),
-        })
-        to_email = user.email
-        send_mail(mail_subject, message, settings.EMAIL_HOST_USER, [to_email])
+        }, [user.email], 'Activate your account')
+        send_otp(user.phone, user.otp)
         return user
 
 

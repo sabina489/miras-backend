@@ -1,3 +1,9 @@
 from django.contrib import admin
+from notes.models import Note
 
-# Register your models here.
+
+class NoteAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', 'created_at', 'updated_at')
+
+
+admin.site.register(Note, NoteAdmin)

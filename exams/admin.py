@@ -14,40 +14,59 @@ from .models import (
 
 # Register your models here.
 
+
 class OptionsInLine(nested_admin.NestedStackedInline):
     model = Option
     extra = 1
+
 
 class QuestionInLine(nested_admin.NestedStackedInline):
     model = Question
     inlines = [
         OptionsInLine,
     ]
-class ExamAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', 'created_at')
-class ExamCategoryAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', )
-class QuestionAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', )
-    inlines = [
-        OptionsInLine,
-    ]
-class QuestionStatusAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', 'updated_at')
+
+
 class MockExamAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id', 'created_at')
     inlines = [
         QuestionInLine,
     ]
+
+
 class MCQExamAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id', 'created_at')
     inlines = [
         QuestionInLine,
     ]
-class GorkhapatraExamAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', 'created_at')
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', )
+    inlines = [
+        OptionsInLine,
+    ]
+
+
+class QuestionStatusAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', 'updated_at')
+
+
 class OptionAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
+
+
+class GorkhapatraExamAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', 'created_at')
+
+
+class ExamAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', 'created_at')
+
+
+class ExamCategoryAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', )
+
 
 admin.site.register(Exam, ExamAdmin)
 admin.site.register(Question, QuestionAdmin)
