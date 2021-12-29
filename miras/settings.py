@@ -75,7 +75,7 @@ ROOT_URLCONF = 'miras.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [(BASE_DIR / 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -176,7 +176,7 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'Access-Control-Allow-Headers',
 ]
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 
 # Email configuration
@@ -216,3 +216,10 @@ SIMPLE_JWT = {
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 # simple jwt end
+
+# OTP settings
+OTP_EXPIRY_DAYS = 1
+OTP_SEND_URL = env('OTP_SEND_URL')
+SMS_TOKEN = env('SMS_TOKEN')
+SMS_FROM = env('SMS_FROM')
+# OTP settings end

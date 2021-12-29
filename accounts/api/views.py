@@ -64,6 +64,22 @@ class UserActivateAPIView(APIView):
         return Response(serializer.data)
 
 
+# class UserActivateOTPAPIView(UpdateAPIView):
+#     permission_classes = [IsAuthenticated, OwnObjectPermission]
+#     serializer_class = UserActivateSerializer
+#     queryset = User.objects.all()
+
+#     def update(self, request, *args, **kwargs):
+#         partial = kwargs.pop('partial', False)
+#         instance = self.get_object()
+#         instance.otp == self.request.POST.get('otp')
+
+#         serializer = self.get_serializer(instance, data=request.data, partial=partial)
+#         serializer.is_valid(raise_exception=True)
+#         self.perform_update(serializer)
+#         return Response(serializer.data)
+    
+
 class UserUpdateAPIView(UpdateAPIView):
     permission_classes = [IsAuthenticated, OwnObjectPermission]
     serializer_class = UserUpdateSerializer
