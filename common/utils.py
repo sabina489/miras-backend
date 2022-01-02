@@ -20,7 +20,7 @@ def send_otp(to, otp):
         "token": settings.SMS_TOKEN,
         "from": settings.SMS_FROM,
         "to": to,
-        "text": "Your OTP is {otp}".format(123456),
+        "text": f"Your OTP is {otp}",
     }
     otp_send = requests.post(sms_send_url, data=params)
     if otp_send.status_code == 200:

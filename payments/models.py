@@ -41,11 +41,11 @@ class Payment(models.Model):
         self.status = new_status
         if (new_status == PaymentStatus.PAID):
             send_mail_common('payments/payment_success.html', {
-                'user': self.enrollment.user,
+                'user': self.enrollment.student,
                 'enrollment': self.enrollment,
-            }, [self.enrollment.user.email], 'Payment Success')
+            }, [self.enrollment.student.email], 'Payment Success')
             send_mail_common('payments/payment_info.html', {
-                'user': self.enrollment.user,
+                'user': self.enrollment.student,
                 'enrollment': self.enrollment,
             }, ['admin@example.com'], 'Payment Info')
         self.save()
