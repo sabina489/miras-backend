@@ -15,7 +15,15 @@ from accounts.api.serializers import (
     UserUpdateSerializer, 
     UserRetrieveSerializer
 )
+from rest_framework_simplejwt.tokens import RefreshToken
 
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 User = get_user_model()
 
@@ -51,17 +59,19 @@ class UserActivateAPIView(APIView):
         instance = self.get_object()
         if instance is not None and default_token_generator.check_token(instance, self.kwargs['token']):
             serializer = self.serializer_class(instance, data={'is_active':True}, partial=partial)
+            token = get_tokens_for_user(instance)
+            status = 200
         else:
             serializer = self.serializer_class(instance, data={}, partial=partial)
+            token = {}
+            status = 401
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
+        return Response(token,status)
 
 
 # class UserActivateOTPAPIView(UpdateAPIView):
