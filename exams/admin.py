@@ -13,14 +13,18 @@ from .models import (
 )
 
 # Register your models here.
+class CustomStackedInline(nested_admin.NestedStackedInline):
+    template ="inlines/stacked.html"
 
+class CustomTabularInline(nested_admin.NestedTabularInline):
+    template ="inlines/tabular.html"
 
-class OptionsInLine(nested_admin.NestedStackedInline):
+class OptionsInLine(CustomStackedInline):
     model = Option
     extra = 1
 
 
-class QuestionInLine(nested_admin.NestedStackedInline):
+class QuestionInLine(CustomStackedInline):
     model = Question
     inlines = [
         OptionsInLine,
