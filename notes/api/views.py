@@ -30,15 +30,8 @@ class NoteListAPIView(ListAPIView):
     queryset = Note.objects.all()
 
 
-<< << << < HEAD
-
-
 class NoteDetailAPIView(RetrieveAPIView):
     permission_classes = [AllowAny]
-
-
-== == == =
->>>>>> > c4a0677(Add precommit.)
 
 
 class NoteRetrieveAPIView(RetrieveAPIView):
