@@ -62,30 +62,23 @@ class UserActivateAPIView(APIView):
         instance = self.get_object()
         if instance is not None and default_token_generator.check_token(instance, self.kwargs['token']):
 
-
-<< << << < HEAD
             serializer = self.serializer_class(
                 instance, data={'is_active': True}, partial=partial)
             token = get_tokens_for_user(instance)
             status = 200
         else:
-            serializer = self.serializer_class(instance, data={}, partial=partial)
-            token = {}
-            status = 401
-=======
-            serializer = self.serializer_class(
-                instance, data={'is_active': True}, partial=partial)
-        else:
             serializer = self.serializer_class(
                 instance, data={}, partial=partial)
->>>>>>> c4a0677 (Add precommit.)
+            token = {}
+            status = 401
+
         serializer.is_valid(raise_exception=True)
         serializer.save()
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-        return Response(token,status)
+        return Response(token, status)
 
 
 # class UserActivateOTPAPIView(UpdateAPIView):
@@ -102,7 +95,7 @@ class UserActivateAPIView(APIView):
 #         serializer.is_valid(raise_exception=True)
 #         self.perform_update(serializer)
 #         return Response(serializer.data)
-    
+
 
 class UserUpdateAPIView(UpdateAPIView):
     permission_classes = [IsAuthenticated, OwnObjectPermission]
