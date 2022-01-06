@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='questionstatus',
             name='exam_stat',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='question_states', to='enrollments.examstatus', verbose_name='exam_stat'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='question_states', to='enrollments.examstatus', verbose_name='exam_stat'),
         ),
     ]

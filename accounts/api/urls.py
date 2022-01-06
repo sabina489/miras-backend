@@ -1,10 +1,10 @@
 from django.urls import path
 
 from accounts.api.views import (
-    UserCreateAPIView, 
+    UserCreateAPIView,
     UserUpdateAPIView,
-    UserRetrieveAPIView, 
-    UserProfileAPIView, 
+    UserRetrieveAPIView,
+    UserProfileAPIView,
     UserActivateAPIView
 )
 

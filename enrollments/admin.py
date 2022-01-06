@@ -12,10 +12,13 @@ from exams.models import (
 class QuestionStatusInline(admin.StackedInline):
     model = QuestionStatus
 
+
 class ExamStatusInline(admin.TabularInline):
     model = Enrollment.exams.through
     readonly_fields = ('id', 'score',)
     extra = 1
+
+
 class EnrollmentAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     inlines = [

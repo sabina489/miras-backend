@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='payment',
             name='status',
-            field=models.CharField(choices=[('unpaid', 'unpaid'), ('inprogress', 'inprogress'), ('paid', 'paid'), ('error', 'error')], default='inprogress', max_length=32, verbose_name='status'),
+            field=models.CharField(choices=[('unpaid', 'unpaid'), ('inprogress', 'inprogress'), (
+                'paid', 'paid'), ('error', 'error')], default='inprogress', max_length=32, verbose_name='status'),
         ),
     ]

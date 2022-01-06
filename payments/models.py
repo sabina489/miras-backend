@@ -85,7 +85,6 @@ class OnlinePayment(Payment):
         verbose_name = 'OnlinePayment'
         verbose_name_plural = 'OnlinePayments'
 
-
     def capture(self, amount=None):
         gateway = gateway_factory.get_gateway(self.variant)
         status = self.status

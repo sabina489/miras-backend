@@ -22,8 +22,10 @@ class ExamStatusSerializer(serializers.ModelSerializer):
             'exam',
         )
 
+
 class ExamStatusListSerializer(serializers.ModelSerializer):
     exam = ExamSerializer()
+
     class Meta:
         model = ExamStatus
         fields = (
@@ -31,9 +33,11 @@ class ExamStatusListSerializer(serializers.ModelSerializer):
             'exam',
         )
 
+
 class EnrollmentCreateSerializer(serializers.ModelSerializer):
 
-    exams = ExamStatusSerializer(many=True, source='exam_states', required=False)
+    exams = ExamStatusSerializer(
+        many=True, source='exam_states', required=False)
 
     class Meta:
         model = Enrollment

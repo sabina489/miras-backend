@@ -12,10 +12,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='onlinepayment',
-            options={'verbose_name': 'OnlinePayment', 'verbose_name_plural': 'OnlinePayments'},
+            options={'verbose_name': 'OnlinePayment',
+                     'verbose_name_plural': 'OnlinePayments'},
         ),
         migrations.AlterModelOptions(
             name='payment',
-            options={'ordering': ['-updated_at'], 'verbose_name': 'Payment', 'verbose_name_plural': 'Payments'},
+            options={'ordering': [
+                '-updated_at'], 'verbose_name': 'Payment', 'verbose_name_plural': 'Payments'},
         ),
     ]

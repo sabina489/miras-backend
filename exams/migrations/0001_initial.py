@@ -17,9 +17,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Exam',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=128, verbose_name='name')),
-                ('created_at', models.DateField(auto_now_add=True, verbose_name='created_at')),
+                ('created_at', models.DateField(
+                    auto_now_add=True, verbose_name='created_at')),
             ],
             options={
                 'verbose_name': 'Exam',
@@ -29,8 +31,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='GorkhapatraExam',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', models.FileField(blank=True, null=True, upload_to='exams/files/', verbose_name='content')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('content', models.FileField(blank=True, null=True,
+                 upload_to='exams/files/', verbose_name='content')),
             ],
             options={
                 'verbose_name': 'GorkhapatraExam',
@@ -40,7 +44,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='MockExam',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('timer', models.TimeField(verbose_name='timer')),
             ],
             options={
@@ -51,11 +56,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Option',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('detail', models.TextField(verbose_name='detail')),
-                ('correct', models.BooleanField(default=False, verbose_name='correct')),
+                ('correct', models.BooleanField(
+                    default=False, verbose_name='correct')),
                 ('feedback', models.TextField(verbose_name='feedback')),
-                ('img', models.ImageField(blank=True, null=True, upload_to='options/', verbose_name='img')),
+                ('img', models.ImageField(blank=True, null=True,
+                 upload_to='options/', verbose_name='img')),
             ],
             options={
                 'verbose_name': 'Option',
@@ -65,10 +73,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Question',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('detail', models.TextField(verbose_name='detail')),
-                ('img', models.ImageField(blank=True, null=True, upload_to='questions/', verbose_name='img')),
-                ('exam', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='exams.exam', verbose_name='exam')),
+                ('img', models.ImageField(blank=True, null=True,
+                 upload_to='questions/', verbose_name='img')),
+                ('exam', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='questions', to='exams.exam', verbose_name='exam')),
             ],
             options={
                 'verbose_name': 'Question',
@@ -78,7 +89,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='MCQExam',
             fields=[
-                ('exam_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='exams.exam')),
+                ('exam_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='exams.exam')),
             ],
             options={
                 'verbose_name': 'MCQExam',
@@ -89,11 +101,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='QuestionStatus',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='upadated_at')),
-                ('examinee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='question_states', to=settings.AUTH_USER_MODEL, verbose_name='examinee')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_states', to='exams.question', verbose_name='question')),
-                ('selected_option', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_choices', to='exams.option', verbose_name='selected_option')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('updated_at', models.DateTimeField(
+                    auto_now=True, verbose_name='upadated_at')),
+                ('examinee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='question_states', to=settings.AUTH_USER_MODEL, verbose_name='examinee')),
+                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='user_states', to='exams.question', verbose_name='question')),
+                ('selected_option', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='user_choices', to='exams.option', verbose_name='selected_option')),
             ],
             options={
                 'verbose_name': 'QuestionStatus',
@@ -103,14 +120,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='option',
             name='question',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='options', to='exams.question', verbose_name='question'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='options', to='exams.question', verbose_name='question'),
         ),
         migrations.CreateModel(
             name='ExamCategory',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=128, verbose_name='name')),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='exams.examcategory')),
+                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                 related_name='children', to='exams.examcategory')),
             ],
             options={
                 'verbose_name': 'ExamCategory',
@@ -120,6 +140,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='exam',
             name='category',
-            field=models.ManyToManyField(related_name='exams_exam_related', related_query_name='exams_exams', to='exams.ExamCategory', verbose_name='categories'),
+            field=models.ManyToManyField(
+                related_name='exams_exam_related', related_query_name='exams_exams', to='exams.ExamCategory', verbose_name='categories'),
         ),
     ]

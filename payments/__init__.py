@@ -9,4 +9,3 @@ class PaymentStatus:
         (PAID, "paid"),
         (ERROR, "error"),
     ]
-

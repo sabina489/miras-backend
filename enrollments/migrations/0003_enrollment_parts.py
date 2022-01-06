@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='enrollment',
             name='parts',
-            field=models.ManyToManyField(blank=True, related_name='enrolls', to='part.Part', verbose_name='parts'),
+            field=models.ManyToManyField(
+                blank=True, related_name='enrolls', to='part.Part', verbose_name='parts'),
         ),
     ]

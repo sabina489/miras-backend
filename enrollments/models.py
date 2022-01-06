@@ -66,7 +66,6 @@ class ExamStatus(models.Model):
         "exam"), related_name="exam_states", on_delete=models.CASCADE)
     score = models.FloatField(_("score"), default=0.0)
 
-
     class Meta:
         """Meta definition for ExamStatus."""
 

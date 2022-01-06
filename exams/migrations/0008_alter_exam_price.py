@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='exam',
             name='price',
-            field=models.DecimalField(decimal_places=2, default=Decimal('0.0'), max_digits=5, validators=[courses.validators.validate_positive], verbose_name='price'),
+            field=models.DecimalField(decimal_places=2, default=Decimal('0.0'), max_digits=5, validators=[
+                                      courses.validators.validate_positive], verbose_name='price'),
         ),
     ]
