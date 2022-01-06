@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.fields.related import ForeignKey
 
 from courses.models import Course
+from courses.validators import validate_positive
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
@@ -16,9 +17,8 @@ class Part(models.Model):
     # enrolls = models.ManyToManyField(Enrollment, verbose_name=_(
     #     "enrolls"), related_name="parts", blank=True)
     detail = models.TextField(_("detail"), null=True, blank=True)
-    price = models.FloatField(_("price"), default=0.0)
-    # TODO: Add field for count
-    # TODO: Count the number enrollment to parts
+    price = models.FloatField(_("price"), default=0.0,
+                              validators=[validate_positive])
 
     class Meta:
         """Meta definition for Part."""
