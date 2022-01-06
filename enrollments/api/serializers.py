@@ -1,43 +1,60 @@
 from rest_framework import serializers
 from courses.api.serializers import CourseSerializer
 
-from enrollments.models import Enrollment
+from enrollments.models import (
+    Enrollment,
+    ExamStatus,
+)
+from notes.models import Note
 from part.api.serializers import PartSerializer
+from exams.api.serializers import ExamSerializer
+from notes.api.serializers import NoteSerializer
 
 from part.models import Part
+from exams.models import Exam
 
+
+class ExamStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExamStatus
+        fields = (
+            'id',
+            'exam',
+        )
+
+class ExamStatusListSerializer(serializers.ModelSerializer):
+    exam = ExamSerializer()
+    class Meta:
+        model = ExamStatus
+        fields = (
+            'id',
+            'exam',
+        )
 
 class EnrollmentCreateSerializer(serializers.ModelSerializer):
-    # object_id = serializers.IntegerField()
-    # object_type = serializers.ChoiceField(choices=EnrollmentType.CHOICES)
+
+    exams = ExamStatusSerializer(many=True, source='exam_states', required=False)
 
     class Meta:
         model = Enrollment
         fields = (
             'id',
-            'student',
+            # 'student',
             'parts',
+            'exams',
+            'notes',
         )
-        # extra_kwargs = {
-        #     'object_id': {'write_only': True},
-        #     'object_type': {'write_only': True}
-        # }
 
-    # def create(self, validated_data):
-    #     object_type = validated_data['object_type']
-    #     type_id = validated_data['object_id']
-    #     enrollment = Enrollment.objects.create(student=validated_data['student'])
-    #     enrollment.save()
-    #     if object_type == EnrollmentType.PART:
-    #         print('hurray this is the part I want')
-    #         part = Part.objects.get(pk=type_id)
-    #         part.enrolls.add(enrollment)
-    #     # TODO: Handle the below cases
-    #     elif object_type == EnrollmentType.NOTE:
-    #         pass
-    #     elif object_type == EnrollmentType.TEST:
-    #         pass
-    #     return validated_data
+    def create(self, validated_data):
+        exams_data = validated_data.pop('exam_states', None)
+        enrollment = super().create(validated_data)
+
+        if exams_data:
+            for data in exams_data:
+                exam = data.get("exam")
+                ExamStatus(enrollment=enrollment, exam=exam).save()
+        enrollment.save()
+        return enrollment
 
 
 class EnrollmentDeleteSerializer(serializers.ModelSerializer):
@@ -50,8 +67,10 @@ class EnrollmentDeleteSerializer(serializers.ModelSerializer):
 
 
 class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
-    
+
     parts = PartSerializer(many=True)
+    notes = NoteSerializer(many=True)
+    exam_states = ExamStatusListSerializer(many=True)
     course = serializers.SerializerMethodField()
 
     class Meta:
@@ -61,6 +80,8 @@ class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
             'student',
             'status',
             'parts',
+            'exam_states',
+            'notes',
             'course',
             'created_at',
         )
