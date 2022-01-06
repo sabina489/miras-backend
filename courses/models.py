@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 
+from courses.validators import validate_positive
+
 # Create your models here.
 
 
@@ -66,10 +68,12 @@ class Course(models.Model):
     detail = models.TextField(_("detail"), null=True, blank=True)
     detail1 = models.TextField(_("detail1"), null=True, blank=True)
     video = models.URLField(_("video"), max_length=200, null=True, blank=True)
-    price = models.FloatField(_("price"), default=0.0)
-    start_date = models.DateField(_("start"), null=True, blank=True, auto_now=False, auto_now_add=False)
-    end_date = models.DateField(_("end"), null=True, blank=True, auto_now=False, auto_now_add=False)
-
+    price = models.FloatField(_("price"), default=0.0,
+                              validators=[validate_positive])
+    start_date = models.DateField(
+        _("start"), null=True, blank=True, auto_now=False, auto_now_add=False)
+    end_date = models.DateField(
+        _("end"), null=True, blank=True, auto_now=False, auto_now_add=False)
 
     class Meta:
         """Meta definition for Course."""

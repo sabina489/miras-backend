@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='start_date',
-            field=models.DateField(blank=True, null=True, verbose_name='start'),
+            field=models.DateField(blank=True, null=True,
+                                   verbose_name='start'),
         ),
     ]

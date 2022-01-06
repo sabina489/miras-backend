@@ -13,7 +13,8 @@ class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -63,15 +64,15 @@ class UserAdmin(BaseUserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     list_display = ('phone', 'email', 'first_name', 'last_name', 'is_active')
-    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups','role')
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups', 'role')
     search_fields = ('phone', 'first_name', 'last_name', 'email')
     ordering = ('phone',)
     filter_horizontal = ('groups', 'user_permissions',)
     fieldsets = (
-        (None, {'fields': ('phone','email', 'password')}),
+        (None, {'fields': ('phone', 'email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions','role'),
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions', 'role'),
         }),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )

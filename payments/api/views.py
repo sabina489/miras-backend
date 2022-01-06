@@ -22,10 +22,12 @@ from payments.models import (
 #     serializer_class = PaymentCreateSerializer
 #     queryset = Payment.objects.all()
 
+
 class OnlinePaymentCreateAPIView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = OnlinePaymentCreateSerializer
     queryset = OnlinePayment.objects.all()
+
 
 class OnlinePaymentUpdateAPIView(UpdateAPIView):
     permission_classes = [IsAuthenticated]

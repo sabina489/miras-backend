@@ -55,6 +55,7 @@ class Payment(models.Model):
 
         verbose_name = 'Payment'
         verbose_name_plural = 'Payments'
+        ordering = ['-updated_at']
 
     def __str__(self):
         """Unicode representation of Payment."""
@@ -83,7 +84,6 @@ class OnlinePayment(Payment):
         """Meta definition for esewa based payment."""
         verbose_name = 'OnlinePayment'
         verbose_name_plural = 'OnlinePayments'
-        ordering = ['created_at']
 
     def capture(self, amount=None):
         gateway = gateway_factory.get_gateway(self.variant)
@@ -91,7 +91,6 @@ class OnlinePayment(Payment):
         if status == PaymentStatus.PAID:
             status = gateway.capture(self, amount)
         self.change_status(status)
-        print('******', self)
 
 
 class BankPayment(Payment):

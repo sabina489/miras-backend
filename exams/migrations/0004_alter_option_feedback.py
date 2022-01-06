@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='option',
             name='feedback',
-            field=models.TextField(blank=True, null=True, verbose_name='feedback'),
+            field=models.TextField(blank=True, null=True,
+                                   verbose_name='feedback'),
         ),
     ]

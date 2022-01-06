@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='onlinepayment',
             name='variant',
-            field=models.CharField(choices=[('esewa', 'esewa')], default='esewa', max_length=32, verbose_name='variant'),
+            field=models.CharField(choices=[(
+                'esewa', 'esewa')], default='esewa', max_length=32, verbose_name='variant'),
         ),
     ]

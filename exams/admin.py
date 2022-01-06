@@ -31,6 +31,25 @@ class QuestionInLine(CustomStackedInline):
     ]
 
 
+class ExamAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', 'created_at')
+
+
+class ExamCategoryAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', )
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', )
+    inlines = [
+        OptionsInLine,
+    ]
+
+
+class QuestionStatusAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', 'updated_at')
+
+
 class MockExamAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id', 'created_at')
     inlines = [
@@ -69,6 +88,10 @@ class ExamAdmin(admin.ModelAdmin):
 
 
 class ExamCategoryAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', )
+
+
+class OptionAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
 
 

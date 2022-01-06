@@ -31,6 +31,9 @@ class EnrollmentCreateAPIView(CreateAPIView):
     serializer_class = EnrollmentCreateSerializer
     queryset = Enrollment.objects.all()
 
+    def perform_create(self, serializer):
+        return serializer.save(student=self.request.user)
+
 
 class EnrollmentDeleteAPIView(UpdateAPIView):
     permission_classes = [IsAuthenticated]

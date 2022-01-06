@@ -19,7 +19,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='exam',
             name='course',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='exams_exam_related', related_query_name='exams_exams', to='courses.course', verbose_name='course'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                    related_name='exams_exam_related', related_query_name='exams_exams', to='courses.course', verbose_name='course'),
         ),
         migrations.DeleteModel(
             name='ExamCategory',

@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='interests',
-            field=models.ManyToManyField(blank=True, to='courses.CourseCategory'),
+            field=models.ManyToManyField(
+                blank=True, to='courses.CourseCategory'),
         ),
     ]

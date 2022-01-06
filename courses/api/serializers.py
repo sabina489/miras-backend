@@ -4,6 +4,8 @@ from rest_framework import serializers
 from courses.models import Course, CourseCategory, CourseStatus
 from enrollments.api.utils import count_enrollments
 from part.api.serializers import PartSerializer
+from notes.api.serializers import NoteSerializer
+from exams.api.serializers import ExamSerializer
 
 
 class CourseCreateSerialzer(serializers.ModelSerializer):
@@ -32,6 +34,10 @@ class CourseCreateSerialzer(serializers.ModelSerializer):
 
 
 class CourseRetrieveSerializer(serializers.ModelSerializer):
+    parts = PartSerializer(many=True)
+    notes = NoteSerializer(many=True)
+    exams_exam_related = ExamSerializer(many=True,)
+
     def to_representation(self, instance):
         """Count the number of course enrollments."""
         count = 0
@@ -52,8 +58,12 @@ class CourseRetrieveSerializer(serializers.ModelSerializer):
             'link',
             'password',
             'status',
+            'price',
             'detail',
-            'video'
+            'video',
+            'parts',
+            'notes',
+            'exams_exam_related',
         )
 
 
@@ -66,9 +76,14 @@ class CourseCategoryRetrieveSerializer(serializers.ModelSerializer):
             'parent'
         )
 
+
 class CourseSerializer(serializers.ModelSerializer):
     parts = PartSerializer(many=True)
 
     class Meta:
         model = Course
-        fields = ("id","name", "parts")
+        fields = (
+            'id',
+            'name',
+            'parts',
+        )
