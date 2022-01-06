@@ -8,8 +8,9 @@ from .models import (
 
 class NoteAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
+    list_display = ('id', 'title', 'type', 'created_at',
+                    'price', 'free', 'courses')
+    list_filter = ('type', 'price', 'courses')
 
 
 admin.site.register(Note, NoteAdmin)
-
-# Register your models here.

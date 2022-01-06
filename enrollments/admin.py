@@ -20,7 +20,20 @@ class ExamStatusInline(admin.TabularInline):
 
 
 class EnrollmentAdmin(admin.ModelAdmin):
+
+    def enrolled_on(self, obj):
+        enrolled = ""
+        if obj.parts:
+            enrolled += ", ".join([f"{p.name}(part)" for p in obj.parts.all()])
+        if obj.exams:
+            enrolled += "(exams), ".join([f"{e.name}(exam)" for e in obj.exams.all()])
+        if obj.notes:
+            enrolled += "(notes), ".join([f"{n.title}(note)" for n in obj.notes.all()])
+        return enrolled
+
     readonly_fields = ('id',)
+    list_display = ('id', 'student', 'status', 'enrolled_on', 'created_at')
+    list_filter = ('status', 'student')
     inlines = [
         ExamStatusInline,
     ]
@@ -29,6 +42,8 @@ class EnrollmentAdmin(admin.ModelAdmin):
 
 class ExamStatusAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
+    list_display = ('id', 'enrollment', 'exam', 'score',)
+    list_filter = ('exam',)
     inlines = [
         QuestionStatusInline,
     ]
