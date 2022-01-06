@@ -1,9 +1,12 @@
 from django.db import models
 from django.db.models.fields.related import ForeignKey
+from decimal import Decimal
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
+from courses.validators import validate_positive
 # Create your models here.
+
 
 class ExamType:
     MOCK = "mock"
@@ -34,6 +37,9 @@ class Exam(models.Model):
                                on_delete=models.SET_NULL,
                                null=True,
                                blank=True)
+    price = models.DecimalField(
+        _("price"), max_digits=5, decimal_places=2, default=Decimal("0.0"),
+        validators=[validate_positive])
 
     def save(self, *args, **kwargs):
         if isinstance(self, MCQExam):
@@ -97,7 +103,7 @@ class Question(models.Model):
         _("img"), upload_to='questions/', null=True, blank=True)
     exam = models.ForeignKey(Exam, verbose_name=_(
         "exam"), related_name=_("questions"), on_delete=models.CASCADE)
-
+    marks = models.FloatField(_("marks"), default=0.0)
     class Meta:
         """Meta definition for Question."""
 
@@ -119,6 +125,7 @@ class Option(models.Model):
     feedback = models.TextField(_("feedback"), blank=True, null=True)
     img = models.ImageField(
         _("img"), upload_to='options/', null=True, blank=True)
+    marks = models.FloatField(_("marks"), default=0.0)
 
     class Meta:
         """Meta definition for Option."""
@@ -135,13 +142,23 @@ class Option(models.Model):
 class QuestionStatus(models.Model):
     """Model definition for QuestionStatus."""
 
-    examinee = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(
-        "examinee"), on_delete=models.CASCADE, related_name='question_states')
+    # examinee = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(
+    #     "examinee"), on_delete=models.CASCADE, related_name='question_states')
+    exam_stat = models.ForeignKey("enrollments.ExamStatus", verbose_name=_(
+        "exam_stat"), on_delete=models.CASCADE, related_name='question_states')
     question = models.ForeignKey(Question, verbose_name=_(
-        'question'), related_name=_("user_states"), on_delete=models.CASCADE)
+        "question"), related_name=_("user_states"), on_delete=models.CASCADE)
     selected_option = models.ForeignKey(Option, verbose_name=_(
-        'selected_option'), related_name=_("user_choices"), on_delete=models.CASCADE)
+        "selected_option"), related_name=_("user_choices"), on_delete=models.CASCADE)
     updated_at = models.DateTimeField(_("upadated_at"), auto_now=True)
+
+    def save(self, *args, **kwargs):
+        try:
+            question = self.exam_stat.exam.questions.get(pk=self.question.id)
+            option = self.question.options.get(pk=self.selected_option.id)
+            super().save(*args, **kwargs)
+        except Exception as error:
+            raise error
 
     class Meta:
         """Meta definition for QuestionStatus."""
@@ -153,7 +170,7 @@ class QuestionStatus(models.Model):
     def __str__(self):
         """Unicode representation of QuestionStatus."""
         return "option {} by {} for {}".format(
-            self.selected_option,
-            self.examinee,
+            self.exam_stat,
+            self.question,
             self.selected_option
         )
