@@ -7,6 +7,7 @@ from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
 )
+from enrollments.permissions import IsEnrolledActive
 from notes.models import Note
 from notes.api.serializers import (
     NoteListSerializer,
@@ -31,5 +32,7 @@ class NoteListAPIView(ListAPIView):
 
 class NoteDetailAPIView(RetrieveAPIView):
     permission_classes = [AllowAny]
+class NoteRetrieveAPIView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated, IsEnrolledActive]
     serializer_class = NoteListSerializer
     queryset = Note.objects.all()
