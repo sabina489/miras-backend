@@ -27,10 +27,6 @@ class QuestionInLine(nested_admin.NestedStackedInline):
     ]
 
 
-<< << << < HEAD
-== == == =
-
-
 class ExamAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'created_at')
 
@@ -48,9 +44,6 @@ class QuestionAdmin(admin.ModelAdmin):
 
 class QuestionStatusAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'updated_at')
-
-
->>>>>> > c4a0677(Add precommit.)
 
 
 class MockExamAdmin(nested_admin.NestedModelAdmin):
@@ -67,9 +60,6 @@ class MCQExamAdmin(nested_admin.NestedModelAdmin):
     ]
 
 
-<< << << < HEAD
-
-
 class QuestionAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
     inlines = [
@@ -85,15 +75,8 @@ class OptionAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
 
 
-== == == =
->>>>>> > c4a0677(Add precommit.)
-
-
 class GorkhapatraExamAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'created_at')
-
-
-<< << << < HEAD
 
 
 class ExamAdmin(admin.ModelAdmin):
@@ -101,14 +84,11 @@ class ExamAdmin(admin.ModelAdmin):
 
 
 class ExamCategoryAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', )
 
 
-== == == =
 class OptionAdmin(admin.ModelAdmin):
-
-
->>>>>> > c4a0677(Add precommit.)
-readonly_fields = ('id', )
+    readonly_fields = ('id', )
 
 
 admin.site.register(Exam, ExamAdmin)
