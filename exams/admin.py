@@ -12,12 +12,14 @@ from .models import (
     Option,
 )
 
-# Register your models here.
+
 class CustomStackedInline(nested_admin.NestedStackedInline):
-    template ="inlines/stacked.html"
+    template = "inlines/stacked.html"
+
 
 class CustomTabularInline(nested_admin.NestedTabularInline):
-    template ="inlines/tabular.html"
+    template = "inlines/tabular.html"
+
 
 class OptionsInLine(CustomStackedInline):
     model = Option
@@ -31,16 +33,43 @@ class QuestionInLine(CustomStackedInline):
     ]
 
 
-class ExamAdmin(admin.ModelAdmin):
+class ExamCommonAdmin(admin.ModelAdmin):
+
+    def category_list(self, obj):
+        return ", ".join([q.name for q in obj.category.all()])
+
+    list_display = ('id', 'name', 'category_list',
+                    'course', 'kind', 'price', 'created_at',)
+
+
+class ExamAdmin(ExamCommonAdmin):
     readonly_fields = ('id', 'created_at')
 
 
-class ExamCategoryAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', )
+class MockExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
+    readonly_fields = ('id', 'created_at')
+    list_display = ExamCommonAdmin.list_display + ('timer',)
+    inlines = [
+        QuestionInLine,
+    ]
+
+
+class MCQExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
+    readonly_fields = ('id', 'created_at')
+    inlines = [
+        QuestionInLine,
+    ]
+
+
+class GorkhapatraExamAdmin(ExamCommonAdmin):
+    readonly_fields = ('id', 'created_at')
+    list_display = ExamCommonAdmin.list_display + ('content',)
 
 
 class QuestionAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
+    list_display = ('id', 'detail', 'exam',  'marks',)
+    list_filter = ('exam', )
     inlines = [
         OptionsInLine,
     ]
@@ -48,51 +77,15 @@ class QuestionAdmin(admin.ModelAdmin):
 
 class QuestionStatusAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'updated_at')
-
-
-class MockExamAdmin(nested_admin.NestedModelAdmin):
-    readonly_fields = ('id', 'created_at')
-    inlines = [
-        QuestionInLine,
-    ]
-
-
-class MCQExamAdmin(nested_admin.NestedModelAdmin):
-    readonly_fields = ('id', 'created_at')
-    inlines = [
-        QuestionInLine,
-    ]
-
-
-class QuestionAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', )
-    inlines = [
-        OptionsInLine,
-    ]
-
-
-class QuestionStatusAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', 'updated_at')
+    list_display = ('id', 'exam_stat', 'question',
+                    'selected_option', 'updated_at',)
+    list_filter = ('question',)
 
 
 class OptionAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
-
-
-class GorkhapatraExamAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', 'created_at')
-
-
-class ExamAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', 'created_at')
-
-
-class ExamCategoryAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', )
-
-
-class OptionAdmin(admin.ModelAdmin):
-    readonly_fields = ('id', )
+    list_display = ('id', 'question', 'detail', 'correct', 'marks',)
+    list_filter = ('question',)
 
 
 admin.site.register(Exam, ExamAdmin)
