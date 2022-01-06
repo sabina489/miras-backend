@@ -3,10 +3,13 @@
 import accounts.models
 from django.db import migrations, models
 
+
 def createRoles(apps, schecma_editor):
-    Role  = apps.get_model('accounts', 'Role')
+    Role = apps.get_model('accounts', 'Role')
     for choice in accounts.models.Role.ROLE_CHOICES:
-        obj, created = Role.objects.update_or_create(id=choice[0], defaults={'id':choice[0]})
+        obj, created = Role.objects.update_or_create(
+            id=choice[0], defaults={'id': choice[0]})
+
 
 class Migration(migrations.Migration):
 
@@ -18,7 +21,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Role',
             fields=[
-                ('id', models.PositiveSmallIntegerField(choices=[(1, 'student'), (2, 'teacher'), (3, 'staff'), (4, 'admin')], primary_key=True, serialize=False)),
+                ('id', models.PositiveSmallIntegerField(choices=[
+                 (1, 'student'), (2, 'teacher'), (3, 'staff'), (4, 'admin')], primary_key=True, serialize=False)),
             ],
         ),
         migrations.AlterModelManagers(

@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='part',
             name='price',
-            field=models.FloatField(default=0.0, validators=[courses.validators.validate_positive], verbose_name='price'),
+            field=models.FloatField(default=0.0, validators=[
+                                    courses.validators.validate_positive], verbose_name='price'),
         ),
     ]

@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='exam',
             name='kind',
-            field=models.CharField(choices=[('mock', 'mock'), ('mcq', 'mcq'), ('gorkha', 'gorkha')], default='mock', max_length=32, verbose_name='kind'),
+            field=models.CharField(choices=[('mock', 'mock'), ('mcq', 'mcq'), (
+                'gorkha', 'gorkha')], default='mock', max_length=32, verbose_name='kind'),
         ),
     ]

@@ -51,4 +51,4 @@ class PartSerializer(serializers.ModelSerializer):
             "name",
             "price",
             "detail",
-            )
+        )

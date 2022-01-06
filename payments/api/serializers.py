@@ -42,6 +42,7 @@ class OnlinePaymentUpdateSerializer(serializers.ModelSerializer):
         instance.capture(validated_data['amount'])
         return instance
         # return super().update(instance, validated_data)
+
     class Meta:
         model = OnlinePayment
         fields = (

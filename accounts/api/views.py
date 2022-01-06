@@ -10,12 +10,13 @@ from rest_framework.views import APIView
 from accounts.api.permissions import OwnObjectPermission
 
 from accounts.api.serializers import (
-    UserActivateSerializer, 
-    UserCreateSerializer, 
-    UserUpdateSerializer, 
+    UserActivateSerializer,
+    UserCreateSerializer,
+    UserUpdateSerializer,
     UserRetrieveSerializer
 )
 from rest_framework_simplejwt.tokens import RefreshToken
+
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -24,6 +25,7 @@ def get_tokens_for_user(user):
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }
+
 
 User = get_user_model()
 
@@ -41,7 +43,8 @@ class UserActivateAPIView(APIView):
     lookup_url_kwarg = 'uidb64'
 
     def get_object(self):
-        filter_kwargs = {'pk': force_text(urlsafe_base64_decode(self.kwargs[self.lookup_url_kwarg]))}
+        filter_kwargs = {'pk': force_text(
+            urlsafe_base64_decode(self.kwargs[self.lookup_url_kwarg]))}
         obj = get_object_or_404(self.queryset, **filter_kwargs)
 
         self.check_object_permissions(self.request, obj)
@@ -58,13 +61,24 @@ class UserActivateAPIView(APIView):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         if instance is not None and default_token_generator.check_token(instance, self.kwargs['token']):
-            serializer = self.serializer_class(instance, data={'is_active':True}, partial=partial)
+
+
+<< << << < HEAD
+            serializer = self.serializer_class(
+                instance, data={'is_active': True}, partial=partial)
             token = get_tokens_for_user(instance)
             status = 200
         else:
             serializer = self.serializer_class(instance, data={}, partial=partial)
             token = {}
             status = 401
+=======
+            serializer = self.serializer_class(
+                instance, data={'is_active': True}, partial=partial)
+        else:
+            serializer = self.serializer_class(
+                instance, data={}, partial=partial)
+>>>>>>> c4a0677 (Add precommit.)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         if getattr(instance, '_prefetched_objects_cache', None):

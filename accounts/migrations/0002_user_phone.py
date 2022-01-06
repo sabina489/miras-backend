@@ -14,7 +14,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='phone',
-            field=models.CharField(default=9840016500, max_length=10, unique=True, validators=[django.core.validators.RegexValidator(message='Enter a valid phonenumber 9XXXXXXXXX', regex='^9\\d{9}')]),
+            field=models.CharField(default=9840016500, max_length=10, unique=True, validators=[
+                                   django.core.validators.RegexValidator(message='Enter a valid phonenumber 9XXXXXXXXX', regex='^9\\d{9}')]),
             preserve_default=False,
         ),
     ]

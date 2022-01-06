@@ -17,12 +17,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Payment',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.DecimalField(decimal_places=2, default=Decimal('0.0'), max_digits=5, verbose_name='amount')),
-                ('status', models.CharField(choices=[('unpaid', 'unpaid'), ('inprogress', 'inprogress'), ('paid', 'paid'), ('error', 'error')], default='unpaid', max_length=32, verbose_name='status')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='createdAt')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('amount', models.DecimalField(decimal_places=2,
+                 default=Decimal('0.0'), max_digits=5, verbose_name='amount')),
+                ('status', models.CharField(choices=[('unpaid', 'unpaid'), ('inprogress', 'inprogress'), (
+                    'paid', 'paid'), ('error', 'error')], default='unpaid', max_length=32, verbose_name='status')),
+                ('created_at', models.DateTimeField(
+                    auto_now_add=True, verbose_name='createdAt')),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('enrollment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='payments_payment_related', related_query_name='payments_payments', to='enrollments.enrollment', verbose_name='enrollment')),
+                ('enrollment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='payments_payment_related',
+                 related_query_name='payments_payments', to='enrollments.enrollment', verbose_name='enrollment')),
             ],
             options={
                 'verbose_name': 'Payment',
@@ -32,8 +37,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BankPayment',
             fields=[
-                ('payment_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='payments.payment')),
-                ('voucher', models.ImageField(blank=True, null=True, upload_to='vouchers/', verbose_name='voucher')),
+                ('payment_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='payments.payment')),
+                ('voucher', models.ImageField(blank=True, null=True,
+                 upload_to='vouchers/', verbose_name='voucher')),
             ],
             options={
                 'verbose_name': 'BankPayment',
@@ -44,14 +51,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='OnlinePayment',
             fields=[
-                ('payment_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='payments.payment')),
+                ('payment_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='payments.payment')),
                 ('variant', models.CharField(max_length=32, verbose_name='variant')),
-                ('tax_amount', models.DecimalField(decimal_places=2, default=Decimal('0.0'), max_digits=5, verbose_name='tax_amount')),
-                ('service_charge', models.DecimalField(decimal_places=2, default=Decimal('0.0'), max_digits=5, verbose_name='service_charge')),
-                ('delivery_charge', models.DecimalField(decimal_places=2, default=Decimal('0.0'), max_digits=5, verbose_name='delivery_charge')),
-                ('merchant_code', models.CharField(max_length=32, verbose_name='scd')),
-                ('transaction_code', models.CharField(blank=True, max_length=128, null=True, verbose_name='txcode')),
-                ('product_code', models.CharField(max_length=128, verbose_name='pid')),
+                ('tax_amount', models.DecimalField(decimal_places=2, default=Decimal(
+                    '0.0'), max_digits=5, verbose_name='tax_amount')),
+                ('service_charge', models.DecimalField(decimal_places=2, default=Decimal(
+                    '0.0'), max_digits=5, verbose_name='service_charge')),
+                ('delivery_charge', models.DecimalField(decimal_places=2, default=Decimal(
+                    '0.0'), max_digits=5, verbose_name='delivery_charge')),
+                ('merchant_code', models.CharField(
+                    max_length=32, verbose_name='scd')),
+                ('transaction_code', models.CharField(blank=True,
+                 max_length=128, null=True, verbose_name='txcode')),
+                ('product_code', models.CharField(
+                    max_length=128, verbose_name='pid')),
                 ('extra_content', models.JSONField(default=dict)),
             ],
             options={

@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='exam',
             name='category',
-            field=models.ManyToManyField(related_name='exams_exam_related', related_query_name='exams_exams', to='courses.CourseCategory', verbose_name='categories'),
+            field=models.ManyToManyField(related_name='exams_exam_related', related_query_name='exams_exams',
+                                         to='courses.CourseCategory', verbose_name='categories'),
         ),
     ]

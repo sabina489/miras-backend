@@ -5,8 +5,10 @@ from .models import (
     Note
 )
 
+
 class NoteAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
+
 
 admin.site.register(Note, NoteAdmin)
 

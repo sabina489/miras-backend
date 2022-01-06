@@ -15,11 +15,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='QuestionStatus',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='upadated_at')),
-                ('exam_stat', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='question_states', to='enrollments.examstatus', verbose_name='examinee')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_states', to='exams.question', verbose_name='question')),
-                ('selected_option', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_choices', to='exams.option', verbose_name='selected_option')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('updated_at', models.DateTimeField(
+                    auto_now=True, verbose_name='upadated_at')),
+                ('exam_stat', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='question_states', to='enrollments.examstatus', verbose_name='examinee')),
+                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='user_states', to='exams.question', verbose_name='question')),
+                ('selected_option', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='user_choices', to='exams.option', verbose_name='selected_option')),
             ],
             options={
                 'verbose_name': 'QuestionStatus',

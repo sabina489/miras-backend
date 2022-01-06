@@ -13,23 +13,28 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='exam',
-            options={'ordering': ['-created_at'], 'verbose_name': 'Exam', 'verbose_name_plural': 'Exams'},
+            options={'ordering': [
+                '-created_at'], 'verbose_name': 'Exam', 'verbose_name_plural': 'Exams'},
         ),
         migrations.AlterModelOptions(
             name='option',
-            options={'ordering': ['question'], 'verbose_name': 'Option', 'verbose_name_plural': 'Options'},
+            options={'ordering': [
+                'question'], 'verbose_name': 'Option', 'verbose_name_plural': 'Options'},
         ),
         migrations.AlterModelOptions(
             name='question',
-            options={'ordering': ['exam'], 'verbose_name': 'Question', 'verbose_name_plural': 'Questions'},
+            options={'ordering': [
+                'exam'], 'verbose_name': 'Question', 'verbose_name_plural': 'Questions'},
         ),
         migrations.AlterModelOptions(
             name='questionstatus',
-            options={'ordering': ['-updated_at'], 'verbose_name': 'QuestionStatus', 'verbose_name_plural': 'QuestionStatuss'},
+            options={'ordering': [
+                '-updated_at'], 'verbose_name': 'QuestionStatus', 'verbose_name_plural': 'QuestionStatuss'},
         ),
         migrations.AddField(
             model_name='exam',
             name='price',
-            field=models.DecimalField(decimal_places=2, default=Decimal('0.0'), max_digits=5, verbose_name='price'),
+            field=models.DecimalField(decimal_places=2, default=Decimal(
+                '0.0'), max_digits=5, verbose_name='price'),
         ),
     ]

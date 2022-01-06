@@ -17,10 +17,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Enrollment',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('status', models.CharField(choices=[('active', 'active'), ('inactive', 'inactive'), ('pending', 'pending'), ('cancelled', 'cancelled')], default='pending', max_length=32, verbose_name='status')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='enrollments', to=settings.AUTH_USER_MODEL, verbose_name='student')),
+                ('status', models.CharField(choices=[('active', 'active'), ('inactive', 'inactive'), ('pending', 'pending'), (
+                    'cancelled', 'cancelled')], default='pending', max_length=32, verbose_name='status')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='enrollments', to=settings.AUTH_USER_MODEL, verbose_name='student')),
             ],
             options={
                 'verbose_name': 'Enrollment',
