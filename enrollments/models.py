@@ -53,6 +53,7 @@ class Enrollment(models.Model):
 
     def __str__(self):
         """Unicode representation of Enrollment."""
+        # TODO: make this more readable for admin panel
         return "{} at {}".format(self.student.__str__(), self.created_at)
 # TODO: part status
 # TODO: notes status
