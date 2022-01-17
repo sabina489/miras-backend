@@ -3,7 +3,6 @@ from rest_framework.generics import (
     CreateAPIView,
     RetrieveAPIView,
     UpdateAPIView,
-    DestroyAPIView,
     ListAPIView,
 )
 
@@ -54,3 +53,15 @@ class EnrollmentListAPIView(ListAPIView):
         if self.request.user.is_superuser:
             return queryset
         return queryset.filter(student=self.request.user)
+
+
+class EnrollmentDetailAPIView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = EnrollmentRetrieveSerializer
+    queryset = Enrollment.objects.all()
+
+    # def get_queryset(self):
+        # queryset = super().get_queryset()
+        # if self.request.user.is_superuser:
+            # return queryset
+        # return queryset.filter(student=self.request.user)
