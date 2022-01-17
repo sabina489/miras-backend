@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from content.models import Content
-from part.api.serializers import PartSerializer
+# from part.api.serializers import PartSerializer
 
 class ContentListSerializer(ModelSerializer):
     class Meta:
@@ -17,7 +17,7 @@ class ContentListSerializer(ModelSerializer):
 
 
 class ContentCourseListSerializer(ModelSerializer):
-    part = PartSerializer(read_only=True)
+    # part = PartSerializer(read_only=True)
     
     class Meta:
         model = Content
@@ -28,5 +28,5 @@ class ContentCourseListSerializer(ModelSerializer):
             'free', 
             'file',
             'course',
-            'part',
+            # 'part',
         ]

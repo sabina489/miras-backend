@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from content.api.serializers import ContentCourseListSerializer
 from enrollments.models import EnrollmentStatus
 
 from part.models import Part
@@ -43,6 +44,7 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
 
 
 class PartSerializer(serializers.ModelSerializer):
+    contents = ContentCourseListSerializer(many=True)
 
     class Meta:
         model = Part
@@ -51,4 +53,5 @@ class PartSerializer(serializers.ModelSerializer):
             "name",
             "price",
             "detail",
+            "contents"
         )
