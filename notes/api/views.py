@@ -42,5 +42,5 @@ class NoteCourseListAPIView(ListAPIView):
     queryset = Note.objects.all()
 
     def get_queryset(self):
-        qs = self.queryset.filter(course=self.kwargs['course_id'])
+        qs = self.queryset.filter(courses__id=self.kwargs['course_id'])
         return qs
