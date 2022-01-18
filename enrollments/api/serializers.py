@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from courses.api.serializers import CourseSerializer
+from enrollments.api.utils import is_enrolled
 
 from enrollments.models import (
     Enrollment,
@@ -51,6 +52,23 @@ class EnrollmentCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         exams_data = validated_data.pop('exam_states', None)
+        user = self.context['request'].user
+        parts = validated_data.get('parts')
+        notes = validated_data.get('notes')
+
+        def batch_is_enrolled(enrolled_objs):
+            # if parts:
+            for enrolled_obj in enrolled_objs:
+                he_is_enrolled = is_enrolled(enrolled_obj, user)
+                if he_is_enrolled:
+                    raise ValueError("User is already enrolled")
+        if parts:
+            batch_is_enrolled(parts)
+        if notes:
+            batch_is_enrolled(notes)
+        if exams_data:
+            exams = [data.get("exam") for data in exams_data]
+            batch_is_enrolled(exams)
         enrollment = super().create(validated_data)
 
         if exams_data:

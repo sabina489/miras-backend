@@ -3,7 +3,10 @@ from rest_framework import serializers
 
 from courses.models import Course, CourseCategory, CourseStatus
 from enrollments.api.utils import count_enrollments
-from part.api.serializers import PartSerializer
+from part.api.serializers import (
+    PartSerializer,
+    PartRetrieveSerializer,
+)
 from notes.api.serializers import NoteSerializer
 from exams.api.serializers import ExamSerializer
 
@@ -34,7 +37,7 @@ class CourseCreateSerialzer(serializers.ModelSerializer):
 
 
 class CourseRetrieveSerializer(serializers.ModelSerializer):
-    parts = PartSerializer(many=True)
+    parts = PartRetrieveSerializer(many=True)
     notes = NoteSerializer(many=True)
     exams_exam_related = ExamSerializer(many=True,)
 

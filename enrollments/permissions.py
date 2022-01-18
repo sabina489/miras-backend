@@ -1,6 +1,9 @@
 from rest_framework import permissions
 
-from .api.utils import is_enrolled_active
+from .api.utils import (
+    is_enrolled_active,
+    is_enrolled,
+)
 
 
 class IsEnrolledActive(permissions.BasePermission):
@@ -10,3 +13,11 @@ class IsEnrolledActive(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return is_enrolled_active(obj, request.user)
+
+
+class IsEnrolled(permissions.BasePermission):
+    code = "ALREADY ENROLLMENT"
+    message = "You already have an enrollment."
+
+    def has_object_permission(self, request, view, obj):
+        return is_enrolled(obj, request.user)

@@ -30,8 +30,8 @@ class NoteListAPIView(ListAPIView):
     queryset = Note.objects.all()
 
 
-class NoteRetrieveAPIView(RetrieveAPIView):
-    permission_classes = [IsAuthenticated, IsEnrolledActive]
+class NoteDetailAPIView(RetrieveAPIView):
+    permission_classes = [AllowAny]
     serializer_class = NoteListSerializer
     queryset = Note.objects.all()
 
