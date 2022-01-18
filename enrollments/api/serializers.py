@@ -1,3 +1,4 @@
+from xml.dom import ValidationErr
 from rest_framework import serializers
 from courses.api.serializers import CourseSerializer
 from enrollments.api.utils import is_enrolled
@@ -55,13 +56,17 @@ class EnrollmentCreateSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         parts = validated_data.get('parts')
         notes = validated_data.get('notes')
+        if not (exams_data or parts or notes):
+            raise serializers.ValidationError(
+                "Atleast one fields should be non-empty.")
 
         def batch_is_enrolled(enrolled_objs):
             # if parts:
             for enrolled_obj in enrolled_objs:
                 he_is_enrolled = is_enrolled(enrolled_obj, user)
                 if he_is_enrolled:
-                    raise ValueError("User is already enrolled")
+                    raise serializers.ValidationError(
+                        "{} is already enrolled into {}".format(user, enrolled_obj))
         if parts:
             batch_is_enrolled(parts)
         if notes:
