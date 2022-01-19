@@ -22,8 +22,9 @@ class CourseCreateSerialzer(serializers.ModelSerializer):
             'link',
             'password',
             'status',
-            'detail',
-            'detail1',
+            'main_detail',
+            'class_detail',
+            'benefit_detail',
             'video',
         )
         extra_kwargs = {'password': {
@@ -62,7 +63,9 @@ class CourseRetrieveSerializer(serializers.ModelSerializer):
             'password',
             'status',
             'price',
-            'detail',
+            'main_detail',
+            'class_detail',
+            'benefit_detail',
             'video',
             'parts',
             'notes',

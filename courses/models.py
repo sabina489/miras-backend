@@ -65,8 +65,12 @@ class Course(models.Model):
     status = models.CharField(
         _("status"), max_length=32, choices=CourseStatus.CHOICES,
         default=CourseStatus.UPCOMING)
-    detail = models.TextField(_("detail"), null=True, blank=True)
-    detail1 = models.TextField(_("detail1"), null=True, blank=True)
+    thumbnail = models.ImageField(
+        _("thumbnail"), upload_to="thumbnails/", blank=True, null=True)
+    main_detail = models.TextField(_("main_detail"), null=True, blank=True)
+    class_detail = models.TextField(_("class_detail"), null=True, blank=True)
+    benefit_detail = models.TextField(
+        _("benefit_detail"), null=True, blank=True)
     video = models.URLField(_("video"), max_length=200, null=True, blank=True)
     price = models.FloatField(_("price"), default=0.0,
                               validators=[validate_positive])
