@@ -43,8 +43,11 @@ class CourseListAPIView(ListAPIView):
 
     def get_queryset(self):
         queryset = Course.objects.all()
-        category_id = self.kwargs['catid']
-        return queryset.filter(category=category_id)
+        category_id = self.kwargs.get('catid')
+        if category_id:
+            return queryset.filter(category=category_id)
+        else:
+            return queryset
 
 
 class CourseRetrieveAPIView(RetrieveAPIView):
