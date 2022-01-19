@@ -12,6 +12,7 @@ class NoteCreateSerializer(serializers.ModelSerializer):
             'type',
             'file',
             'free',
+            'price',
         )
 
 
@@ -25,6 +26,7 @@ class NoteListSerializer(serializers.ModelSerializer):
             'type',
             'file',
             'free',
+            'price',
         )
 
 
