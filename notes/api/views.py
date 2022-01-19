@@ -31,13 +31,13 @@ class NoteListAPIView(ListAPIView):
 
 
 class NoteRetrieveAPIView(RetrieveAPIView):
-    permission_classes = [IsAuthenticated, IsEnrolledActive]
+    permission_classes = [IsEnrolledActive]
     serializer_class = NoteListSerializer
     queryset = Note.objects.all()
 
 
 class NoteCourseListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated, IsEnrolledActive]
+    permission_classes = [IsEnrolledActive]
     serializer_class = NoteListSerializer
     queryset = Note.objects.all()
 
