@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     ExamListAPIView,
+    ExamDetailAPIView,
     ExamStatusUpdateAPIView,
     ExamStatusRetrieveAPIView,
     MCQExamDetailAPIView,
@@ -10,6 +11,8 @@ from .views import (
 )
 
 urlpatterns = [
+    path('detail/<int:pk>/',
+         ExamDetailAPIView.as_view(), name='exam-detail'),
     path('detail/mock/<int:pk>/',
          MockExamDetailAPIView.as_view(), name='mock-detail'),
     path('detail/gorkha/<int:pk>/',

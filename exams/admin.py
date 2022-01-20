@@ -23,7 +23,8 @@ class CustomTabularInline(nested_admin.NestedTabularInline):
 
 class OptionsInLine(CustomStackedInline):
     model = Option
-    extra = 1
+    extra = 3
+    exclude = ('feedback',)
 
 
 class QuestionInLine(CustomStackedInline):
