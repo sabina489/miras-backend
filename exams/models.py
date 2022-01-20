@@ -104,6 +104,7 @@ class Question(models.Model):
     exam = models.ForeignKey(Exam, verbose_name=_(
         "exam"), related_name=_("questions"), on_delete=models.CASCADE)
     marks = models.FloatField(_("marks"), default=0.0)
+    neg_marks = models.FloatField(_("neg_marks"), default=0.0)
 
     class Meta:
         """Meta definition for Question."""

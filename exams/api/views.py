@@ -4,6 +4,7 @@ from rest_framework.generics import (
     ListAPIView,
     UpdateAPIView,
 )
+from rest_framework import filters
 
 
 from rest_framework.permissions import (
@@ -35,6 +36,8 @@ from enrollments.models import (
 class ExamListAPIView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = ExamSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
     queryset = Exam.objects.all()
 
 
@@ -42,6 +45,12 @@ class MockExamDetailAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated, IsEnrolledActive]
     serializer_class = MockExamSerializer
     queryset = MockExam.objects.all()
+
+
+class ExamDetailAPIView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated, IsEnrolledActive]
+    serializer_class = ExamSerializer
+    queryset = Exam.objects.all()
 
 
 class MCQExamDetailAPIView(RetrieveAPIView):

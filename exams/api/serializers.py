@@ -71,6 +71,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'exam',
             'options',
             'marks',
+            'neg_marks',
         )
 
 
@@ -165,9 +166,11 @@ class ExamStatusUpdateSerializer(serializers.ModelSerializer):
                 new_option = prev_state.selected_option
                 if new_option.correct != prev_option.correct:
                     if new_option.correct:
-                        instance.score += prev_state.question.marks
+                        instance.score += (prev_state.question.marks +
+                                           prev_state.question.neg_marks)
                     else:
-                        instance.score -= prev_state.question.marks
+                        instance.score -= (prev_state.question.marks +
+                                           prev_state.question.neg_marks)
             else:
                 new_state = QuestionStatus(
                     exam_stat=instance,
@@ -177,6 +180,10 @@ class ExamStatusUpdateSerializer(serializers.ModelSerializer):
                 new_state.save()
                 if new_state.selected_option.correct == True:
                     instance.score += new_state.question.marks
+                else:
+                    instance.score -= new_state.question.neg_marks
+        # if instance.score < 0:
+        #     instance.score = 0.0
         instance.save()
         return instance
 
@@ -197,4 +204,4 @@ class ExamStatusRetrieveSerializer(serializers.ModelSerializer):
         )
 
     def get_rank(self, obj):
-        return ExamStatus.objects.filter(score__lte=obj.score).count()
+        return ExamStatus.objects.filter(score__lt=obj.score).count()
