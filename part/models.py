@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.fields.related import ForeignKey
+from decimal import Decimal
 
 from courses.models import Course
 from courses.validators import validate_positive
@@ -17,8 +18,8 @@ class Part(models.Model):
     # enrolls = models.ManyToManyField(Enrollment, verbose_name=_(
     #     "enrolls"), related_name="parts", blank=True)
     detail = models.TextField(_("detail"), null=True, blank=True)
-    price = models.FloatField(_("price"), default=0.0,
-                              validators=[validate_positive])
+    price = models.DecimalField(_("price"), max_digits=7, decimal_places=2, default=Decimal("0.0"),
+                                validators=[validate_positive])
 
     class Meta:
         """Meta definition for Part."""

@@ -103,8 +103,10 @@ class Question(models.Model):
         _("img"), upload_to='questions/', null=True, blank=True)
     exam = models.ForeignKey(Exam, verbose_name=_(
         "exam"), related_name=_("questions"), on_delete=models.CASCADE)
-    marks = models.FloatField(_("marks"), default=0.0)
-    neg_marks = models.FloatField(_("neg_marks"), default=0.0)
+    marks = models.DecimalField(
+        _("marks"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
+    neg_marks = models.DecimalField(
+        _("neg_marks"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
 
     class Meta:
         """Meta definition for Question."""
@@ -127,7 +129,8 @@ class Option(models.Model):
     feedback = models.TextField(_("feedback"), blank=True, null=True)
     img = models.ImageField(
         _("img"), upload_to='options/', null=True, blank=True)
-    marks = models.FloatField(_("marks"), default=0.0)
+    marks = models.DecimalField(
+        _("marks"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
 
     class Meta:
         """Meta definition for Option."""

@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
+from decimal import Decimal
+
 
 from courses.validators import validate_positive
 
@@ -72,8 +74,8 @@ class Course(models.Model):
     benefit_detail = models.TextField(
         _("benefit_detail"), null=True, blank=True)
     video = models.URLField(_("video"), max_length=200, null=True, blank=True)
-    price = models.FloatField(_("price"), default=0.0,
-                              validators=[validate_positive])
+    price = models.DecimalField(_("price"), max_digits=7, decimal_places=2, default=Decimal("0.0"),
+                                validators=[validate_positive])
     start_date = models.DateField(
         _("start"), null=True, blank=True, auto_now=False, auto_now_add=False)
     end_date = models.DateField(
