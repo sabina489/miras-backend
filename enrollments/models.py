@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.models.fields.related import ManyToManyField
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from decimal import Decimal
 
 
 from part.models import Part
@@ -65,7 +66,8 @@ class ExamStatus(models.Model):
         "enrollment"), related_name="exam_states", on_delete=models.CASCADE)
     exam = models.ForeignKey("exams.Exam", verbose_name=_(
         "exam"), related_name="exam_states", on_delete=models.CASCADE)
-    score = models.FloatField(_("score"), default=0.0)
+    score = models.DecimalField(
+        _("score"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
 
     class Meta:
         """Meta definition for ExamStatus."""
