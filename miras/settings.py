@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'exams',
     'notes',
     'content',
+    'contactus',
 ]
 
 MIDDLEWARE = [
