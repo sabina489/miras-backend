@@ -18,7 +18,7 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ('faculty', 'college_name', 'admission_year',
-                  'interests', 'extra_content')
+                  'extra_content', 'image',)
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -38,16 +38,25 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user.role.add(Role.objects.get(id=1))
         user.is_active = True
         if profile:
+            interests = None
+            if 'interests' in profile:
+                interests = profile.pop('interests')
+            profile_object = Profile.objects.create(user=user)
             for attr, value in profile.items():
-                setattr(user.profile, attr, value)
+                setattr(profile_object, attr, value)
+            if interests:
+                profile_object.interests.set(interests)
+            profile_object.save()
         user.otp = randrange(100000, 999999)
-        user.otp_expiry = timezone.datetime.now()+timezone.timedelta(days=settings.OTP_EXPIRY_DAYS)
+        user.otp_expiry = timezone.datetime.now(
+        )+timezone.timedelta(days=settings.OTP_EXPIRY_DAYS)
         user.save()
         send_mail_common('accounts/email/activate.html', {
             'user': user,
-            'domain': 'localhost:3000',
+            'domain': settings.FRONTEND_URL,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': default_token_generator.make_token(user),
+            'otp': user.otp,
         }, [user.email], 'Activate your account')
         send_otp(user.phone, user.otp)
         return user
@@ -66,8 +75,12 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             profile = validated_data.pop('profile')
         instance = super().update(instance, validated_data)
         if profile:
+            if 'interests' in profile:
+                interests = profile.pop('interests')
             for attr, value in profile.items():
                 setattr(instance.profile, attr, value)
+            if interests:
+                instance.profile.interests.set(interests)
             instance.profile.save()
         return instance
 

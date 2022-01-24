@@ -100,7 +100,7 @@ class User(AbstractUser):
     phone = models.CharField(
         validators=[phone_regex], max_length=10, unique=True)
     role = models.ManyToManyField(Role, blank=True)
-    
+
     otp = models.CharField(max_length=6, blank=True)
     otp_expiry = models.DateTimeField(blank=True, null=True)
 
@@ -125,17 +125,24 @@ class User(AbstractUser):
         return self.role.id == Role.ADMIN
 
 
+def image_upload_location(instance, filename):
+    return f'profile/{instance.user.phone}/{filename}'
+
+
 class Profile(models.Model):
     # it is imported here due to the ciruclar dependency
     # Course model contains user get which is imported above this import.
     from courses.models import CourseCategory
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, related_name="profile", on_delete=models.CASCADE)
+    image = models.ImageField(
+        upload_to=image_upload_location, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     college_name = models.CharField(max_length=100, null=True, blank=True)
     faculty = models.CharField(max_length=100, null=True, blank=True)
     admission_year = models.DateField(null=True, blank=True)
     interests = models.ManyToManyField(CourseCategory, blank=True)
-    extra_content = models.JSONField(default=dict,blank=True, null=True)
+    extra_content = models.JSONField(default=dict, blank=True, null=True)
 
     class Meta:
         ordering = ['user']
