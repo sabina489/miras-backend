@@ -1,5 +1,6 @@
 {% autoescape off %}
 Hi ,
 Please click on the link to confirm your registration,
-http://{{ domain }}/activate?uid={{ uid }}&token={{ token }}
+{{ domain }}/activate?uid={{ uid }}&token={{ token }}
+or otp is {{ otp }}
 {% endautoescape %}

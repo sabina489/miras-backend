@@ -229,3 +229,7 @@ OTP_SEND_URL = env('OTP_SEND_URL')
 SMS_TOKEN = env('SMS_TOKEN')
 SMS_FROM = env('SMS_FROM')
 # OTP settings end
+
+# Frontend IP start
+FRONTEND_URL = env('FRONTEND_URL')
+# Frontend IP end
