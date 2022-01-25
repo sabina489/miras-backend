@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from courses.models import Course
 from courses.validators import validate_positive
+from part.models import Part
 
 User = get_user_model()
 
@@ -38,6 +39,8 @@ class Note(models.Model):
 
     courses = models.ForeignKey(Course, verbose_name=_(
         "courses"), on_delete=models.CASCADE, related_name='notes')
+    part = models.ForeignKey(
+        Part, on_delete=models.CASCADE, related_name='notes', blank=True, null=True)
     # Erollment or course or part linking to the note
 
     class Meta:
