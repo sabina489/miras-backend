@@ -204,4 +204,9 @@ class ExamStatusRetrieveSerializer(serializers.ModelSerializer):
         )
 
     def get_rank(self, obj):
-        return ExamStatus.objects.filter(score__lt=obj.score).count()
+        all_examinee_states = ExamStatus.objects.filter(exam=obj.exam)
+        num_examinee = all_examinee_states.count()
+        num_examinee_lower_score = all_examinee_states(
+            score__lt=obj.score).count()
+        rank = num_examinee - num_examinee_lower_score
+        return rank
