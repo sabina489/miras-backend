@@ -46,8 +46,7 @@ class CourseListAPIView(ListAPIView):
         category_id = self.kwargs.get('catid')
         if category_id:
             return queryset.filter(category=category_id)
-        else:
-            return queryset
+        return queryset
 
 
 class CourseRetrieveAPIView(RetrieveAPIView):

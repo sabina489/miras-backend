@@ -13,9 +13,25 @@ def content_location(instance, filename):
     return 'content/{0}/{1}'.format(instance.note.id, filename)
 
 
+class ContentType:
+    VIDEO = "video"
+    AUDIO = "audio"
+    PDF = "pdf"
+    TEXT = "text"
+
+    CHOICES = [
+        (VIDEO, "Video"),
+        (AUDIO, "Audio"),
+        (PDF, "PDF"),
+        (TEXT, "Text"),
+    ]
+
+
 class Content(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
+    type = models.CharField(_("Type"), max_length=10,
+                            choices=ContentType.CHOICES, default=ContentType.VIDEO)
     # free = models.BooleanField(default=False)
     file = models.FileField(upload_to=content_location, blank=True, null=True)
     # course = models.ForeignKey(

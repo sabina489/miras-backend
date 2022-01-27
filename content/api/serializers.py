@@ -1,23 +1,22 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from content.models import Content
 # from part.api.serializers import PartSerializer
 
-class ContentListSerializer(ModelSerializer):
+class ContentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Content
         fields = [
             'id', 
             'name', 
             'description', 
-            'free', 
             'file',
-            'course',
-            'part',
+            'note',
         ]
 
 
-class ContentCourseListSerializer(ModelSerializer):
+class ContentCourseListSerializer(serializers.ModelSerializer):
     # part = PartSerializer(read_only=True)
+    file = serializers.SerializerMethodField()
     
     class Meta:
         model = Content
@@ -25,8 +24,12 @@ class ContentCourseListSerializer(ModelSerializer):
             'id', 
             'name', 
             'description', 
-            'free', 
             'file',
-            'course',
             # 'part',
         ]
+    
+    def get_file(self, obj):
+        request = self.context.get('request')
+        if request.user.is_authenticated:
+            return request.build_absolute_uri(obj.file.url)
+        return None
