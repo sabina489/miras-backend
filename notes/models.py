@@ -10,25 +10,21 @@ User = get_user_model()
 
 
 class NoteType:
-    VIDEO = "video"
-    AUDIO = "audio"
-    PDF = "pdf"
-    TEXT = "text"
+    RECORDED_VIDEO = "Recorded Video"
+    OTHERS = "Others"
 
     CHOICES = [
-        (VIDEO, "Video"),
-        (AUDIO, "Audio"),
-        (PDF, "PDF"),
-        (TEXT, "Text"),
+        (RECORDED_VIDEO, "Recorded Video"),
+        (OTHERS, "Others"),
     ]
 
 
 class Note(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField()
-    type = models.CharField(_("Type"), max_length=10,
-                            choices=NoteType.CHOICES, default=NoteType.TEXT)
-    file = models.FileField(upload_to='notes/files/', blank=True, null=True)
+    type = models.CharField(_("Type"), max_length=20,
+                            choices=NoteType.CHOICES, default=NoteType.RECORDED_VIDEO)
+    # file = models.FileField(upload_to='notes/files/', blank=True, null=True)
     free = models.BooleanField(default=False)
     price = models.DecimalField(_("price"), max_digits=7, decimal_places=2, default=Decimal("0.0"),
                                 validators=[validate_positive])

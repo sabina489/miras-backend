@@ -12,7 +12,7 @@ from content.admin import ContentInline
 class NoteAdminForm(ModelForm):
     class Meta:
         model = Note
-        exclude = ('type', 'file',)
+        fields = '__all__'
         widgets = {
             'body': admin.widgets.AdminTextareaWidget(attrs={"rows": 2, "cols": 1})
         }
