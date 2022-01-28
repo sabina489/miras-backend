@@ -1,3 +1,4 @@
+from multiprocessing import context
 from xml.dom import ValidationErr
 from rest_framework import serializers
 from courses.api.serializers import CourseSerializer
@@ -120,5 +121,5 @@ class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
         """
         part_0 = obj.parts.first()
         if part_0:
-            return CourseSerializer(part_0.course).data
+            return CourseSerializer(part_0.course, context=self.context).data
         return None
