@@ -4,6 +4,7 @@ from enrollments.models import EnrollmentStatus
 
 from part.models import Part
 from enrollments.api.utils import count_enrollments, is_enrolled, is_enrolled_active
+from notes.api.serializers import NoteSerializer
 
 
 class PartRetrieveSerializer(serializers.ModelSerializer):
@@ -11,6 +12,7 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
     count = serializers.SerializerMethodField()
     is_enrolled = serializers.SerializerMethodField()
     is_enrolled_active = serializers.SerializerMethodField()
+    notes = NoteSerializer(many=True)
 
     class Meta:
         model = Part
@@ -23,6 +25,7 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
             "count",
             "is_enrolled",
             "is_enrolled_active",
+            "notes",
         )
 
     def get_count(self, obj):
@@ -44,7 +47,7 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
 
 
 class PartSerializer(serializers.ModelSerializer):
-    contents = ContentCourseListSerializer(many=True)
+    notes = NoteSerializer(many=True)
 
     class Meta:
         model = Part
@@ -53,5 +56,5 @@ class PartSerializer(serializers.ModelSerializer):
             "name",
             "price",
             "detail",
-            "contents"
+            "notes"
         )
