@@ -14,6 +14,13 @@ class PaymentAdmin(admin.ModelAdmin):
     list_filter = ('status',)
 
 
+class BankPaymentAdmin(admin.ModelAdmin):
+    readonly_fields = ('id',)
+    list_display = ('id', 'enrollment', 'amount',
+                    'status', 'created_at', 'updated_at', 'voucher')
+    list_filter = ('status',)
+
+
 class OnlinePaymentAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     list_display = ('id', 'enrollment', 'amount',
@@ -22,4 +29,5 @@ class OnlinePaymentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Payment, PaymentAdmin)
+admin.site.register(BankPayment, BankPaymentAdmin)
 admin.site.register(OnlinePayment, OnlinePaymentAdmin)

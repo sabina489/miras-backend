@@ -30,6 +30,20 @@ class OnlinePaymentCreateSerializer(serializers.ModelSerializer):
             'delivery_charge',
             'merchant_code',
             'product_code',
+            'created_at',
+            'updated_at',
+        )
+
+
+class BankPaymentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BankPayment
+        fields = (
+            'id',
+            'amount',
+            'enrollment',
+            'created_at',
+            'voucher',
         )
 
 
