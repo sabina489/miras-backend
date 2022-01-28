@@ -120,6 +120,9 @@ class EnrollmentRetrieveSerializer(serializers.ModelSerializer):
         obj is the enrollment object
         """
         part_0 = obj.parts.first()
+        notes_0 = obj.notes.first()
         if part_0:
             return CourseSerializer(part_0.course, context=self.context).data
+        if notes_0:
+            return CourseSerializer(notes_0.courses, context=self.context).data
         return None
