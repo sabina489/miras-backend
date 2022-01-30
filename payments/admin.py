@@ -44,6 +44,5 @@ class BankPaymentAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
 
 
-admin.site.register(BankPayment, BankPaymentAdmin)
 admin.site.register(OnlinePayment, OnlinePaymentAdmin)
 admin.site.register(BankPayment, BankPaymentAdmin)
