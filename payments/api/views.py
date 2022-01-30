@@ -10,9 +10,9 @@ from notes.api import serializers
 from payments.api.serializers import (
     OnlinePaymentCreateSerializer,
     OnlinePaymentUpdateSerializer,
+    BankPaymentCreateSerializer,
 )
 from payments.models import (
-    Payment,
     BankPayment,
     OnlinePayment
 )
@@ -27,6 +27,12 @@ class OnlinePaymentCreateAPIView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = OnlinePaymentCreateSerializer
     queryset = OnlinePayment.objects.all()
+
+
+class BankPaymentCreateAPIView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = BankPaymentCreateSerializer
+    queryset = BankPayment.objects.all()
 
 
 class OnlinePaymentUpdateAPIView(UpdateAPIView):
