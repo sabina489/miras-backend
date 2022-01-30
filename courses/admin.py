@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from courses.models import (
     Course,
-    CourseCategory
+    CourseCategory,
+    CourseRequest,
 )
 from notes.admin import NoteInline
 
@@ -41,5 +42,12 @@ class CourseCategoryAdmin(admin.ModelAdmin):
     list_filter = ('parent',)
 
 
+class CourseRequestAdmin(admin.ModelAdmin):
+    readonly_fields = ('id',)
+    list_display = ('id', 'course_name', 'course_category', 'requester_name', 'requester_phone', 'status','created_at')
+    list_filter = ('status',)
+
+
+admin.site.register(CourseRequest, CourseRequestAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseCategory, CourseCategoryAdmin)

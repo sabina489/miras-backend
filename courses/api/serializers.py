@@ -1,7 +1,7 @@
 from django.db.models import fields
 from rest_framework import serializers
 
-from courses.models import Course, CourseCategory, CourseStatus
+from courses.models import Course, CourseCategory, CourseRequest, CourseStatus
 from enrollments.api.utils import count_enrollments, is_enrolled, is_enrolled_active
 from part.api.serializers import (
     PartSerializer,
@@ -95,4 +95,42 @@ class CourseSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'parts',
+        )
+
+
+class CourseRequestCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseRequest
+        fields = (
+            'course_name',
+            'course_category',
+            'requester_name',
+            'requester_email',
+            'requester_phone',
+        )
+
+
+class CourseRequestVoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseRequest
+        fields = ("vote_count",)
+
+
+class CourseRequestViewCountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseRequest
+        fields = ("view_count",)
+
+
+class CourseRequestListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseRequest
+        fields = (
+            'id',
+            'course_name',
+            'course_category',
+            'status',
+            'vote_count',
+            'view_count',
+            'created_at',
         )

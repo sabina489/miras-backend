@@ -112,11 +112,17 @@ class CourseRequest(models.Model):
     course_category = models.CharField(_("Course Category"), max_length=200)
     requester_name = models.CharField(_("Requester Name"), max_length=200)
     requester_email = models.EmailField(_("Requester Email"))
-    requester_phone = RegexValidator(
+    phone_regex = RegexValidator(
         regex=r'^9\d{9}', message="Enter a valid phonenumber 9XXXXXXXXX")
+
+    requester_phone= models.CharField(
+        validators=[phone_regex], max_length=10, unique=True)
     status = models.CharField(choices=CourseRequestStatus.CHOICES,
                               default=CourseRequestStatus.REQUEST, max_length=32)
     created_at = models.DateTimeField(auto_now_add=True)
+    vote_count = models.IntegerField(default=0)
+    view_count = models.IntegerField(default=0)
+
 
     class Meta:
         ordering = ['created_at']
