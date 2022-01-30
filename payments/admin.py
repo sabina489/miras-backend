@@ -6,10 +6,12 @@ from .models import (
 )
 # Register your models here.
 
+
 class OnlinePaymentInline(admin.TabularInline):
     model = OnlinePayment
     extra = 0
     show_change_link = True
+
 
 class BankPaymentInline(admin.TabularInline):
     model = BankPayment
@@ -37,11 +39,11 @@ class OnlinePaymentAdmin(admin.ModelAdmin):
                     'status', 'created_at', 'updated_at')
     list_filter = ('status',)
 
+
 class BankPaymentAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
 
 
-
-# admin.site.register(Payment, PaymentAdmin)
+admin.site.register(BankPayment, BankPaymentAdmin)
 admin.site.register(OnlinePayment, OnlinePaymentAdmin)
 admin.site.register(BankPayment, BankPaymentAdmin)
