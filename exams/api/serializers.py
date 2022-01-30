@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from common.api.mixin import EnrolledSerializerMixin
 
 from enrollments.models import ExamStatus
 from ..models import (
@@ -17,10 +18,8 @@ from enrollments.api.utils import (
 )
 
 
-class ExamSerializer(serializers.ModelSerializer):
+class ExamSerializer(EnrolledSerializerMixin):
     count = serializers.SerializerMethodField()
-    is_enrolled = serializers.SerializerMethodField()
-    is_enrolled_active = serializers.SerializerMethodField()
 
     class Meta:
         model = Exam
@@ -38,12 +37,6 @@ class ExamSerializer(serializers.ModelSerializer):
 
     def get_count(self, obj):
         return count_enrollments(obj)
-
-    def get_is_enrolled(self, obj):
-        return is_enrolled(obj, self.context["request"].user)
-
-    def get_is_enrolled_active(self, obj):
-        return is_enrolled_active(obj, self.context["request"].user)
 
 
 class OptionSerializer(serializers.ModelSerializer):
