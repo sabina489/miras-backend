@@ -26,13 +26,6 @@ class BankPaymentInline(admin.TabularInline):
 #     list_filter = ('status',)
 
 
-class BankPaymentAdmin(admin.ModelAdmin):
-    readonly_fields = ('id',)
-    list_display = ('id', 'enrollment', 'amount',
-                    'status', 'created_at', 'updated_at', 'voucher')
-    list_filter = ('status',)
-
-
 class OnlinePaymentAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     list_display = ('id', 'enrollment', 'amount',
@@ -44,5 +37,6 @@ class BankPaymentAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
 
 
+# admin.site.register(Payment, PaymentAdmin)
 admin.site.register(OnlinePayment, OnlinePaymentAdmin)
 admin.site.register(BankPayment, BankPaymentAdmin)
