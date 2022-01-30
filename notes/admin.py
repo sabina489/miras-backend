@@ -1,10 +1,6 @@
 from django.contrib import admin
-from django.forms import ModelForm, TextInput, models
+from django.forms import ModelForm
 from notes.models import Note
-
-from .models import (
-    Note
-)
 
 from content.admin import ContentInline
 
@@ -28,9 +24,9 @@ class NoteInline(admin.TabularInline):
 
 class NoteAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'created_by',)
-    list_display = ('title', 'type', 'created_at',
-                    'price', 'free', 'courses', 'part')
-    list_filter = ('type', 'price', 'courses', 'part')
+    list_display = ('title', 'created_at',
+                    'price', 'courses', 'part')
+    list_filter = ('price', 'courses', 'part')
     inlines = [ContentInline, ]
 
     def save_model(self, request, obj, form, change):
@@ -48,6 +44,5 @@ class NoteAdmin(admin.ModelAdmin):
                 instance.created_by = request.user
             instance.save()
         formset.save_m2m()
-
 
 admin.site.register(Note, NoteAdmin)

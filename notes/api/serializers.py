@@ -9,8 +9,6 @@ class NoteCreateSerializer(serializers.ModelSerializer):
         fields = (
             'title',
             'body',
-            'type',
-            'free',
             'price',
         )
 
@@ -24,8 +22,6 @@ class NoteListSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'body',
-            'type',
-            'free',
             'price',
             'contents',
         )
@@ -40,8 +36,6 @@ class NoteSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'body',
-            'type',
-            'free',
             'price',
             'contents',
         )
