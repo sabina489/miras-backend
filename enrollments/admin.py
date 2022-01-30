@@ -7,7 +7,7 @@ from enrollments.models import (
 from exams.models import (
     QuestionStatus
 )
-
+from payments.admin import OnlinePaymentInline, BankPaymentInline
 
 class QuestionStatusInline(admin.StackedInline):
     model = QuestionStatus
@@ -36,6 +36,8 @@ class EnrollmentAdmin(admin.ModelAdmin):
     list_filter = ('status', 'student')
     inlines = [
         ExamStatusInline,
+        OnlinePaymentInline,
+        BankPaymentInline,
     ]
     exclude = ('exams',)
 
