@@ -9,10 +9,12 @@ from .models import (
 class OnlinePaymentInline(admin.TabularInline):
     model = OnlinePayment
     extra = 0
+    show_change_link = True
 
 class BankPaymentInline(admin.TabularInline):
     model = BankPayment
     extra = 0
+    show_change_link = True
 
 
 # class PaymentAdmin(admin.ModelAdmin):
