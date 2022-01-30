@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from content.models import Content
+from content.models import Content, RecordedVideo
 # from part.api.serializers import PartSerializer
 
 class ContentListSerializer(serializers.ModelSerializer):
@@ -33,3 +33,12 @@ class ContentCourseListSerializer(serializers.ModelSerializer):
         if request.user.is_authenticated:
             return request.build_absolute_uri(obj.file.url)
         return None
+
+class RecordedVideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecordedVideo
+        fields = [
+            'id', 
+            'name', 
+            'file',
+        ]

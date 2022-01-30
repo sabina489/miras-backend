@@ -12,7 +12,6 @@ User = get_user_model()
 def content_location(instance, filename):
     return 'content/{0}/{1}'.format(instance.note.id, filename)
 
-
 class ContentType:
     VIDEO = "video"
     AUDIO = "audio"
@@ -32,13 +31,7 @@ class Content(models.Model):
     description = models.TextField()
     type = models.CharField(_("Type"), max_length=10,
                             choices=ContentType.CHOICES, default=ContentType.VIDEO)
-    # free = models.BooleanField(default=False)
     file = models.FileField(upload_to=content_location, blank=True, null=True)
-    # course = models.ForeignKey(
-    #     Course, on_delete=models.CASCADE, related_name='contents')
-    # part = models.ForeignKey(
-    #     Part, on_delete=models.CASCADE, related_name='contents', blank=True, null=True)
-
     note = models.ForeignKey(
         Note, on_delete=models.CASCADE, related_name="contents", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -51,3 +44,20 @@ class Content(models.Model):
 
     def __str__(self):
         return self.name
+
+def recorded_content_location(instance, filename):
+    return 'content/{0}/{1}'.format(instance.part.id, filename)
+
+class RecordedVideo(models.Model):
+    name = models.CharField(max_length=200, default="Recorded Video")
+    file = models.FileField(upload_to=recorded_content_location)
+    part = models.ForeignKey(
+        Part, on_delete=models.CASCADE, related_name='recorded_video')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='recorded_video')
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.part.name}"
+    

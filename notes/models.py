@@ -1,5 +1,4 @@
 from django.db import models
-from decimal import Decimal
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from courses.models import Course
@@ -9,25 +8,11 @@ from part.models import Part
 User = get_user_model()
 
 
-class NoteType:
-    RECORDED_VIDEO = "Recorded Video"
-    OTHERS = "Others"
-
-    CHOICES = [
-        (RECORDED_VIDEO, "Recorded Video"),
-        (OTHERS, "Others"),
-    ]
-
-
 class Note(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField()
-    type = models.CharField(_("Type"), max_length=20,
-                            choices=NoteType.CHOICES, default=NoteType.RECORDED_VIDEO)
-    # file = models.FileField(upload_to='notes/files/', blank=True, null=True)
-    free = models.BooleanField(default=False)
-    price = models.DecimalField(_("price"), max_digits=7, decimal_places=2, default=Decimal("0.0"),
-                                validators=[validate_positive])
+    price = models.FloatField(_("price"), default=0.0,
+                              validators=[validate_positive])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(

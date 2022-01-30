@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from content.api.serializers import ContentCourseListSerializer
-from enrollments.models import EnrollmentStatus
+from content.api.serializers import RecordedVideoSerializer
 
 from part.models import Part
 from enrollments.api.utils import count_enrollments, is_enrolled, is_enrolled_active
@@ -13,6 +12,7 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
     is_enrolled = serializers.SerializerMethodField()
     is_enrolled_active = serializers.SerializerMethodField()
     notes = NoteSerializer(many=True)
+    recorded_videos = serializers.SerializerMethodField()
 
     class Meta:
         model = Part
@@ -26,6 +26,7 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
             "is_enrolled",
             "is_enrolled_active",
             "notes",
+            "recorded_videos",
         )
 
     def get_count(self, obj):
@@ -45,9 +46,20 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
         """
         return is_enrolled_active(obj, self.context["request"].user)
 
+    def get_recorded_videos(self, obj):
+        if self.get_is_enrolled_active(obj):
+            return RecordedVideoSerializer(obj.recorded_video.all(), many=True).data
+        return []
+
 
 class PartSerializer(serializers.ModelSerializer):
     notes = NoteSerializer(many=True)
+    recorded_videos = serializers.SerializerMethodField()
+
+    def get_recorded_videos(self, obj):
+        if is_enrolled_active(obj, self.context["request"].user):
+            return RecordedVideoSerializer(obj.recorded_video.all(), many=True).data
+        return []
 
     class Meta:
         model = Part
@@ -56,5 +68,6 @@ class PartSerializer(serializers.ModelSerializer):
             "name",
             "price",
             "detail",
-            "notes"
+            "notes",
+            "recorded_videos",
         )

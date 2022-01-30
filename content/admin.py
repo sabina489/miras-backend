@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.forms import ModelForm
-from content.models import Content
+from content.models import Content, RecordedVideo
 
 
 class ContentAdminForm(ModelForm):
@@ -32,4 +32,23 @@ class ContentAdmin(admin.ModelAdmin):
         obj.save()
 
 
+class RecordedVideoInline(admin.TabularInline):
+    model = RecordedVideo
+    extra = 1
+    readonly_fields = ('created_by',)
+    show_change_link = True
+
+
+class RecordedVideoAdmin(admin.ModelAdmin):
+    readonly_fields = ('id', 'created_by',)
+    list_filter = ['created_at', 'part']
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            if not hasattr(obj, 'created_by'):
+                obj.created_by = request.user
+        obj.save()
+
+
+admin.site.register(RecordedVideo, RecordedVideoAdmin)
 admin.site.register(Content, ContentAdmin)
