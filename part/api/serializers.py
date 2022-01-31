@@ -4,13 +4,12 @@ from content.api.serializers import RecordedVideoSerializer
 from part.models import Part
 from enrollments.api.utils import count_enrollments, is_enrolled, is_enrolled_active
 from notes.api.serializers import NoteSerializer
+from common.api.mixin import EnrolledSerializerMixin
 
 
-class PartRetrieveSerializer(serializers.ModelSerializer):
+class PartRetrieveSerializer(EnrolledSerializerMixin):
 
     count = serializers.SerializerMethodField()
-    is_enrolled = serializers.SerializerMethodField()
-    is_enrolled_active = serializers.SerializerMethodField()
     notes = NoteSerializer(many=True)
     recorded_videos = serializers.SerializerMethodField()
 
@@ -23,10 +22,10 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
             "detail",
             "price",
             "count",
-            "is_enrolled",
-            "is_enrolled_active",
             "notes",
             "recorded_videos",
+            "is_enrolled",
+            "is_enrolled_active",
         )
 
     def get_count(self, obj):
@@ -36,28 +35,18 @@ class PartRetrieveSerializer(serializers.ModelSerializer):
         """
         return count_enrollments(obj)
 
-    def get_is_enrolled(self, obj):
-        return is_enrolled(obj, self.context["request"].user)
-
-    def get_is_enrolled_active(self, obj):
-        """
-        Get the enrollment status of the user for the part.
-        obj: Part object
-        """
-        return is_enrolled_active(obj, self.context["request"].user)
-
     def get_recorded_videos(self, obj):
         if self.get_is_enrolled_active(obj):
             return RecordedVideoSerializer(obj.recorded_video.all(), many=True).data
         return []
 
 
-class PartSerializer(serializers.ModelSerializer):
+class PartSerializer(EnrolledSerializerMixin):
     notes = NoteSerializer(many=True)
     recorded_videos = serializers.SerializerMethodField()
 
     def get_recorded_videos(self, obj):
-        if is_enrolled_active(obj, self.context["request"].user):
+        if self.get_is_enrolled_active(obj):
             return RecordedVideoSerializer(obj.recorded_video.all(), many=True).data
         return []
 
@@ -70,4 +59,6 @@ class PartSerializer(serializers.ModelSerializer):
             "detail",
             "notes",
             "recorded_videos",
+            "is_enrolled",
+            "is_enrolled_active",
         )

@@ -2,13 +2,14 @@ from django.db.models import fields
 from rest_framework import serializers
 
 from courses.models import Course, CourseCategory, CourseStatus
-from enrollments.api.utils import count_enrollments
+from enrollments.api.utils import count_enrollments, is_enrolled, is_enrolled_active
 from part.api.serializers import (
     PartSerializer,
     PartRetrieveSerializer,
 )
 from notes.api.serializers import NoteSerializer
 from exams.api.serializers import ExamSerializer
+from common.api.mixin import EnrolledSerializerMixin
 
 
 class CourseCreateSerialzer(serializers.ModelSerializer):
@@ -37,7 +38,7 @@ class CourseCreateSerialzer(serializers.ModelSerializer):
         return course
 
 
-class CourseRetrieveSerializer(serializers.ModelSerializer):
+class CourseRetrieveSerializer(EnrolledSerializerMixin):
     parts = PartRetrieveSerializer(many=True)
     notes = NoteSerializer(many=True)
     exams_exam_related = ExamSerializer(many=True,)
@@ -70,6 +71,8 @@ class CourseRetrieveSerializer(serializers.ModelSerializer):
             'parts',
             'notes',
             'exams_exam_related',
+            'is_enrolled',
+            'is_enrolled_active',
         )
 
 
