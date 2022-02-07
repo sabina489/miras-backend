@@ -58,7 +58,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'token': default_token_generator.make_token(user),
             'otp': user.otp,
         }, [user.email], 'Activate your account')
-        send_otp(user.phone, user.otp)
+        send_otp(user.phone, user.otp, user.otp_expiry)
         return user
 
 

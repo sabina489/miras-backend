@@ -1,8 +1,11 @@
+from unittest import result
 from django.conf import settings
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.utils.html import strip_tags
 import requests
+
+from common.models import OTP
 
 def send_mail_common(template, context, to, subject):
     htmly = get_template(template)
@@ -14,17 +17,19 @@ def send_mail_common(template, context, to, subject):
     msg.send()
 
 
-def send_otp(to, otp):
+def send_otp(to, otp, otp_expiry):
+    otp_object = OTP.objects.create(phone=to, otp=otp, otp_expiry=otp_expiry, result="")
     sms_send_url = settings.OTP_SEND_URL
     params = {
-        "token": settings.SMS_TOKEN,
-        "from": settings.SMS_FROM,
+        "auth_token": settings.SMS_TOKEN,
         "to": to,
         "text": f"Your OTP is {otp}",
     }
     otp_send = requests.post(sms_send_url, data=params)
-    if otp_send.status_code == 200:
-        print("OTP sent successfully")
+    result = otp_send.json()
+    otp_object.result = result
+    otp_object.error_status = result['error']
+    otp_object.save()
+    if not result['error']:
         return True
-    print("OTP sent failed", otp_send.json())
     return False
