@@ -16,7 +16,6 @@ class NoteCreateSerializer(serializers.ModelSerializer):
 
 
 class NoteListSerializer(EnrolledSerializerMixin):
-    contents = serializers.SerializerMethodField()
 
     class Meta:
         model = Note
@@ -25,13 +24,9 @@ class NoteListSerializer(EnrolledSerializerMixin):
             'title',
             'body',
             'price',
-            'contents',
+            "is_enrolled",
+            "is_enrolled_active",
         )
-
-    def get_contents(self, obj):
-        if self.get_is_enrolled_active(obj):
-            return ContentCourseListSerializer(obj.contents.all(), many=True).data
-        return []
 
 
 class NoteSerializer(EnrolledSerializerMixin):

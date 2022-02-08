@@ -3,15 +3,17 @@ from content.api.serializers import RecordedVideoSerializer
 
 from part.models import Part
 from enrollments.api.utils import count_enrollments, is_enrolled, is_enrolled_active
-from notes.api.serializers import NoteSerializer
+from notes.api.serializers import (
+    NoteSerializer,
+    NoteListSerializer
+)
 from common.api.mixin import EnrolledSerializerMixin
 
 
 class PartRetrieveSerializer(EnrolledSerializerMixin):
 
     count = serializers.SerializerMethodField()
-    notes = NoteSerializer(many=True)
-    recorded_videos = serializers.SerializerMethodField()
+    notes = NoteListSerializer(many=True)
 
     class Meta:
         model = Part
@@ -23,7 +25,6 @@ class PartRetrieveSerializer(EnrolledSerializerMixin):
             "price",
             "count",
             "notes",
-            "recorded_videos",
             "is_enrolled",
             "is_enrolled_active",
         )
@@ -34,11 +35,6 @@ class PartRetrieveSerializer(EnrolledSerializerMixin):
         obj: Part object
         """
         return count_enrollments(obj)
-
-    def get_recorded_videos(self, obj):
-        if self.get_is_enrolled_active(obj):
-            return RecordedVideoSerializer(obj.recorded_video.all(), many=True).data
-        return []
 
 
 class PartSerializer(EnrolledSerializerMixin):
