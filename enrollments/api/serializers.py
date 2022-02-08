@@ -6,6 +6,7 @@ from enrollments.api.utils import is_enrolled
 
 from enrollments.models import (
     Enrollment,
+    EnrollmentStatus,
     ExamStatus,
 )
 from notes.models import Note
@@ -57,30 +58,36 @@ class EnrollmentCreateSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         parts = validated_data.get('parts')
         notes = validated_data.get('notes')
+        total_price = 0.0
         if not (exams_data or parts or notes):
             raise serializers.ValidationError(
                 "Atleast one fields should be non-empty.")
 
-        def batch_is_enrolled(enrolled_objs):
-            # if parts:
+        def batch_is_enrolled_and_price(enrolled_objs):
+            sum_price = 0.0
             for enrolled_obj in enrolled_objs:
+                sum_price += float(enrolled_obj.price)
                 he_is_enrolled = is_enrolled(enrolled_obj, user)
                 if he_is_enrolled:
                     raise serializers.ValidationError(
                         "{} is already enrolled into {}".format(user, enrolled_obj))
+            return sum_price
+
         if parts:
-            batch_is_enrolled(parts)
+            total_price += batch_is_enrolled_and_price(parts)
         if notes:
-            batch_is_enrolled(notes)
+            total_price += batch_is_enrolled_and_price(notes)
         if exams_data:
             exams = [data.get("exam") for data in exams_data]
-            batch_is_enrolled(exams)
+            total_price += batch_is_enrolled_and_price(exams)
         enrollment = super().create(validated_data)
 
         if exams_data:
             for data in exams_data:
                 exam = data.get("exam")
                 ExamStatus(enrollment=enrollment, exam=exam).save()
+        if total_price == 0.0:
+            enrollment.status = EnrollmentStatus.ACTIVE
         enrollment.save()
         return enrollment
 
