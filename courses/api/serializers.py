@@ -7,7 +7,7 @@ from part.api.serializers import (
     PartSerializer,
     PartRetrieveSerializer,
 )
-from notes.api.serializers import NoteSerializer
+from notes.api.serializers import NoteListSerializer
 from exams.api.serializers import ExamSerializer
 from common.api.mixin import EnrolledSerializerMixin
 
@@ -40,7 +40,7 @@ class CourseCreateSerialzer(serializers.ModelSerializer):
 
 class CourseRetrieveSerializer(EnrolledSerializerMixin):
     parts = PartRetrieveSerializer(many=True)
-    notes = NoteSerializer(many=True)
+    notes = NoteListSerializer(many=True)
     exams_exam_related = ExamSerializer(many=True,)
 
     def to_representation(self, instance):
