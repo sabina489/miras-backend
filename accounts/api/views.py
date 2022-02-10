@@ -1,6 +1,7 @@
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, get_object_or_404
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, get_object_or_404, GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from django.utils import timezone
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import get_user_model
@@ -81,20 +82,14 @@ class UserActivateAPIView(APIView):
         return Response(token, status)
 
 
-# class UserActivateOTPAPIView(UpdateAPIView):
-#     permission_classes = [IsAuthenticated, OwnObjectPermission]
-#     serializer_class = UserActivateSerializer
-#     queryset = User.objects.all()
+class UserActivateOTPAPIView(UpdateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserActivateSerializer
+    queryset = User.objects.all()
+    lookup_field = "phone"
 
-#     def update(self, request, *args, **kwargs):
-#         partial = kwargs.pop('partial', False)
-#         instance = self.get_object()
-#         instance.otp == self.request.POST.get('otp')
-
-#         serializer = self.get_serializer(instance, data=request.data, partial=partial)
-#         serializer.is_valid(raise_exception=True)
-#         self.perform_update(serializer)
-#         return Response(serializer.data)
+    def perform_update(self, serializer):
+        serializer.save(is_active=True, otp_expiry=timezone.now())
 
 
 class UserUpdateAPIView(UpdateAPIView):

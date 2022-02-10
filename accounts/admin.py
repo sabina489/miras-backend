@@ -69,10 +69,10 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('phone',)
     filter_horizontal = ('groups', 'user_permissions',)
     fieldsets = (
-        (None, {'fields': ('phone', 'email', 'password')}),
+        (None, {'fields': ('phone', 'email', 'password', 'otp')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions', 'role'),
+            'fields': ('otp_expiry', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions', 'role'),
         }),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )

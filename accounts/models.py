@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import make_password
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
@@ -123,6 +124,13 @@ class User(AbstractUser):
     @property
     def is_admin(self):
         return self.role.id == Role.ADMIN
+
+    @property
+    def is_otp_time_valid(self):
+        return self.otp_expiry > timezone.now()
+
+    def validate_otp(self, value):
+        return self.otp == value
 
 
 def image_upload_location(instance, filename):
