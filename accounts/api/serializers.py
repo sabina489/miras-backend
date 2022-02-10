@@ -3,7 +3,9 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from accounts.models import Role, Profile
+from django.forms import ValidationError
 from django.conf import settings
+from django.db import transaction
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
@@ -30,13 +32,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
                   'email', 'password', 'profile')
         extra_kwargs = {'password': {'write_only': True}}
 
+    @transaction.atomic
     def create(self, validated_data):
         profile = None
         if 'profile' in validated_data:
             profile = validated_data.pop('profile')
         user = User.objects.create_user(**validated_data)
         user.role.add(Role.objects.get(id=1))
-        user.is_active = True
+        user.is_active = False
         if profile:
             interests = None
             if 'interests' in profile:
@@ -48,9 +51,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 profile_object.interests.set(interests)
             profile_object.save()
         user.otp = randrange(100000, 999999)
-        user.otp_expiry = timezone.datetime.now(
-        )+timezone.timedelta(days=settings.OTP_EXPIRY_DAYS)
+        user.otp_expiry = timezone.now()+timezone.timedelta(seconds=settings.OTP_EXPIRY_SECONDS)
+
         user.save()
+
         send_mail_common('accounts/email/activate.html', {
             'user': user,
             'domain': settings.FRONTEND_URL,
@@ -96,4 +100,13 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
 class UserActivateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'is_active')
+        fields = ('id', 'otp')
+        extra_kwargs = {'otp': {'write_only': True}}
+
+    def validate_otp(self, value):
+        otp_time_valid = self.instance.is_otp_time_valid
+        valid_otp = self.instance.validate_otp(value)
+        if otp_time_valid and valid_otp:
+            return value
+        else:
+            raise ValidationError("OTP expired or invalid")
