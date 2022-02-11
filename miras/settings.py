@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'notes',
     'content',
     'contactus',
+    'common',
 ]
 
 MIDDLEWARE = [
@@ -224,12 +225,12 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 # simple jwt end
 
 # OTP settings
-OTP_EXPIRY_DAYS = 1
-OTP_SEND_URL = env('OTP_SEND_URL')
-SMS_TOKEN = env('SMS_TOKEN')
-SMS_FROM = env('SMS_FROM')
+OTP_EXPIRY_SECONDS = env('OTP_EXPIRY_SECONDS', default=60)
+OTP_SEND_URL = env(
+    'OTP_SEND_URL', default='https://sms.aakashsms.com/sms/v3/send')
+SMS_TOKEN = env('SMS_TOKEN', default='aakash')
 # OTP settings end
 
 # Frontend IP start
-FRONTEND_URL = env('FRONTEND_URL')
+FRONTEND_URL = env('FRONTEND_URL', default='http://localhost:3000')
 # Frontend IP end
