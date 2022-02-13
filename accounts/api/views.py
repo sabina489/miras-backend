@@ -14,7 +14,10 @@ from accounts.api.serializers import (
     UserActivateSerializer,
     UserCreateSerializer,
     UserUpdateSerializer,
-    UserRetrieveSerializer
+    UserRetrieveSerializer,
+    UserResetPasswordRequestSerializer,
+    UserResetPasswordConfirmSerializer,
+    UserResetPasswordOTPConfirmSerializer,
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -87,9 +90,7 @@ class UserActivateOTPAPIView(UpdateAPIView):
     serializer_class = UserActivateSerializer
     queryset = User.objects.all()
     lookup_field = "phone"
-
-    def perform_update(self, serializer):
-        serializer.save(is_active=True, otp_expiry=timezone.now())
+    http_method_names = ['put']
 
 
 class UserUpdateAPIView(UpdateAPIView):
@@ -111,3 +112,50 @@ class UserProfileAPIView(RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class UserPasswordResetRequestAPIView(UpdateAPIView):
+    serializer_class = UserResetPasswordRequestSerializer
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    http_method_names = ['put']
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = get_object_or_404(queryset, email=self.request.data.get('email'))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+
+class UserPasswordResetConfirmAPIView(UpdateAPIView):
+    serializer_class = UserResetPasswordConfirmSerializer
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    http_method_names = ['put']
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = get_object_or_404(
+            queryset, email=self.request.data.get('email'))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+
+class UserResetPasswordOTPConfirmAPIView(GenericAPIView):
+    serializer_class = UserResetPasswordOTPConfirmSerializer
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    http_method_names = ['put']
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = get_object_or_404(
+            queryset, email=self.request.data.get('email'))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def put(self, request, *args, **kwags):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
