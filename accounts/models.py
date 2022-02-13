@@ -105,6 +105,11 @@ class User(AbstractUser):
     otp = models.CharField(max_length=6, blank=True)
     otp_expiry = models.DateTimeField(blank=True, null=True)
 
+    otp_reset = models.CharField(max_length=6, blank=True)
+    otp_reset_expiry = models.DateTimeField(blank=True, null=True)
+
+    reset_token = models.CharField(max_length=100, blank=True)
+
     USERNAME_FIELD = "phone"
 
     objects = UserManager()
@@ -128,9 +133,16 @@ class User(AbstractUser):
     @property
     def is_otp_time_valid(self):
         return self.otp_expiry > timezone.now()
+    
+    @property
+    def is_otp_reset_time_valid(self):
+        return self.otp_reset_expiry > timezone.now()
 
     def validate_otp(self, value):
-        return self.otp == value
+        return int(self.otp) == value
+
+    def validate_otp_reset(self, value):
+        return int(self.otp_reset) == value
 
 
 def image_upload_location(instance, filename):

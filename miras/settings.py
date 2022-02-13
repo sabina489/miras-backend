@@ -231,7 +231,6 @@ OTP_SEND_URL = env(
     'OTP_SEND_URL', default='https://sms.aakashsms.com/sms/v3/send')
 SMS_TOKEN = env('SMS_TOKEN', default='aakash')
 # OTP settings end
-print(env('OTP_EXPIRY_SECONDS'))
 
 # Frontend IP start
 FRONTEND_URL = env('FRONTEND_URL', default='http://localhost:3000')
