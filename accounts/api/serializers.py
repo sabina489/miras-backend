@@ -123,13 +123,13 @@ class UserResetPasswordRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email')
+        fields = ('id', 'phone')
 
-    def validate_email(self, value):
-        if self.instance.email == value:
+    def validate_phone(self, value):
+        if self.instance.phone == value:
             return value
         else:
-            raise ValidationError("Email does not match")
+            raise ValidationError("Phone does not match")
 
     def update(self, instance, validated_data):
         instance.otp_reset = randrange(100000, 999999)
@@ -149,11 +149,10 @@ class UserResetPasswordRequestSerializer(serializers.ModelSerializer):
 
 class UserResetPasswordConfirmSerializer(serializers.ModelSerializer):
     reset_token = serializers.CharField(write_only=True, required=True)
-    email = serializers.EmailField(required=True)
 
     class Meta:
         model = User
-        fields = ('id', 'reset_token', 'password', 'email')
+        fields = ('id', 'reset_token', 'password', 'phone')
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_reset_token(self, value):
@@ -171,11 +170,10 @@ class UserResetPasswordConfirmSerializer(serializers.ModelSerializer):
 class UserResetPasswordOTPConfirmSerializer(serializers.ModelSerializer):
     otp_reset = serializers.IntegerField(required=True)
     reset_token = serializers.CharField(read_only=True)
-    email = serializers.EmailField(required=True)
 
     class Meta:
         model = User
-        fields = ('id', 'otp_reset', 'reset_token', 'email')
+        fields = ('id', 'otp_reset', 'reset_token', 'phone')
 
     def validate_otp_reset(self, value):
         otp_time_valid = self.instance.is_otp_reset_time_valid
