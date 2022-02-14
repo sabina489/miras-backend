@@ -122,7 +122,7 @@ class UserPasswordResetRequestAPIView(UpdateAPIView):
 
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
-        obj = get_object_or_404(queryset, email=self.request.data.get('email'))
+        obj = get_object_or_404(queryset, phone=self.request.data.get('phone'))
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -136,7 +136,7 @@ class UserPasswordResetConfirmAPIView(UpdateAPIView):
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
         obj = get_object_or_404(
-            queryset, email=self.request.data.get('email'))
+            queryset, phone=self.request.data.get('phone'))
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -150,7 +150,7 @@ class UserResetPasswordOTPConfirmAPIView(GenericAPIView):
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
         obj = get_object_or_404(
-            queryset, email=self.request.data.get('email'))
+            queryset, phone=self.request.data.get('phone'))
         self.check_object_permissions(self.request, obj)
         return obj
 
