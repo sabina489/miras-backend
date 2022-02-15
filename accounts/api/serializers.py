@@ -12,6 +12,7 @@ from django.contrib.auth.tokens import default_token_generator
 
 from common.utils import send_mail_common, send_otp
 from random import randrange
+from accounts.api.utils import get_tokens_for_user
 
 User = get_user_model()
 
@@ -99,10 +100,11 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
 
 class UserActivateSerializer(serializers.ModelSerializer):
     otp = serializers.IntegerField(required=True)
+    token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'otp')
+        fields = ('id', 'otp', 'token')
 
     def validate_otp(self, value):
         otp_time_valid = self.instance.is_otp_time_valid
@@ -117,7 +119,9 @@ class UserActivateSerializer(serializers.ModelSerializer):
         instance.otp_expiry = timezone.now()
         instance.save()
         return instance
-
+    
+    def get_token(self, obj):
+        return get_tokens_for_user(obj)
 
 class UserResetPasswordRequestSerializer(serializers.ModelSerializer):
 
