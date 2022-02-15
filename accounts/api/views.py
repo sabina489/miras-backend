@@ -19,16 +19,9 @@ from accounts.api.serializers import (
     UserResetPasswordConfirmSerializer,
     UserResetPasswordOTPConfirmSerializer,
 )
-from rest_framework_simplejwt.tokens import RefreshToken
 
+from accounts.api.utils import get_tokens_for_user
 
-def get_tokens_for_user(user):
-    refresh = RefreshToken.for_user(user)
-
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    }
 
 
 User = get_user_model()
