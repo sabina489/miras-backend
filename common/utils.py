@@ -23,7 +23,7 @@ def send_otp(to, otp, otp_expiry):
     params = {
         "auth_token": settings.SMS_TOKEN,
         "to": to,
-        "text": f"Your OTP is {otp}",
+        "text": f"Welcome to Miras Academy!! Your OTP is {otp}",
     }
     otp_send = requests.post(sms_send_url, data=params)
     result = otp_send.json()
