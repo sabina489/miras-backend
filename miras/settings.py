@@ -235,3 +235,5 @@ SMS_TOKEN = env('SMS_TOKEN', default='aakash')
 # Frontend IP start
 FRONTEND_URL = env('FRONTEND_URL', default='http://localhost:3000')
 # Frontend IP end
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
