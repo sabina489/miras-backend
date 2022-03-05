@@ -237,3 +237,6 @@ FRONTEND_URL = env('FRONTEND_URL', default='http://localhost:3000')
 # Frontend IP end
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+SERVER_EMAIL = EMAIL_CONFIG['EMAIL_HOST_USER']
+ADMINS = [('atharva', 'miras@atharvatech.io')]
