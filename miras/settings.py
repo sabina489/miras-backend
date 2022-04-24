@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'corsheaders',
+    'file_resubmit',
     'accounts',
     'courses',
     'enrollments',
@@ -240,3 +241,13 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 SERVER_EMAIL = EMAIL_CONFIG['EMAIL_HOST_USER']
 ADMINS = [('atharva', 'miras@atharvatech.io')]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    "file_resubmit": {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        "LOCATION": '/tmp/file_resubmit/'
+    },
+}

@@ -2,6 +2,8 @@ from django.contrib import admin
 
 import nested_admin
 
+from file_resubmit.admin import AdminResubmitMixin
+
 from .models import (
     Exam,
     Question,
@@ -21,13 +23,13 @@ class CustomTabularInline(nested_admin.NestedTabularInline):
     template = "inlines/tabular.html"
 
 
-class OptionsInLine(CustomStackedInline):
+class OptionsInLine(AdminResubmitMixin, CustomStackedInline):
     model = Option
     extra = 4
     exclude = ('feedback',)
 
 
-class QuestionInLine(CustomStackedInline):
+class QuestionInLine(AdminResubmitMixin, CustomStackedInline):
     model = Question
     inlines = [
         OptionsInLine,
@@ -67,7 +69,7 @@ class GorkhapatraExamAdmin(ExamCommonAdmin):
     list_display = ExamCommonAdmin.list_display + ('content',)
 
 
-class QuestionAdmin(admin.ModelAdmin):
+class QuestionAdmin(AdminResubmitMixin, admin.ModelAdmin):
     readonly_fields = ('id', )
     list_display = ('id', 'detail', 'exam',  'marks',)
     list_filter = ('exam', )
@@ -83,7 +85,7 @@ class QuestionStatusAdmin(admin.ModelAdmin):
     list_filter = ('question',)
 
 
-class OptionAdmin(admin.ModelAdmin):
+class OptionAdmin(AdminResubmitMixin, admin.ModelAdmin):
     readonly_fields = ('id', )
     list_display = ('id', 'question', 'detail', 'correct', 'marks',)
     list_filter = ('question',)
