@@ -33,10 +33,14 @@ class EnrollmentAdmin(admin.ModelAdmin):
             enrolled += "(notes), ".join(
                 [f"{n.title}(note)" for n in obj.notes.all()])
         return enrolled
+    
+    def email(self, obj):
+        return obj.student.email
 
     readonly_fields = ('id',)
-    list_display = ('id', 'student', 'status', 'enrolled_on', 'created_at')
-    list_filter = ('status', 'student', 'parts', 'exams', 'notes')
+    list_display = ('id', 'student',"email", 'status', 'enrolled_on', 'created_at')
+    list_filter = ('status',"parts__course", 'parts', 'exams', 'notes')
+    search_fields = ['student__phone',]
     inlines = [
         ExamStatusInline,
         OnlinePaymentInline,
