@@ -8,7 +8,8 @@ from exams.models import (
     QuestionStatus
 )
 from payments.admin import OnlinePaymentInline, BankPaymentInline
-
+from import_export.admin import ExportMixin
+from enrollments.resources import EnrollmentResource
 
 class QuestionStatusInline(admin.StackedInline):
     model = QuestionStatus
@@ -20,7 +21,8 @@ class ExamStatusInline(admin.TabularInline):
     extra = 1
 
 
-class EnrollmentAdmin(admin.ModelAdmin):
+class EnrollmentAdmin(ExportMixin, admin.ModelAdmin):
+    resource_class = EnrollmentResource
 
     def enrolled_on(self, obj):
         enrolled = ""
