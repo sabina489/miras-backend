@@ -62,9 +62,9 @@ class Course(models.Model):
         "category"), related_name="courses", on_delete=models.CASCADE)
     instructor = models.ForeignKey(User, verbose_name=_(
         "instructor"), related_name="courses", on_delete=models.CASCADE)
-    link = models.URLField(_("link"), max_length=200)
+    link = models.URLField(_("link"), max_length=200, blank=True, null=True)
     password = models.CharField(_("password"), max_length=128, help_text=_(
-        "Use'[algo]$[salt]$[hexdigest]' or use the < a href=\"password/\">change password form</a>."))
+        "Use'[algo]$[salt]$[hexdigest]' or use the < a href=\"password/\">change password form</a>."), blank=True, null=True)
     status = models.CharField(
         _("status"), max_length=32, choices=CourseStatus.CHOICES,
         default=CourseStatus.UPCOMING)
