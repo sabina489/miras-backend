@@ -56,9 +56,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user.role.add(Role.objects.get(id=1))
         user.is_active = True
         if profile:
-            interests = None
-            if 'interests' in profile:
-                interests = profile.pop('interests')
+            interests = profile.pop('interests') if 'interests' in profile else None
             profile_object = Profile.objects.create(user=user)
             for attr, value in profile.items():
                 setattr(profile_object, attr, value)

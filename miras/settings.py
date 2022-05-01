@@ -252,3 +252,9 @@ CACHES = {
         "LOCATION": '/tmp/file_resubmit/'
     },
 }
+
+    
+SWAGGER_SETTINGS = {
+    'DEFAULT_API_URL': env("SWAGGER_DEFAULT_API_URL", default=None),
+}
+print(SWAGGER_SETTINGS)
