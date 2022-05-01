@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 
 import nested_admin
@@ -23,17 +24,38 @@ class CustomTabularInline(nested_admin.NestedTabularInline):
     template = "inlines/tabular.html"
 
 
-class OptionsInLine(AdminResubmitMixin, CustomStackedInline):
+class OptionsAdminForm(forms.ModelForm):
+    class Meta:
+        model = Option
+        fields = "__all__"
+        widgets = {
+            "detail": admin.widgets.AdminTextareaWidget(attrs={"rows": 2, "cols": 1, 'class': 'vTextField'}),
+        }
+
+
+class OptionsInLine(AdminResubmitMixin, nested_admin.NestedTabularInline):
     model = Option
     extra = 4
+    max_num = 6
     exclude = ('feedback',)
+    form = OptionsAdminForm
 
 
-class QuestionInLine(AdminResubmitMixin, CustomStackedInline):
+class QuestionAdminForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = "__all__"
+        widgets = {
+            "detail": admin.widgets.AdminTextareaWidget(attrs={"rows": 3, "cols": 2}),
+        }
+
+
+class QuestionInLine(AdminResubmitMixin, nested_admin.NestedStackedInline):
     model = Question
     inlines = [
         OptionsInLine,
     ]
+    form = QuestionAdminForm
 
 
 class ExamCommonAdmin(admin.ModelAdmin):
@@ -55,6 +77,7 @@ class MockExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
     inlines = [
         QuestionInLine,
     ]
+    autocomplete_fields = ["category", ]
 
 
 class MCQExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
@@ -62,11 +85,13 @@ class MCQExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
     inlines = [
         QuestionInLine,
     ]
+    autocomplete_fields = ["category", ]
 
 
 class GorkhapatraExamAdmin(ExamCommonAdmin):
     readonly_fields = ('id', 'created_at')
     list_display = ExamCommonAdmin.list_display + ('content',)
+    autocomplete_fields = ["category", ]
 
 
 class QuestionAdmin(AdminResubmitMixin, admin.ModelAdmin):
