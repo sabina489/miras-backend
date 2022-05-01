@@ -7,4 +7,3 @@ from contactus.api.serializers import ContactUsSerializer
 class ContactUsAPIView(CreateAPIView):
     serializer_class = ContactUsSerializer
     permission_classes = [AllowAny]
-

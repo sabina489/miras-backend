@@ -7,6 +7,7 @@ import requests
 
 from common.models import OTP
 
+
 def send_mail_common(template, context, to, subject):
     htmly = get_template(template)
     from_email = settings.EMAIL_HOST_USER
@@ -18,7 +19,8 @@ def send_mail_common(template, context, to, subject):
 
 
 def send_otp(to, otp, otp_expiry):
-    otp_object = OTP.objects.create(phone=to, otp=otp, otp_expiry=otp_expiry, result="")
+    otp_object = OTP.objects.create(
+        phone=to, otp=otp, otp_expiry=otp_expiry, result="")
     sms_send_url = settings.OTP_SEND_URL
     params = {
         "auth_token": settings.SMS_TOKEN,

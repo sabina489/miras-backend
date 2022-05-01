@@ -3,7 +3,7 @@ from contactus.models import ContactUs
 
 
 class ContactUsAdmin(admin.ModelAdmin):
-    list_display = ['email', 'name', 'message','send_status', 'created_on']
+    list_display = ['email', 'name', 'message', 'send_status', 'created_on']
 
 
 admin.site.register(ContactUs, ContactUsAdmin)

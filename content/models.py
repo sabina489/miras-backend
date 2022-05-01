@@ -12,6 +12,7 @@ User = get_user_model()
 def content_location(instance, filename):
     return 'content/{0}/{1}'.format(instance.note.id, filename)
 
+
 class ContentType:
     VIDEO = "video"
     AUDIO = "audio"
@@ -45,8 +46,10 @@ class Content(models.Model):
     def __str__(self):
         return self.name
 
+
 def recorded_content_location(instance, filename):
     return 'content/{0}/{1}'.format(instance.part.id, filename)
+
 
 class RecordedVideo(models.Model):
     name = models.CharField(max_length=200, default="Recorded Video")
@@ -60,4 +63,3 @@ class RecordedVideo(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} - {self.part.name}"
-    

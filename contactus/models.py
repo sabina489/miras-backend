@@ -14,7 +14,6 @@ class ContactUs(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-
     def __str__(self):
         return self.name
 
@@ -31,7 +30,7 @@ class ContactUs(models.Model):
                 "Contact Us Mail"
             )
             status = True
-            self.send_status = True 
+            self.send_status = True
         except BaseException as e:
             status = True
             ex_type, ex_value, ex_traceback = sys.exc_info()

@@ -24,7 +24,6 @@ from accounts.api.serializers import (
 from accounts.api.utils import get_tokens_for_user
 
 
-
 User = get_user_model()
 
 

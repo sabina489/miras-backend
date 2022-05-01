@@ -18,13 +18,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RecordedVideo',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(default='Recorded Video', max_length=200)),
-                ('file', models.FileField(upload_to=content.models.recorded_content_location)),
+                ('file', models.FileField(
+                    upload_to=content.models.recorded_content_location)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recorded_video', to=settings.AUTH_USER_MODEL)),
-                ('part', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recorded_video', to='part.part')),
+                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='recorded_video', to=settings.AUTH_USER_MODEL)),
+                ('part', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='recorded_video', to='part.part')),
             ],
         ),
     ]
