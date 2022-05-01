@@ -27,7 +27,8 @@ class CustomTabularInline(nested_admin.NestedTabularInline):
 class OptionsAdminForm(forms.ModelForm):
     class Meta:
         model = Option
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = ("marks", "feedback",)
         widgets = {
             "detail": admin.widgets.AdminTextareaWidget(attrs={"rows": 2, "cols": 1, 'class': 'vTextField'}),
         }
@@ -37,7 +38,6 @@ class OptionsInLine(AdminResubmitMixin, nested_admin.NestedTabularInline):
     model = Option
     extra = 4
     max_num = 6
-    exclude = ('feedback',)
     form = OptionsAdminForm
 
 
