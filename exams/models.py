@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.fields.related import ForeignKey
 from decimal import Decimal
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
@@ -113,11 +112,11 @@ class Question(models.Model):
 
         verbose_name = 'Question'
         verbose_name_plural = 'Questions'
-        ordering = ['exam']
+        ordering = ['exam','id']
 
     def __str__(self):
         """Unicode representation of Question."""
-        return "{}_{}".format(self.exam, self.id)
+        return f"{self.exam}_{self.id}"
 
 
 class Option(models.Model):
@@ -137,11 +136,11 @@ class Option(models.Model):
 
         verbose_name = 'Option'
         verbose_name_plural = 'Options'
-        ordering = ['question']
+        ordering = ['question', 'id']
 
     def __str__(self):
         """Unicode representation of Option."""
-        return "{}_{}".format(self.question, self.id)
+        return f"{self.question}_{self.id}"
 
 
 class QuestionStatus(models.Model):
@@ -174,8 +173,4 @@ class QuestionStatus(models.Model):
 
     def __str__(self):
         """Unicode representation of QuestionStatus."""
-        return "option {} by {} for {}".format(
-            self.exam_stat,
-            self.question,
-            self.selected_option
-        )
+        return f"option {self.exam_stat} by {self.question} for {self.selected_option}"
