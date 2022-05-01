@@ -64,34 +64,32 @@ class ExamCommonAdmin(admin.ModelAdmin):
         return ", ".join([q.name for q in obj.category.all()])
 
     list_display = ('id', 'name', 'category_list',
-                    'course', 'kind', 'price', 'created_at',)
+                    'course',  'price', 'created_at',)
+    list_filter = ("course", "category")
+    autocomplete_fields = ["category", ]
+    readonly_fields = ('id', 'created_at')
 
 
 class ExamAdmin(ExamCommonAdmin):
-    readonly_fields = ('id', 'created_at')
+    list_filter = ExamCommonAdmin.list_filter + ("kind",)
+    list_display = ExamCommonAdmin.list_display + ("kind",)
 
 
 class MockExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
-    readonly_fields = ('id', 'created_at')
     list_display = ExamCommonAdmin.list_display + ('timer',)
     inlines = [
         QuestionInLine,
     ]
-    autocomplete_fields = ["category", ]
 
 
 class MCQExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
-    readonly_fields = ('id', 'created_at')
     inlines = [
         QuestionInLine,
     ]
-    autocomplete_fields = ["category", ]
 
 
 class GorkhapatraExamAdmin(ExamCommonAdmin):
-    readonly_fields = ('id', 'created_at')
     list_display = ExamCommonAdmin.list_display + ('content',)
-    autocomplete_fields = ["category", ]
 
 
 class QuestionAdmin(AdminResubmitMixin, admin.ModelAdmin):
