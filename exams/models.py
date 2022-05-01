@@ -103,9 +103,9 @@ class Question(models.Model):
     exam = models.ForeignKey(Exam, verbose_name=_(
         "exam"), related_name=_("questions"), on_delete=models.CASCADE)
     marks = models.DecimalField(
-        _("marks"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
+        _("marks"), max_digits=5, decimal_places=2, default=Decimal("2.0"))
     neg_marks = models.DecimalField(
-        _("neg_marks"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
+        _("neg_marks"), max_digits=5, decimal_places=2, default=Decimal("0.4"))
 
     class Meta:
         """Meta definition for Question."""
