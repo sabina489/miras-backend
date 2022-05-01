@@ -32,6 +32,7 @@ class CourseCategory(models.Model):
 
         verbose_name = 'CourseCategory'
         verbose_name_plural = 'CourseCategorys'
+        ordering = ["id"]
 
     def __str__(self):
         """Unicode representation of CourseCategory."""
