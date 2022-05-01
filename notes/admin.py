@@ -45,4 +45,5 @@ class NoteAdmin(admin.ModelAdmin):
             instance.save()
         formset.save_m2m()
 
+
 admin.site.register(Note, NoteAdmin)

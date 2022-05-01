@@ -33,7 +33,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('phone', 'first_name', 'last_name',
-                  'email', 'password', 'profile', 'otp',"token")
+                  'email', 'password', 'profile', 'otp', "token")
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_otp(self, value):
@@ -56,7 +56,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user.role.add(Role.objects.get(id=1))
         user.is_active = True
         if profile:
-            interests = profile.pop('interests') if 'interests' in profile else None
+            interests = profile.pop(
+                'interests') if 'interests' in profile else None
             profile_object = Profile.objects.create(user=user)
             for attr, value in profile.items():
                 setattr(profile_object, attr, value)
@@ -73,6 +74,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def get_token(self, obj):
         return get_tokens_for_user(obj)
+
 
 class UserSendOTP(serializers.ModelSerializer):
     profile = ProfileCreateSerializer(required=False)

@@ -61,7 +61,7 @@ class EnrollmentDetailAPIView(RetrieveAPIView):
     queryset = Enrollment.objects.all()
 
     # def get_queryset(self):
-        # queryset = super().get_queryset()
-        # if self.request.user.is_superuser:
-            # return queryset
-        # return queryset.filter(student=self.request.user)
+    # queryset = super().get_queryset()
+    # if self.request.user.is_superuser:
+    # return queryset
+    # return queryset.filter(student=self.request.user)

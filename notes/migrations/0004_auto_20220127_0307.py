@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='note',
             name='type',
-            field=models.CharField(choices=[('Recorded Video', 'Recorded Video'), ('Others', 'Others')], default='Recorded Video', max_length=20, verbose_name='Type'),
+            field=models.CharField(choices=[('Recorded Video', 'Recorded Video'), (
+                'Others', 'Others')], default='Recorded Video', max_length=20, verbose_name='Type'),
         ),
     ]
