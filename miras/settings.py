@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nested_admin',
     'import_export',
-    
+
     'rest_framework',
     'drf_yasg',
     'corsheaders',
@@ -253,7 +253,7 @@ CACHES = {
     },
 }
 
-    
+
 SWAGGER_SETTINGS = {
     'DEFAULT_API_URL': env("SWAGGER_DEFAULT_API_URL", default=None),
 }

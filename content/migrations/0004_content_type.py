@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='content',
             name='type',
-            field=models.CharField(choices=[('video', 'Video'), ('audio', 'Audio'), ('pdf', 'PDF'), ('text', 'Text')], default='video', max_length=10, verbose_name='Type'),
+            field=models.CharField(choices=[('video', 'Video'), ('audio', 'Audio'), (
+                'pdf', 'PDF'), ('text', 'Text')], default='video', max_length=10, verbose_name='Type'),
         ),
     ]

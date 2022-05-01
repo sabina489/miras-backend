@@ -17,8 +17,9 @@ class EnrollmentResource(resources.ModelResource):
                 [f"{n.title}(note)" for n in obj.notes.all()])
         return enrolled
 
-
     class Meta:
         model = Enrollment
-        fields = ("id", "student__phone", "student__email", "status", "enrolled",)
-        export_order = ("id", "student__phone", "student__email", "status", "enrolled",)
+        fields = ("id", "student__phone",
+                  "student__email", "status", "enrolled",)
+        export_order = ("id", "student__phone",
+                        "student__email", "status", "enrolled",)

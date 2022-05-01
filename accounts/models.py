@@ -133,7 +133,7 @@ class User(AbstractUser):
     @property
     def is_otp_time_valid(self):
         return self.otp_expiry > timezone.now()
-    
+
     @property
     def is_otp_reset_time_valid(self):
         return self.otp_reset_expiry > timezone.now()
