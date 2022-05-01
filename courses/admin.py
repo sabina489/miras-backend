@@ -39,6 +39,7 @@ class CourseCategoryAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     list_display = ('id', 'name', 'parent')
     list_filter = ('parent',)
+    search_fields = ["name"]
 
 
 admin.site.register(Course, CourseAdmin)
