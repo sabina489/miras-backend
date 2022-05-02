@@ -50,8 +50,8 @@ class EnrollmentListAPIView(ListAPIView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.is_superuser:
-            return queryset
+        # if self.request.user.is_superuser:
+        #     return queryset
         return queryset.filter(student=self.request.user)
 
 
