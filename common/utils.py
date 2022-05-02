@@ -4,7 +4,7 @@ from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.utils.html import strip_tags
 import requests
-
+from miras.celery import app
 from common.models import OTP
 
 
@@ -13,11 +13,20 @@ def send_mail_common(template, context, to, subject):
     from_email = settings.EMAIL_HOST_USER
     html_content = htmly.render(context)
     text_content = strip_tags(html_content)
+    # msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+    # msg.attach_alternative(html_content, "text/html")
+    # msg.send()
+    async_send_mail.delay(subject, text_content, from_email, to, html_content)
+
+
+@app.task
+def async_send_mail(subject, text_content, from_email, to, html_content):
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
 
+@app.task
 def send_otp(to, otp, otp_expiry):
     otp_object = OTP.objects.create(
         phone=to, otp=otp, otp_expiry=otp_expiry, result="")
