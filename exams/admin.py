@@ -50,7 +50,7 @@ class QuestionAdminForm(forms.ModelForm):
         }
 
 
-class QuestionInLine(AdminResubmitMixin, nested_admin.NestedStackedInline):
+class QuestionInLine(AdminResubmitMixin, CustomStackedInline):
     model = Question
     inlines = [
         OptionsInLine,
