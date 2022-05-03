@@ -262,7 +262,7 @@ SWAGGER_SETTINGS = {
 # Celery settings
 # CELERY_BROKER_URL = 'redis://localhost:6379'
 # CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_BROKER_URL = 'amqp://rabbit'
+CELERY_BROKER_URL = 'amqp://miras-rabbit'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
