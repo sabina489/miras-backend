@@ -26,7 +26,6 @@ def async_send_mail(subject, text_content, from_email, to, html_content):
     msg.send()
 
 
-@app.task
 def send_otp(to, otp, otp_expiry):
     otp_object = OTP.objects.create(
         phone=to, otp=otp, otp_expiry=otp_expiry, result="")
@@ -44,3 +43,8 @@ def send_otp(to, otp, otp_expiry):
     if not result['error']:
         return True
     return False
+
+
+@app.task
+def async_send_otp(to, otp, otp_expiry):
+    send_otp(to, otp, otp_expiry)
