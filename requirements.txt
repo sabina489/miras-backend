@@ -57,3 +57,5 @@ django-file-resubmit==0.5.2
 flower==1.0.0
 celery==5.2.6
 django-celery-results==2.3.1
+django-redis==5.2.0
+redis==4.2.2
