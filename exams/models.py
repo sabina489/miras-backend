@@ -72,7 +72,7 @@ class MCQExam(Exam):
 class MockExam(Exam):
     """Model definition for MockExam."""
 
-    timer = models.TimeField(_("timer"))
+    timer = models.DurationField(_("timer"))
 
     class Meta:
         """Meta definition for MockExam."""
