@@ -17,6 +17,10 @@ from enrollments.api.utils import (
     is_enrolled_active,
 )
 
+from .utils import (
+    calculate_full_marks,
+)
+
 
 class ExamSerializer(EnrolledSerializerMixin):
     count = serializers.SerializerMethodField()
@@ -79,6 +83,20 @@ class MockExamSerializer(ExamSerializer):
         )
 
 
+class MockExamMiniSerializer(ExamSerializer):
+    full_marks = serializers.SerializerMethodField()
+
+    class Meta():
+        model = MockExam
+        fields = ExamSerializer.Meta.fields + (
+            'timer',
+            'full_marks'
+        )
+
+    def get_full_marks(self, obj):
+        return calculate_full_marks(obj)
+
+
 class MCQExamSerializer(ExamSerializer):
     questions = QuestionSerializer(many=True)
 
@@ -87,6 +105,19 @@ class MCQExamSerializer(ExamSerializer):
         fields = ExamSerializer.Meta.fields + (
             'questions',
         )
+
+
+class MCQExamMiniSerializer(ExamSerializer):
+    full_marks = serializers.SerializerMethodField()
+
+    class Meta():
+        model = MCQExam
+        fields = ExamSerializer.Meta.fields + (
+            'full_marks',
+        )
+
+    def get_full_marks(self, obj):
+        return calculate_full_marks(obj)
 
 
 class GorkhapatraExamSerializer(ExamSerializer):
@@ -175,8 +206,6 @@ class ExamStatusUpdateSerializer(serializers.ModelSerializer):
                     instance.score += new_state.question.marks
                 else:
                     instance.score -= new_state.question.neg_marks
-        # if instance.score < 0:
-        #     instance.score = 0.0
         instance.save()
         return instance
 
@@ -201,5 +230,4 @@ class ExamStatusRetrieveSerializer(serializers.ModelSerializer):
         num_examinee = all_examinee_states.count()
         num_examinee_lower_score = all_examinee_states.filter(
             score__lt=obj.score).count()
-        rank = num_examinee - num_examinee_lower_score
-        return rank
+        return num_examinee - num_examinee_lower_score
