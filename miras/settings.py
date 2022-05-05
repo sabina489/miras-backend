@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     'content',
     'contactus',
     'common',
+    'django_celery_results',
+
 ]
 
 MIDDLEWARE = [
@@ -257,3 +259,13 @@ CACHES = {
 SWAGGER_SETTINGS = {
     'DEFAULT_API_URL': env("SWAGGER_DEFAULT_API_URL", default=None),
 }
+# Celery settings
+# CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://rabbitmq'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kathmandu'
