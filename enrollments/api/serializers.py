@@ -67,10 +67,10 @@ class EnrollmentCreateSerializer(serializers.ModelSerializer):
             sum_price = 0.0
             for enrolled_obj in enrolled_objs:
                 sum_price += float(enrolled_obj.price)
-                he_is_enrolled = is_enrolled(enrolled_obj, user)
-                if he_is_enrolled:
+                if he_is_enrolled := is_enrolled(enrolled_obj, user):
                     raise serializers.ValidationError(
-                        "{} is already enrolled into {}".format(user, enrolled_obj))
+                        f"{user} is already enrolled into {enrolled_obj}")
+
             return sum_price
 
         if parts:
