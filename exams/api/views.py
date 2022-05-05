@@ -17,7 +17,9 @@ from enrollments.permissions import IsEnrolledActive
 from .serializers import (
     ExamSerializer,
     MockExamSerializer,
+    MockExamMiniSerializer,
     MCQExamSerializer,
+    MCQExamMiniSerializer,
     GorkhapatraExamSerializer,
     ExamStatusUpdateSerializer,
     ExamStatusRetrieveSerializer,
@@ -47,6 +49,12 @@ class MockExamDetailAPIView(RetrieveAPIView):
     queryset = MockExam.objects.all()
 
 
+class MockExamMiniDetailAPIView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = MockExamMiniSerializer
+    queryset = MockExam.objects.all()
+
+
 class ExamDetailAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated, IsEnrolledActive]
     serializer_class = ExamSerializer
@@ -56,6 +64,12 @@ class ExamDetailAPIView(RetrieveAPIView):
 class MCQExamDetailAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated, IsEnrolledActive]
     serializer_class = MCQExamSerializer
+    queryset = MCQExam.objects.all()
+
+
+class MCQExamMiniDetailAPIView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = MCQExamMiniSerializer
     queryset = MCQExam.objects.all()
 
 
