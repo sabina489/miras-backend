@@ -61,7 +61,7 @@ class Course(models.Model):
     category = models.ForeignKey(CourseCategory, verbose_name=_(
         "category"), related_name="courses", on_delete=models.CASCADE)
     instructor = models.ForeignKey(User, verbose_name=_(
-        "instructor"), related_name="courses", on_delete=models.CASCADE)
+        "instructor"), related_name="courses", on_delete=models.CASCADE, blank=True, null=True)
     link = models.URLField(_("link"), max_length=200, blank=True, null=True)
     password = models.CharField(_("password"), max_length=128, help_text=_(
         "Use'[algo]$[salt]$[hexdigest]' or use the < a href=\"password/\">change password form</a>."), blank=True, null=True)
