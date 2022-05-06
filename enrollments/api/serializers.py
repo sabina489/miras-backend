@@ -24,6 +24,7 @@ class ExamStatusSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'exam',
+            'submitted'
         )
 
 
@@ -35,6 +36,7 @@ class ExamStatusListSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'exam',
+            'submitted'
         )
 
 
