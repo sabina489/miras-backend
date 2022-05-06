@@ -184,10 +184,12 @@ class ExamStatusUpdateSerializer(serializers.ModelSerializer):
         model = ExamStatus
         fields = (
             'question_states',
+            'submitted',
         )
 
     def update(self, instance, validated_data):
         question_states = validated_data.pop('question_states')
+        submitted = validated_data.get('submitted') or False
 
         for state_data in question_states:
             question = state_data["question"]
@@ -219,6 +221,7 @@ class ExamStatusUpdateSerializer(serializers.ModelSerializer):
                     instance.score += new_state.question.marks
                 else:
                     instance.score -= new_state.question.neg_marks
+        instance.submitted = submitted
         instance.save()
         return instance
 
@@ -236,6 +239,7 @@ class ExamStatusRetrieveSerializer(serializers.ModelSerializer):
             'question_states',
             'score',
             'rank',
+            'submitted',
         )
 
     def get_rank(self, obj):

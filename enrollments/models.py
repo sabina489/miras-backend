@@ -68,6 +68,7 @@ class ExamStatus(models.Model):
         "exam"), related_name="exam_states", on_delete=models.CASCADE)
     score = models.DecimalField(
         _("score"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
+    submitted = models.BooleanField(_("submitted"), default=False)
 
     class Meta:
         """Meta definition for ExamStatus."""
