@@ -20,6 +20,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False),
+    HTTPS_ENABLED=(bool, False),
     ALLOWED_HOSTS=(list, []),
     OTP_EXPIRY_SECONDS=(int, 60),
 )
@@ -270,7 +271,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kathmandu'
 
-HTTPS_ENABLED = env('HTTPS_ENABLED', default=False)
+HTTPS_ENABLED = env('HTTPS_ENABLED')
 
 if HTTPS_ENABLED:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
