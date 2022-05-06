@@ -83,7 +83,7 @@ class MockExamSerializer(ExamSerializer):
             'timer',
             'questions',
             'officer',
-            'level'
+            'level',
         )
 
     def get_officer(self, obj):
@@ -92,16 +92,22 @@ class MockExamSerializer(ExamSerializer):
 
 class MockExamMiniSerializer(ExamSerializer):
     full_marks = serializers.SerializerMethodField()
-
+    officer = serializers.SerializerMethodField()
+    
     class Meta():
         model = MockExam
         fields = ExamSerializer.Meta.fields + (
             'timer',
-            'full_marks'
+            'full_marks',
+            'officer',
+            'level',
         )
 
     def get_full_marks(self, obj):
         return calculate_full_marks(obj)
+
+    def get_officer(self, obj):
+        return obj.officer.all().values_list('name', flat=True)
 
 
 class MCQExamSerializer(ExamSerializer):
