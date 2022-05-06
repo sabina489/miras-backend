@@ -69,10 +69,22 @@ class MCQExam(Exam):
         verbose_name_plural = 'MCQExams'
 
 
+class Officer(models.Model):
+    name = models.CharField(_("name"), max_length=128)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
 class MockExam(Exam):
     """Model definition for MockExam."""
 
     timer = models.DurationField(_("timer"))
+    level = models.CharField(max_length=20, default="I")
+    officer = models.ManyToManyField(Officer, blank=True)
 
     class Meta:
         """Meta definition for MockExam."""

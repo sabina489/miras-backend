@@ -13,7 +13,14 @@ from .models import (
     MCQExam,
     GorkhapatraExam,
     Option,
+    Officer,
 )
+
+
+class OfficerAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    ordering = ('name',)
+    search_fields = ('name',)
 
 
 class CustomStackedInline(nested_admin.NestedStackedInline):
@@ -66,7 +73,7 @@ class ExamCommonAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'category_list',
                     'course',  'price', 'created_at',)
     list_filter = ("course", "category")
-    autocomplete_fields = ["category", ]
+    autocomplete_fields = ("category", )
     readonly_fields = ('id', 'created_at')
 
 
@@ -80,6 +87,7 @@ class MockExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
     inlines = [
         QuestionInLine,
     ]
+    autocomplete_fields = ExamCommonAdmin.autocomplete_fields + ("officer",)
 
 
 class MCQExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
@@ -121,3 +129,4 @@ admin.site.register(MockExam, MockExamAdmin)
 admin.site.register(MCQExam, MCQExamAdmin)
 admin.site.register(GorkhapatraExam, GorkhapatraExamAdmin)
 admin.site.register(Option, OptionAdmin)
+admin.site.register(Officer, OfficerAdmin)

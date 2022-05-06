@@ -7,6 +7,7 @@ from ..models import (
     MockExam,
     MCQExam,
     GorkhapatraExam,
+    Officer,
     Question,
     QuestionStatus,
     Option,
@@ -70,13 +71,19 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 class MockExamSerializer(ExamSerializer):
     questions = QuestionSerializer(many=True)
+    officer = serializers.SerializerMethodField()
 
     class Meta():
         model = MockExam
         fields = ExamSerializer.Meta.fields + (
             'timer',
-            'questions'
+            'questions',
+            'officer',
+            'level'
         )
+
+    def get_officer(self, obj):
+        return obj.officer.all().values_list('name', flat=True)
 
 
 class MCQExamSerializer(ExamSerializer):
