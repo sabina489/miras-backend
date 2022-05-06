@@ -92,7 +92,8 @@ class MockExamSerializer(ExamSerializer):
 
 class MockExamMiniSerializer(ExamSerializer):
     full_marks = serializers.SerializerMethodField()
-
+    officer = serializers.SerializerMethodField()
+    
     class Meta():
         model = MockExam
         fields = ExamSerializer.Meta.fields + (
