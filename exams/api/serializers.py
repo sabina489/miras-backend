@@ -4,6 +4,7 @@ from common.api.mixin import EnrolledSerializerMixin
 from enrollments.models import ExamStatus
 from ..models import (
     Exam,
+    ExamType,
     MockExam,
     MCQExam,
     GorkhapatraExam,
@@ -25,6 +26,8 @@ from .utils import (
 
 class ExamSerializer(EnrolledSerializerMixin):
     count = serializers.SerializerMethodField()
+    officer = serializers.SerializerMethodField()
+    level = serializers.SerializerMethodField()
 
     class Meta:
         model = Exam
@@ -37,11 +40,23 @@ class ExamSerializer(EnrolledSerializerMixin):
             'category',
             'price',
             'is_enrolled',
-            'is_enrolled_active'
+            'is_enrolled_active',
+            'officer',
+            'level',
         )
 
     def get_count(self, obj):
         return count_enrollments(obj)
+
+    def get_officer(self, obj):
+        if obj.kind == ExamType.MOCK:
+            return MockExam.objects.get(id=obj.id).officer.all().values_list('name', flat=True)
+        return None
+
+    def get_level(self, obj):
+        if obj.kind == ExamType.MOCK:
+            return MockExam.objects.get(id=obj.id).level
+        return None
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -93,7 +108,7 @@ class MockExamSerializer(ExamSerializer):
 class MockExamMiniSerializer(ExamSerializer):
     full_marks = serializers.SerializerMethodField()
     officer = serializers.SerializerMethodField()
-    
+
     class Meta():
         model = MockExam
         fields = ExamSerializer.Meta.fields + (
