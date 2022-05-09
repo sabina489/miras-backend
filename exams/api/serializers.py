@@ -26,8 +26,7 @@ from .utils import (
 
 class ExamSerializer(EnrolledSerializerMixin):
     count = serializers.SerializerMethodField()
-    officer = serializers.SerializerMethodField()
-    level = serializers.SerializerMethodField()
+    extra = serializers.SerializerMethodField()
 
     class Meta:
         model = Exam
@@ -41,22 +40,23 @@ class ExamSerializer(EnrolledSerializerMixin):
             'price',
             'is_enrolled',
             'is_enrolled_active',
-            'officer',
-            'level',
+            'extra',
         )
 
     def get_count(self, obj):
         return count_enrollments(obj)
 
-    def get_officer(self, obj):
+    def get_extra(self, obj):
+        data = {}
         if obj.kind == ExamType.MOCK:
-            return MockExam.objects.get(id=obj.id).officer.all().values_list('name', flat=True)
-        return None
-
-    def get_level(self, obj):
-        if obj.kind == ExamType.MOCK:
-            return MockExam.objects.get(id=obj.id).level
-        return None
+            mock = MockExam.objects.get(id=obj.id)
+            data["officer"] = mock.officer.all().values_list('name', flat=True)
+            data["level"] = mock.level
+            data["timer"] = mock.timer
+        elif obj.kind == ExamType.GORKHA:
+            gorkha = GorkhapatraExam.objects.get(id=obj.id)
+            data["date"] = gorkha.date
+        return data
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -153,6 +153,7 @@ class GorkhapatraExamSerializer(ExamSerializer):
         model = GorkhapatraExam
         fields = ExamSerializer.Meta.fields + (
             'content',
+            'date',
         )
 
 
