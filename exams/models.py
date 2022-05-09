@@ -98,6 +98,7 @@ class GorkhapatraExam(Exam):
 
     content = models.FileField(
         _("content"), upload_to='exams/files/', blank=True, null=True)
+    date = models.DateField(_("date"))
 
     class Meta:
         """Meta definition for GorkhapatraExam."""
