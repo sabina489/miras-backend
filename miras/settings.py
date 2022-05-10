@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'contactus',
     'common',
     'django_celery_results',
-
+    'import_export_celery',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'author.middlewares.AuthorDefaultBackendMiddleware',
 ]
 
 ROOT_URLCONF = 'miras.urls'
@@ -261,10 +262,12 @@ SWAGGER_SETTINGS = {
     'DEFAULT_API_URL': env("SWAGGER_DEFAULT_API_URL", default=None),
 }
 # Celery settings
-# CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='redis://localhost:6379')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND',
+                            default='redis://localhost:6379')
 # CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_BROKER_URL = 'amqp://rabbitmq'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+# CELERY_BROKER_URL = 'amqp://rabbitmq'
+# CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
@@ -275,3 +278,5 @@ HTTPS_ENABLED = env('HTTPS_ENABLED')
 
 if HTTPS_ENABLED:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+IMPORT_EXPORT_CELERY_INIT_MODULE = "miras.celery"
