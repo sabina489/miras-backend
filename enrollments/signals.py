@@ -16,12 +16,6 @@ def on_course_end(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender='payments.OnlinePayment')
-def on_paid_status(sender, instance, **kwargs):
-    if instance.status == PaymentStatus.PAID:
-        activated_enroll = activate_enrollment(instance)
-        print('activated enrollment', activated_enroll)
-
-
 @receiver(post_save, sender='payments.BankPayment')
 def on_paid_status(sender, instance, **kwargs):
     if instance.status == PaymentStatus.PAID:
