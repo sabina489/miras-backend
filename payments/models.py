@@ -40,6 +40,7 @@ class Payment(models.Model):
     def change_status(self, new_status):
         self.status = new_status
         if (new_status == PaymentStatus.PAID):
+            self.save()
             send_mail_common('payments/payment_success.html', {
                 'user': self.enrollment.student,
                 'enrollment': self.enrollment,
@@ -48,7 +49,6 @@ class Payment(models.Model):
                 'user': self.enrollment.student,
                 'enrollment': self.enrollment,
             }, ['admin@example.com'], 'Payment Info')
-        self.save()
 
     class Meta:
         """Meta definition for Payment."""
