@@ -16,6 +16,7 @@ from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from common.utils import send_mail_common
 from django.template.response import TemplateResponse
+from import_export_celery.admin_actions import create_export_job_action
 
 
 class QuestionStatusInline(admin.StackedInline):
@@ -28,8 +29,8 @@ class ExamStatusInline(admin.TabularInline):
     extra = 1
 
 
-class EnrollmentAdmin(ExportMixin, admin.ModelAdmin):
-    resource_class = EnrollmentResource
+class EnrollmentAdmin(admin.ModelAdmin):
+    # resource_class = EnrollmentResource
 
     def enrolled_on(self, obj):
         enrolled = ""
@@ -103,7 +104,11 @@ class EnrollmentAdmin(ExportMixin, admin.ModelAdmin):
         OnlinePaymentInline,
         BankPaymentInline,
     ]
-    actions = ['send_email']
+    # actions = ['send_email',]
+    actions = (
+        send_email,
+        create_export_job_action,
+    )
     exclude = ('exams',)
 
 

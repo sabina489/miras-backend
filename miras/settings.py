@@ -280,3 +280,7 @@ if HTTPS_ENABLED:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 IMPORT_EXPORT_CELERY_INIT_MODULE = "miras.celery"
+
+IMPORT_EXPORT_CELERY_MODELS = {
+    "Enrollment": {"app_label": "enrollments", "model_name": "Enrollment"}
+}
