@@ -25,18 +25,6 @@ from courses.api.serializers import (
 )
 
 
-class CourseCreateAPIView(CreateAPIView):
-    pass
-
-
-class CourseUpdateAPIView(UpdateAPIView):
-    pass
-
-
-class CourseDeleteAPIView(DestroyAPIView):
-    pass
-
-
 class CourseListAPIView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = CourseRetrieveSerializer

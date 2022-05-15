@@ -49,6 +49,7 @@ class MockExamDetailAPIView(RetrieveAPIView):
     queryset = MockExam.objects.all()
 
 
+# TODO need to verify with frontend. Should it be AllowAny?
 class MockExamMiniDetailAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = MockExamMiniSerializer
@@ -67,6 +68,7 @@ class MCQExamDetailAPIView(RetrieveAPIView):
     queryset = MCQExam.objects.all()
 
 
+# TODO need to verify with frontend. Should it be AllowAny?
 class MCQExamMiniDetailAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = MCQExamMiniSerializer
@@ -80,7 +82,7 @@ class GorkhaPatraExamDetailAPIView(RetrieveAPIView):
 
 
 class ExamStatusUpdateAPIView(UpdateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEnrolledActive]
     serializer_class = ExamStatusUpdateSerializer
     queryset = ExamStatus.objects.all()
 
