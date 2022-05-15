@@ -22,6 +22,10 @@ from enrollments.api.serializers import(
     EnrollmentRetrieveSerializer,
 )
 
+from enrollments.api.permissions import (
+    IsEnrollmentOwner,
+)
+
 User = get_user_model()
 
 
@@ -35,7 +39,7 @@ class EnrollmentCreateAPIView(CreateAPIView):
 
 
 class EnrollmentDeleteAPIView(UpdateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEnrollmentOwner]
     serializer_class = EnrollmentDeleteSerializer
     queryset = Enrollment.objects.all()
 
@@ -44,19 +48,17 @@ class EnrollmentDeleteAPIView(UpdateAPIView):
 
 
 class EnrollmentListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEnrollmentOwner]
     serializer_class = EnrollmentRetrieveSerializer
     queryset = Enrollment.objects.all()
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        # if self.request.user.is_superuser:
-        #     return queryset
         return queryset.filter(student=self.request.user)
 
 
 class EnrollmentDetailAPIView(RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsEnrollmentOwner]
     serializer_class = EnrollmentRetrieveSerializer
     queryset = Enrollment.objects.all()
 

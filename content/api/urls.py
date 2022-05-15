@@ -1,9 +1,9 @@
 from django.urls import path
-from content.api.views import (
-    ContentListAPIView,
-    ContentCourseListAPIView,
-    ContentCoursePartListAPIView
-)
+# from content.api.views import (
+#     ContentListAPIView,
+#     ContentCourseListAPIView,
+#     ContentCoursePartListAPIView
+# )
 
 app_name = 'content'
 
