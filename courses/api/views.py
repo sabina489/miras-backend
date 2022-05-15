@@ -8,6 +8,7 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import (
     AllowAny,
+    IsAuthenticated,
 )
 
 from courses.models import (
@@ -18,7 +19,6 @@ from courses.models import (
 from courses.api.serializers import (
     CourseRequestCreateSerializer,
     CourseRequestListSerializer,
-    CourseRequestViewCountSerializer,
     CourseRequestVoteSerializer,
     CourseRetrieveSerializer,
     CourseCategoryRetrieveSerializer,
@@ -58,29 +58,23 @@ class CourseCategoryRetrieveAPIView(RetrieveAPIView):
 
 
 class CourseRequestCreateAPIView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = CourseRequestCreateSerializer
+
+    def perform_create(self, serializer):
+        return serializer.save(created_by=self.request.user)
 
 
 class CourseRequestVoteAPIView(UpdateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = CourseRequestVoteSerializer
     queryset = CourseRequest.objects.all()
 
     def perform_update(self, serializer):
-        serializer.save(vote_count=serializer.instance.vote_count + 1)
-
-
-class CourseRequestViewCountAPIView(UpdateAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = CourseRequestViewCountSerializer
-    queryset = CourseRequest.objects.all()
-
-    def perform_update(self, serializer):
-        serializer.save(view_count=serializer.instance.view_count + 1)
+        serializer.save(voters=[self.request.user])
 
 
 class CourseRequestListAPIView(ListAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = CourseRequestListSerializer
     queryset = CourseRequest.objects.all()

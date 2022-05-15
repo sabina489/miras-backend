@@ -4,7 +4,7 @@ from courses.api.views import (
     CourseListAPIView,
     CourseRequestCreateAPIView,
     CourseRequestListAPIView,
-    CourseRequestViewCountAPIView,
+    # CourseRequestViewCountAPIView,
     CourseRequestVoteAPIView,
     CourseRetrieveAPIView,
     CourseCategoryListAPIView,
@@ -22,8 +22,9 @@ urlpatterns = [
 
 
 urlpatterns += [
-    path('request/create/', CourseRequestCreateAPIView.as_view(), name='request-create'),
+    path('request/create/', CourseRequestCreateAPIView.as_view(),
+         name='request-create'),
     path('request/list/', CourseRequestListAPIView.as_view(), name='request-list'),
-    path('request/vote/<int:pk>/', CourseRequestVoteAPIView.as_view(), name='request-vote'),
-    path('request/view/<int:pk>/', CourseRequestViewCountAPIView.as_view(), name='request-view'),
+    path('request/vote/<int:pk>/',
+         CourseRequestVoteAPIView.as_view(), name='request-vote'),
 ]
