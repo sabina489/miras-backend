@@ -110,23 +110,35 @@ class CourseRequest(models.Model):
     """Model definition for CourseRequest."""
 
     course_name = models.CharField(_("Course Name"), max_length=200)
-    course_category = models.CharField(_("Course Category"), max_length=200)
-    requester_name = models.CharField(_("Requester Name"), max_length=200)
-    requester_email = models.EmailField(_("Requester Email"))
-    phone_regex = RegexValidator(
-        regex=r'^9\d{9}', message="Enter a valid phonenumber 9XXXXXXXXX")
+    course_category = models.ForeignKey(CourseCategory, verbose_name=_(
+        "category"), related_name="requests", on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, verbose_name=_(
+        "course"), related_name="requests", on_delete=models.CASCADE, blank=True, null=True)
+    # course_category = models.CharField(_("Course Category"), max_length=200)
+    # requester_name = models.CharField(_("Requester Name"), max_length=200)
+    # requester_email = models.EmailField(_("Requester Email"))
+    # phone_regex = RegexValidator(
+    #     regex=r'^9\d{9}', message="Enter a valid phonenumber 9XXXXXXXXX")
 
-    requester_phone= models.CharField(
-        validators=[phone_regex], max_length=10, unique=True)
+    # requester_phone= models.CharField(
+    #     validators=[phone_regex], max_length=10, unique=True)
     status = models.CharField(choices=CourseRequestStatus.CHOICES,
                               default=CourseRequestStatus.REQUEST, max_length=32)
     created_at = models.DateTimeField(auto_now_add=True)
-    vote_count = models.IntegerField(default=0)
-    view_count = models.IntegerField(default=0)
-
+    created_by = models.ForeignKey(
+        User, verbose_name=_("created_by"), related_name="course_requests", on_delete=models.CASCADE)
+    voters = models.ManyToManyField(
+        User, related_name="course_requests_voters", blank=True)
+    # view_count = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['created_at']
+
+    def number_of_votes(self):
+        return self.voters.count()
+
+    def has_voted(self, user):
+        return user in self.voters.all()
 
     def __str__(self):
         """Unicode representation of CourseRequest."""
