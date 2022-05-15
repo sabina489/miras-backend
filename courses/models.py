@@ -74,7 +74,11 @@ class Course(models.Model):
     class_detail = models.TextField(_("class_detail"), null=True, blank=True)
     benefit_detail = models.TextField(
         _("benefit_detail"), null=True, blank=True)
-    video = models.URLField(_("video"), max_length=200, null=True, blank=True)
+    video = models.URLField(_("video"), null=True, blank=True)
+    how_to_pay = models.URLField(_("how_to_pay"), null=True, blank=True)
+    teachers_video = models.URLField(
+        _("teachers_video"), null=True, blank=True)
+
     price = models.DecimalField(_("price"), max_digits=7, decimal_places=2, default=Decimal("0.0"),
                                 validators=[validate_positive])
     start_date = models.DateField(

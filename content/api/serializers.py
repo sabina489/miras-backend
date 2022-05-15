@@ -10,14 +10,14 @@ class ContentListSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'description',
-            'file',
+            'link',
             'note',
         ]
 
 
 class ContentCourseListSerializer(serializers.ModelSerializer):
     # part = PartSerializer(read_only=True)
-    file = serializers.SerializerMethodField()
+    # file = serializers.SerializerMethodField()
 
     class Meta:
         model = Content
@@ -25,15 +25,15 @@ class ContentCourseListSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'description',
-            'file',
+            'link'
             # 'part',
         ]
 
-    def get_file(self, obj):
-        request = self.context.get('request')
-        if request.user.is_authenticated:
-            return request.build_absolute_uri(obj.file.url)
-        return None
+    # def get_file(self, obj):
+    #     request = self.context.get('request')
+    #     if request.user.is_authenticated:
+    #         return request.build_absolute_uri(obj.file.url)
+    #     return None
 
 
 class RecordedVideoSerializer(serializers.ModelSerializer):
@@ -42,5 +42,7 @@ class RecordedVideoSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'name',
-            'file',
+            'link',
+            'professor_name',
+            'date',
         ]
