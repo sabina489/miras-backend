@@ -9,15 +9,17 @@ from rest_framework.generics import (
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
-    IsAdminUser
 )
-from accounts.api import permissions
 
 from courses.models import (
     Course,
-    CourseCategory
+    CourseCategory,
+    CourseRequest
 )
 from courses.api.serializers import (
+    CourseRequestCreateSerializer,
+    CourseRequestListSerializer,
+    CourseRequestVoteSerializer,
     CourseRetrieveSerializer,
     CourseCategoryRetrieveSerializer,
 )
@@ -53,3 +55,26 @@ class CourseCategoryRetrieveAPIView(RetrieveAPIView):
     permission_classes = [AllowAny]
     serializer_class = CourseCategoryRetrieveSerializer
     queryset = CourseCategory.objects.all()
+
+
+class CourseRequestCreateAPIView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CourseRequestCreateSerializer
+
+    def perform_create(self, serializer):
+        return serializer.save(created_by=self.request.user)
+
+
+class CourseRequestVoteAPIView(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CourseRequestVoteSerializer
+    queryset = CourseRequest.objects.all()
+
+    def perform_update(self, serializer):
+        serializer.save(voters=[self.request.user])
+
+
+class CourseRequestListAPIView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CourseRequestListSerializer
+    queryset = CourseRequest.objects.all()

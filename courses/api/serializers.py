@@ -1,8 +1,8 @@
 from django.db.models import fields
 from rest_framework import serializers
 
-from courses.models import Course, CourseCategory, CourseStatus
-from enrollments.api.utils import count_enrollments, is_enrolled, is_enrolled_active
+from courses.models import Course, CourseCategory, CourseRequest, CourseStatus
+from enrollments.api.utils import count_enrollments
 from part.api.serializers import (
     PartSerializer,
     PartRetrieveSerializer,
@@ -45,9 +45,7 @@ class CourseRetrieveSerializer(EnrolledSerializerMixin):
 
     def to_representation(self, instance):
         """Count the number of course enrollments."""
-        count = 0
-        for part in instance.parts.all():
-            count += count_enrollments(part)
+        count = sum(count_enrollments(part) for part in instance.parts.all())
         ret = super().to_representation(instance)
         ret['count'] = count
         return ret
@@ -96,3 +94,56 @@ class CourseSerializer(serializers.ModelSerializer):
             'name',
             'parts',
         )
+
+
+class CourseRequestCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseRequest
+        fields = (
+            'course_name',
+            'course_category',
+        )
+
+
+class CourseRequestVoteSerializer(serializers.ModelSerializer):
+    vote_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CourseRequest
+        fields = ("vote_count",)
+
+    def get_vote_count(self, obj):
+        return obj.number_of_votes()
+
+
+# class CourseRequestViewCountSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CourseRequest
+#         fields = ("view_count",)
+
+
+class CourseRequestListSerializer(serializers.ModelSerializer):
+    vote_count = serializers.SerializerMethodField()
+    has_voted = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CourseRequest
+        fields = (
+            'id',
+            'course_name',
+            'course_category',
+            'status',
+            'vote_count',
+            'created_at',
+            'created_by',
+            'has_voted',
+        )
+
+    def get_vote_count(self, obj):
+        return obj.number_of_votes()
+
+    def get_has_voted(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return obj.has_voted(user)
+        return False

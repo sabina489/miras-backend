@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from courses.models import (
     Course,
-    CourseCategory
+    CourseCategory,
+    CourseRequest,
 )
 from notes.admin import NoteInline
 
@@ -42,5 +43,22 @@ class CourseCategoryAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
 
+class VotersInline(admin.TabularInline):
+    model = CourseRequest.voters.through
+    extra = 0
+
+
+class CourseRequestAdmin(admin.ModelAdmin):
+    readonly_fields = ('id',)
+    list_display = ('id', 'course_name', 'course', 'course_category',
+                    'status', 'created_at', 'created_by', 'vote_count')
+    list_filter = ('status',)
+    inlines = [VotersInline, ]
+
+    def vote_count(self, obj):
+        return obj.number_of_votes()
+
+
+admin.site.register(CourseRequest, CourseRequestAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseCategory, CourseCategoryAdmin)
