@@ -27,6 +27,8 @@ class CourseCreateSerialzer(serializers.ModelSerializer):
             'class_detail',
             'benefit_detail',
             'video',
+            'how_to_pay',
+            'teachers_video',
         )
         extra_kwargs = {'password': {
             'write_only': True
@@ -73,6 +75,8 @@ class CourseRetrieveSerializer(EnrolledSerializerMixin):
             'exams_exam_related',
             'is_enrolled',
             'is_enrolled_active',
+            'how_to_pay',
+            'teachers_video',
         )
 
 
