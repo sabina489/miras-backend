@@ -10,7 +10,7 @@ from accounts.api.views import (
     UserPasswordResetRequestAPIView,
     UserPasswordResetConfirmAPIView,
     UserResetPasswordOTPConfirmAPIView,
-    UserSendOTP,
+    UserSendOTPAPIView,
 )
 
 
@@ -30,5 +30,5 @@ urlpatterns = [
          UserPasswordResetConfirmAPIView.as_view(), name='reset-password'),
     path('reset-password/otp-confirm/',
          UserResetPasswordOTPConfirmAPIView.as_view(), name='reset-password'),
-    path('send-otp/', UserSendOTP.as_view(), name='send-otp'),
+    path('send-otp/', UserSendOTPAPIView.as_view(), name='send-otp'),
 ]

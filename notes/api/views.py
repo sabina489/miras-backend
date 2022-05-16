@@ -37,10 +37,9 @@ class NoteRetrieveAPIView(RetrieveAPIView):
 
 
 class NoteCourseListAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated, IsEnrolledActive]
+    permission_classes = [AllowAny]
     serializer_class = NoteListSerializer
     queryset = Note.objects.all()
 
     def get_queryset(self):
-        qs = self.queryset.filter(courses__id=self.kwargs['course_id'])
-        return qs
+        return self.queryset.filter(courses__id=self.kwargs['course_id'])
