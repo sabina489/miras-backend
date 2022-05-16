@@ -133,11 +133,19 @@ class UserAdmin(BaseUserAdmin):
         return TemplateResponse(request, "admin/email_data.html", context)
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    def interest(self, obj):
+        return ", ".join(obj.interests.all().values_list('name', flat=True))
+
+    list_display = ("user", "date_of_birth", "college_name", "interest")
+    list_filter = ("interests",)
+
+
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
 admin.site.register(Permission)
 admin.site.register(Role)
-admin.site.register(Profile)
+admin.site.register(Profile, ProfileAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 # admin.site.unregister(Group)
