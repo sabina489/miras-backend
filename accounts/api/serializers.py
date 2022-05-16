@@ -76,7 +76,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return get_tokens_for_user(obj)
 
 
-class UserSendOTP(serializers.ModelSerializer):
+class UserSendOTPSerializer(serializers.ModelSerializer):
     profile = ProfileCreateSerializer(required=False)
 
     class Meta:

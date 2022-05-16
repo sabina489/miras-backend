@@ -20,8 +20,8 @@ class Note(models.Model):
 
     courses = models.ForeignKey(Course, verbose_name=_(
         "courses"), on_delete=models.CASCADE, related_name='notes')
-    part = models.ForeignKey(
-        Part, on_delete=models.CASCADE, related_name='notes', blank=True, null=True)
+    # part = models.ForeignKey(
+    #     Part, on_delete=models.CASCADE, related_name='notes', blank=True, null=True)
     # Erollment or course or part linking to the note
 
     class Meta:

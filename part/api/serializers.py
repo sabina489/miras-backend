@@ -13,7 +13,7 @@ from common.api.mixin import EnrolledSerializerMixin
 class PartRetrieveSerializer(EnrolledSerializerMixin):
 
     count = serializers.SerializerMethodField()
-    notes = NoteListSerializer(many=True)
+    # notes = NoteListSerializer(many=True)
 
     class Meta:
         model = Part
@@ -24,7 +24,7 @@ class PartRetrieveSerializer(EnrolledSerializerMixin):
             "detail",
             "price",
             "count",
-            "notes",
+            # "notes",
             "is_enrolled",
             "is_enrolled_active",
         )
@@ -38,7 +38,7 @@ class PartRetrieveSerializer(EnrolledSerializerMixin):
 
 
 class PartSerializer(EnrolledSerializerMixin):
-    notes = NoteSerializer(many=True)
+    # notes = NoteSerializer(many=True)
     recorded_videos = serializers.SerializerMethodField()
 
     def get_recorded_videos(self, obj):
@@ -53,7 +53,7 @@ class PartSerializer(EnrolledSerializerMixin):
             "name",
             "price",
             "detail",
-            "notes",
+            # "notes",
             "recorded_videos",
             "is_enrolled",
             "is_enrolled_active",
