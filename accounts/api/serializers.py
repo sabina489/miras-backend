@@ -106,8 +106,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             profile = validated_data.pop('profile')
         instance = super().update(instance, validated_data)
         if profile:
-            if 'interests' in profile:
-                interests = profile.pop('interests')
+            interests = profile.pop(
+                'interests') if 'interests' in profile else None
             for attr, value in profile.items():
                 setattr(instance.profile, attr, value)
             if interests:
