@@ -119,7 +119,6 @@ class Question(models.Model):
         """Unicode representation of Question."""
         return "{}_{}".format(self.exam, self.id)
 
-
 class Option(models.Model):
     """Model definition for Option."""
     detail = models.TextField(_("detail"))

@@ -34,7 +34,6 @@ class CourseUpdateAPIView(UpdateAPIView):
 class CourseDeleteAPIView(DestroyAPIView):
     pass
 
-
 class CourseListAPIView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = CourseRetrieveSerializer
@@ -65,3 +64,4 @@ class CourseCategoryRetrieveAPIView(RetrieveAPIView):
     permission_classes = [AllowAny]
     serializer_class = CourseCategoryRetrieveSerializer
     queryset = CourseCategory.objects.all()
+

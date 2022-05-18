@@ -24,7 +24,6 @@ from enrollments.api.serializers import(
 
 User = get_user_model()
 
-
 class EnrollmentCreateAPIView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = EnrollmentCreateSerializer

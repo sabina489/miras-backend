@@ -21,7 +21,7 @@ urlpatterns = [
          UserActivateAPIView.as_view(), name='activate'),
 
     path('update/<int:pk>/', UserUpdateAPIView.as_view(), name='update'),
-    path('get/<int:pk>/', UserRetrieveAPIView.as_view(), name='retrieve'),
+    path('get/<int:pk>/', UserRetrieveAPIView.as_view(), name='user-retrieve'),
     path('profile/', UserProfileAPIView.as_view(), name='profile'),
     path('reset-password/', UserPasswordResetRequestAPIView.as_view(),name='reset-password'),
     path('reset-password/confirm/', UserPasswordResetConfirmAPIView.as_view(),name='reset-password'),

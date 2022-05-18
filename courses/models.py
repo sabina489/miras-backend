@@ -8,8 +8,6 @@ from decimal import Decimal
 from courses.validators import validate_positive
 
 # Create your models here.
-
-
 User = get_user_model()
 
 

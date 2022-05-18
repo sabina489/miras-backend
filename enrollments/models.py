@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from decimal import Decimal
 
-
 from part.models import Part
 # Create your models here.
 User = get_user_model()

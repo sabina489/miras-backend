@@ -7,8 +7,6 @@ from courses.validators import validate_positive
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
-
-
 class Part(models.Model):
     """Model definition for Part."""
 

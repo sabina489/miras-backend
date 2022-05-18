@@ -19,7 +19,6 @@ class OnlinePaymentVariants():
         (key, key) for key in keys
     ]
 
-
 class Payment(models.Model):
     """Model definition for Payment."""
 

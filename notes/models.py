@@ -7,7 +7,6 @@ from part.models import Part
 
 User = get_user_model()
 
-
 class Note(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField()
@@ -22,7 +21,7 @@ class Note(models.Model):
         "courses"), on_delete=models.CASCADE, related_name='notes')
     part = models.ForeignKey(
         Part, on_delete=models.CASCADE, related_name='notes', blank=True, null=True)
-    # Erollment or course or part linking to the note
+    # Enrollment or course or part linking to the note
 
     class Meta:
         """Meta definition for Note"""
@@ -34,3 +33,4 @@ class Note(models.Model):
     def __str__(self):
         """Unicode representation of Note"""
         return self.title
+

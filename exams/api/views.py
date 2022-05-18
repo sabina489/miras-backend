@@ -32,14 +32,12 @@ from enrollments.models import (
     ExamStatus
 )
 
-
 class ExamListAPIView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = ExamSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
     queryset = Exam.objects.all()
-
 
 class MockExamDetailAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated, IsEnrolledActive]
