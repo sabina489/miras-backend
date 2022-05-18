@@ -1,4 +1,3 @@
-# from datetime import date, datetime, timedelta
 from ast import Try
 from logging import exception
 from django.utils import timezone
@@ -19,7 +18,6 @@ class UserTest(TestCase):
         time_1_min_after_now = time_now+timezone.timedelta(minutes=1)
         usernew = self.UserNew()
         usernew.otp_reset_expiry = time_1_min_after_now
-        # print('******', usernew.is_otp_reset_time_valid)
         self.assertTrue(usernew.is_otp_reset_time_valid)
 
     # before_now
@@ -29,7 +27,6 @@ class UserTest(TestCase):
         time_1_min_before_now = time_recent-timezone.timedelta(minutes=1)
         userrecent = self.UserNew()
         userrecent.otp_reset_expiry = time_1_min_before_now
-        # print('***', userrecent.is_otp_reset_time_valid)
         self.assertFalse(userrecent.is_otp_reset_time_valid)
 
     # validate_otp
@@ -68,7 +65,6 @@ class UserTest(TestCase):
         time_1_min_after_now = time_now + timezone.timedelta(minutes=1)
         usernew1 = self.UserNew()
         usernew1.otp_expiry = time_1_min_after_now
-        # print('##', usernew1.is_otp_time_valid)
         self.assertTrue(usernew1.is_otp_time_valid)
     
     # before_now()
@@ -78,7 +74,6 @@ class UserTest(TestCase):
         time_1_min_before_now = time_recent - timezone.timedelta(minutes=1)
         usernew2 = self.UserNew()
         usernew2.otp_expiry = time_1_min_before_now
-        # print('!!',usernew2.is_otp_time_valid)
         self.assertFalse(usernew2.is_otp_time_valid)
 
         #test for invalid users
@@ -88,5 +83,7 @@ class UserTest(TestCase):
             User.objects.create(phone=invalid_phone)
         except Exception as e:
             self.assertRaisesMessage(e, "Enter a valid phonenumber 9XXXXXXXXX")
+
+
     
 
