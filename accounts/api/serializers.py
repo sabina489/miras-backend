@@ -1,8 +1,10 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from accounts.models import Role, Profile
+from common.models import OTP
 from django.forms import ValidationError
 from django.conf import settings
 from django.db import transaction
@@ -13,7 +15,6 @@ from django.contrib.auth.tokens import default_token_generator
 from common.utils import send_mail_common, send_otp
 from random import randrange
 from accounts.api.utils import get_tokens_for_user
-
 User = get_user_model()
 
 
@@ -26,12 +27,25 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
 
 class UserCreateSerializer(serializers.ModelSerializer):
     profile = ProfileCreateSerializer(required=False)
+    token = serializers.SerializerMethodField(read_only=True)
+    otp = serializers.CharField(required=True)
 
     class Meta:
         model = User
         fields = ('phone', 'first_name', 'last_name',
-                  'email', 'password', 'profile')
+                  'email', 'password', 'profile', 'otp', "token")
         extra_kwargs = {'password': {'write_only': True}}
+
+    def validate_otp(self, value):
+        try:
+            otp = OTP.objects.filter(
+                phone=self.initial_data['phone']).last()
+        except:
+            raise ValidationError('OTP not found')
+        if otp.otp == int(value) and otp.otp_expiry > timezone.now():
+            return value
+        else:
+            raise ValidationError("OTP expired or invalid")
 
     @transaction.atomic
     def create(self, validated_data):
@@ -40,31 +54,43 @@ class UserCreateSerializer(serializers.ModelSerializer):
             profile = validated_data.pop('profile')
         user = User.objects.create_user(**validated_data)
         user.role.add(Role.objects.get(id=1))
-        user.is_active = False
+        user.is_active = True
         if profile:
-            interests = None
-            if 'interests' in profile:
-                interests = profile.pop('interests')
+            interests = profile.pop(
+                'interests') if 'interests' in profile else None
             profile_object = Profile.objects.create(user=user)
             for attr, value in profile.items():
                 setattr(profile_object, attr, value)
             if interests:
                 profile_object.interests.set(interests)
             profile_object.save()
-        user.otp = randrange(100000, 999999)
-        user.otp_expiry = timezone.now()+timezone.timedelta(seconds=settings.OTP_EXPIRY_SECONDS)
+        # user.otp = randrange(100000, 999999)
+        # user.otp_expiry = timezone.now()+timezone.timedelta(seconds=settings.OTP_EXPIRY_SECONDS)
 
         user.save()
 
-        send_mail_common('accounts/email/activate.html', {
-            'user': user,
-            'domain': settings.FRONTEND_URL,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': default_token_generator.make_token(user),
-            'otp': user.otp,
-        }, [user.email], 'Activate your account')
-        send_otp(user.phone, user.otp, user.otp_expiry)
+        # send_otp(user.phone, user.otp, user.otp_expiry)
         return user
+
+    def get_token(self, obj):
+        return get_tokens_for_user(obj)
+
+
+class UserSendOTPSerializer(serializers.ModelSerializer):
+    profile = ProfileCreateSerializer(required=False)
+
+    class Meta:
+        model = User
+        fields = ('phone', 'first_name', 'last_name',
+                  'email', 'password', 'profile')
+        extra_kwargs = {'password': {'write_only': True}}
+
+    @transaction.atomic
+    def send_otp(self):
+        otp = randrange(100000, 999999)
+        otp_expiry = timezone.now()+timezone.timedelta(seconds=settings.OTP_EXPIRY_SECONDS)
+        send_otp(self.validated_data['phone'], otp, otp_expiry)
+        return True
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -72,7 +98,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'profile')
+        fields = ('first_name', 'last_name', 'email', 'profile')
 
     def update(self, instance, validated_data):
         profile = None
@@ -80,8 +106,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             profile = validated_data.pop('profile')
         instance = super().update(instance, validated_data)
         if profile:
-            if 'interests' in profile:
-                interests = profile.pop('interests')
+            interests = profile.pop(
+                'interests') if 'interests' in profile else None
             for attr, value in profile.items():
                 setattr(instance.profile, attr, value)
             if interests:
@@ -119,9 +145,10 @@ class UserActivateSerializer(serializers.ModelSerializer):
         instance.otp_expiry = timezone.now()
         instance.save()
         return instance
-    
+
     def get_token(self, obj):
         return get_tokens_for_user(obj)
+
 
 class UserResetPasswordRequestSerializer(serializers.ModelSerializer):
 

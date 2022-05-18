@@ -15,13 +15,13 @@ from notes.api.serializers import (
 )
 
 
-class NoteCreateAPIView(CreateAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = NoteCreateSerializer
-    queryset = Note.objects.all()
+# class NoteCreateAPIView(CreateAPIView):
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = NoteCreateSerializer
+#     queryset = Note.objects.all()
 
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+#     def perform_create(self, serializer):
+#         serializer.save(created_by=self.request.user)
 
 
 class NoteListAPIView(ListAPIView):
@@ -31,16 +31,15 @@ class NoteListAPIView(ListAPIView):
 
 
 class NoteRetrieveAPIView(RetrieveAPIView):
-    permission_classes = [IsEnrolledActive]
+    permission_classes = [IsAuthenticated, IsEnrolledActive]
     serializer_class = NoteListSerializer
     queryset = Note.objects.all()
 
 
 class NoteCourseListAPIView(ListAPIView):
-    permission_classes = [IsEnrolledActive]
+    permission_classes = [AllowAny]
     serializer_class = NoteListSerializer
     queryset = Note.objects.all()
 
     def get_queryset(self):
-        qs = self.queryset.filter(courses__id=self.kwargs['course_id'])
-        return qs
+        return self.queryset.filter(courses__id=self.kwargs['course_id'])

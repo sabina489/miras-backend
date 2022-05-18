@@ -2,6 +2,7 @@
 {% load i18n nested_admin static %}
 
 {% with inline_admin_formset.formset.is_nested as is_nested %}
+
 {% with inline_admin_formset.opts as inline_opts %}
 <div
   class="inline-group group djn-group djn-tabular{% if is_nested %} djn-group-nested{% else %} djn-group-root{% endif %}"

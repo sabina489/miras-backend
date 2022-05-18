@@ -4,9 +4,11 @@ from common.api.mixin import EnrolledSerializerMixin
 from enrollments.models import ExamStatus
 from ..models import (
     Exam,
+    ExamType,
     MockExam,
     MCQExam,
     GorkhapatraExam,
+    Officer,
     Question,
     QuestionStatus,
     Option,
@@ -17,9 +19,14 @@ from enrollments.api.utils import (
     is_enrolled_active,
 )
 
+from .utils import (
+    calculate_full_marks,
+)
+
 
 class ExamSerializer(EnrolledSerializerMixin):
     count = serializers.SerializerMethodField()
+    extra = serializers.SerializerMethodField()
 
     class Meta:
         model = Exam
@@ -32,11 +39,24 @@ class ExamSerializer(EnrolledSerializerMixin):
             'category',
             'price',
             'is_enrolled',
-            'is_enrolled_active'
+            'is_enrolled_active',
+            'extra',
         )
 
     def get_count(self, obj):
         return count_enrollments(obj)
+
+    def get_extra(self, obj):
+        data = {}
+        if obj.kind == ExamType.MOCK:
+            mock = MockExam.objects.get(id=obj.id)
+            data["officer"] = mock.officer.all().values_list('name', flat=True)
+            data["level"] = mock.level
+            data["timer"] = mock.timer
+        elif obj.kind == ExamType.GORKHA:
+            gorkha = GorkhapatraExam.objects.get(id=obj.id)
+            data["date"] = gorkha.date
+        return data
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -70,13 +90,39 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 class MockExamSerializer(ExamSerializer):
     questions = QuestionSerializer(many=True)
+    officer = serializers.SerializerMethodField()
 
     class Meta():
         model = MockExam
         fields = ExamSerializer.Meta.fields + (
             'timer',
-            'questions'
+            'questions',
+            'officer',
+            'level',
         )
+
+    def get_officer(self, obj):
+        return obj.officer.all().values_list('name', flat=True)
+
+
+class MockExamMiniSerializer(ExamSerializer):
+    full_marks = serializers.SerializerMethodField()
+    officer = serializers.SerializerMethodField()
+
+    class Meta():
+        model = MockExam
+        fields = ExamSerializer.Meta.fields + (
+            'timer',
+            'full_marks',
+            'officer',
+            'level',
+        )
+
+    def get_full_marks(self, obj):
+        return calculate_full_marks(obj)
+
+    def get_officer(self, obj):
+        return obj.officer.all().values_list('name', flat=True)
 
 
 class MCQExamSerializer(ExamSerializer):
@@ -89,11 +135,25 @@ class MCQExamSerializer(ExamSerializer):
         )
 
 
+class MCQExamMiniSerializer(ExamSerializer):
+    full_marks = serializers.SerializerMethodField()
+
+    class Meta():
+        model = MCQExam
+        fields = ExamSerializer.Meta.fields + (
+            'full_marks',
+        )
+
+    def get_full_marks(self, obj):
+        return calculate_full_marks(obj)
+
+
 class GorkhapatraExamSerializer(ExamSerializer):
     class Meta:
         model = GorkhapatraExam
         fields = ExamSerializer.Meta.fields + (
             'content',
+            'date',
         )
 
 
@@ -140,10 +200,12 @@ class ExamStatusUpdateSerializer(serializers.ModelSerializer):
         model = ExamStatus
         fields = (
             'question_states',
+            'submitted',
         )
 
     def update(self, instance, validated_data):
         question_states = validated_data.pop('question_states')
+        submitted = validated_data.get('submitted') or False
 
         for state_data in question_states:
             question = state_data["question"]
@@ -175,8 +237,7 @@ class ExamStatusUpdateSerializer(serializers.ModelSerializer):
                     instance.score += new_state.question.marks
                 else:
                     instance.score -= new_state.question.neg_marks
-        # if instance.score < 0:
-        #     instance.score = 0.0
+        instance.submitted = submitted
         instance.save()
         return instance
 
@@ -194,6 +255,7 @@ class ExamStatusRetrieveSerializer(serializers.ModelSerializer):
             'question_states',
             'score',
             'rank',
+            'submitted',
         )
 
     def get_rank(self, obj):
@@ -201,5 +263,4 @@ class ExamStatusRetrieveSerializer(serializers.ModelSerializer):
         num_examinee = all_examinee_states.count()
         num_examinee_lower_score = all_examinee_states.filter(
             score__lt=obj.score).count()
-        rank = num_examinee - num_examinee_lower_score
-        return rank
+        return num_examinee - num_examinee_lower_score

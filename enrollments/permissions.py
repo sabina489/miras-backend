@@ -8,15 +8,15 @@ from .api.utils import (
 
 class IsEnrolledActive(permissions.BasePermission):
     """Permission to allow only the enrolled users to use the obj."""
-    code = "NOT ENROLLED"
-    message = "You are not enrolled."
+    code = "NO ACTIVE ENROLLMENT"
+    message = "You don't have active enrollment."
 
     def has_object_permission(self, request, view, obj):
         return is_enrolled_active(obj, request.user)
 
 
 class IsEnrolled(permissions.BasePermission):
-    code = "ALREADY ENROLLMENT"
+    code = "ALREADY ENROLLED"
     message = "You already have an enrollment."
 
     def has_object_permission(self, request, view, obj):

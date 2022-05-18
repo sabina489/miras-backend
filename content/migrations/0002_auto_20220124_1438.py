@@ -23,6 +23,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='content',
             name='note',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='contents', to='notes.note'),
+            field=models.ForeignKey(
+                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='contents', to='notes.note'),
         ),
     ]

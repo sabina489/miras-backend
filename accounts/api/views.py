@@ -18,10 +18,10 @@ from accounts.api.serializers import (
     UserResetPasswordRequestSerializer,
     UserResetPasswordConfirmSerializer,
     UserResetPasswordOTPConfirmSerializer,
+    UserSendOTPSerializer,
 )
 
 from accounts.api.utils import get_tokens_for_user
-
 
 
 User = get_user_model()
@@ -151,4 +151,15 @@ class UserResetPasswordOTPConfirmAPIView(GenericAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
+
+
+class UserSendOTPAPIView(GenericAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserSendOTPSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.send_otp()
         return Response(serializer.data)

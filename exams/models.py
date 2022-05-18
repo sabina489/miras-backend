@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.fields.related import ForeignKey
 from decimal import Decimal
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
@@ -70,10 +69,22 @@ class MCQExam(Exam):
         verbose_name_plural = 'MCQExams'
 
 
+class Officer(models.Model):
+    name = models.CharField(_("name"), max_length=128)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
 class MockExam(Exam):
     """Model definition for MockExam."""
 
-    timer = models.TimeField(_("timer"))
+    timer = models.DurationField(_("timer"))
+    level = models.CharField(max_length=20, default="I")
+    officer = models.ManyToManyField(Officer, blank=True)
 
     class Meta:
         """Meta definition for MockExam."""
@@ -87,6 +98,7 @@ class GorkhapatraExam(Exam):
 
     content = models.FileField(
         _("content"), upload_to='exams/files/', blank=True, null=True)
+    date = models.DateField(_("date"))
 
     class Meta:
         """Meta definition for GorkhapatraExam."""
@@ -104,20 +116,20 @@ class Question(models.Model):
     exam = models.ForeignKey(Exam, verbose_name=_(
         "exam"), related_name=_("questions"), on_delete=models.CASCADE)
     marks = models.DecimalField(
-        _("marks"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
+        _("marks"), max_digits=5, decimal_places=2, default=Decimal("2.0"))
     neg_marks = models.DecimalField(
-        _("neg_marks"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
+        _("neg_marks"), max_digits=5, decimal_places=2, default=Decimal("0.4"))
 
     class Meta:
         """Meta definition for Question."""
 
         verbose_name = 'Question'
         verbose_name_plural = 'Questions'
-        ordering = ['exam']
+        ordering = ['exam', 'id']
 
     def __str__(self):
         """Unicode representation of Question."""
-        return "{}_{}".format(self.exam, self.id)
+        return f"{self.exam}_{self.id}"
 
 
 class Option(models.Model):
@@ -137,11 +149,11 @@ class Option(models.Model):
 
         verbose_name = 'Option'
         verbose_name_plural = 'Options'
-        ordering = ['question']
+        ordering = ['question', 'id']
 
     def __str__(self):
         """Unicode representation of Option."""
-        return "{}_{}".format(self.question, self.id)
+        return f"{self.question}_{self.id}"
 
 
 class QuestionStatus(models.Model):
@@ -174,8 +186,4 @@ class QuestionStatus(models.Model):
 
     def __str__(self):
         """Unicode representation of QuestionStatus."""
-        return "option {} by {} for {}".format(
-            self.exam_stat,
-            self.question,
-            self.selected_option
-        )
+        return f"option {self.exam_stat} by {self.question} for {self.selected_option}"

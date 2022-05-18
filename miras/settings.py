@@ -20,6 +20,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False),
+    HTTPS_ENABLED=(bool, False),
     ALLOWED_HOSTS=(list, []),
     OTP_EXPIRY_SECONDS=(int, 60),
 )
@@ -47,10 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nested_admin',
+    'import_export',
 
     'rest_framework',
     'drf_yasg',
     'corsheaders',
+    'file_resubmit',
     'accounts',
     'courses',
     'enrollments',
@@ -61,6 +64,8 @@ INSTALLED_APPS = [
     'content',
     'contactus',
     'common',
+    'django_celery_results',
+    'import_export_celery',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'author.middlewares.AuthorDefaultBackendMiddleware',
 ]
 
 ROOT_URLCONF = 'miras.urls'
@@ -240,3 +246,41 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 SERVER_EMAIL = EMAIL_CONFIG['EMAIL_HOST_USER']
 ADMINS = [('atharva', 'miras@atharvatech.io')]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    "file_resubmit": {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        "LOCATION": '/tmp/file_resubmit/'
+    },
+}
+
+
+SWAGGER_SETTINGS = {
+    'DEFAULT_API_URL': env("SWAGGER_DEFAULT_API_URL", default=None),
+}
+# Celery settings
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='redis://localhost:6379')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND',
+                            default='redis://localhost:6379')
+# CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_BROKER_URL = 'amqp://rabbitmq'
+# CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kathmandu'
+
+HTTPS_ENABLED = env('HTTPS_ENABLED')
+
+if HTTPS_ENABLED:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+IMPORT_EXPORT_CELERY_INIT_MODULE = "miras.celery"
+
+IMPORT_EXPORT_CELERY_MODELS = {
+    "Enrollment": {"app_label": "enrollments", "model_name": "Enrollment"}
+}

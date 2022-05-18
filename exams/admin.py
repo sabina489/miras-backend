@@ -1,6 +1,9 @@
+from django import forms
 from django.contrib import admin
 
 import nested_admin
+
+from file_resubmit.admin import AdminResubmitMixin
 
 from .models import (
     Exam,
@@ -10,7 +13,14 @@ from .models import (
     MCQExam,
     GorkhapatraExam,
     Option,
+    Officer,
 )
+
+
+class OfficerAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    ordering = ('name',)
+    search_fields = ('name',)
 
 
 class CustomStackedInline(nested_admin.NestedStackedInline):
@@ -21,17 +31,38 @@ class CustomTabularInline(nested_admin.NestedTabularInline):
     template = "inlines/tabular.html"
 
 
-class OptionsInLine(CustomStackedInline):
+class OptionsAdminForm(forms.ModelForm):
+    class Meta:
+        model = Option
+        # fields = "__all__"
+        exclude = ("marks", "feedback",)
+        widgets = {
+            "detail": admin.widgets.AdminTextareaWidget(attrs={"rows": 2, "cols": 1, 'class': 'vTextField'}),
+        }
+
+
+class OptionsInLine(AdminResubmitMixin, nested_admin.NestedTabularInline):
     model = Option
     extra = 4
-    exclude = ('feedback',)
+    max_num = 6
+    form = OptionsAdminForm
 
 
-class QuestionInLine(CustomStackedInline):
+class QuestionAdminForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = "__all__"
+        widgets = {
+            "detail": admin.widgets.AdminTextareaWidget(attrs={"rows": 3, "cols": 2}),
+        }
+
+
+class QuestionInLine(AdminResubmitMixin, CustomStackedInline):
     model = Question
     inlines = [
         OptionsInLine,
     ]
+    form = QuestionAdminForm
 
 
 class ExamCommonAdmin(admin.ModelAdmin):
@@ -40,34 +71,36 @@ class ExamCommonAdmin(admin.ModelAdmin):
         return ", ".join([q.name for q in obj.category.all()])
 
     list_display = ('id', 'name', 'category_list',
-                    'course', 'kind', 'price', 'created_at',)
+                    'course',  'price', 'created_at',)
+    list_filter = ("course", "category")
+    autocomplete_fields = ("category", )
+    readonly_fields = ('id', 'created_at')
 
 
 class ExamAdmin(ExamCommonAdmin):
-    readonly_fields = ('id', 'created_at')
+    list_filter = ExamCommonAdmin.list_filter + ("kind",)
+    list_display = ExamCommonAdmin.list_display + ("kind",)
 
 
 class MockExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
-    readonly_fields = ('id', 'created_at')
     list_display = ExamCommonAdmin.list_display + ('timer',)
     inlines = [
         QuestionInLine,
     ]
+    autocomplete_fields = ExamCommonAdmin.autocomplete_fields + ("officer",)
 
 
 class MCQExamAdmin(ExamCommonAdmin, nested_admin.NestedModelAdmin):
-    readonly_fields = ('id', 'created_at')
     inlines = [
         QuestionInLine,
     ]
 
 
 class GorkhapatraExamAdmin(ExamCommonAdmin):
-    readonly_fields = ('id', 'created_at')
     list_display = ExamCommonAdmin.list_display + ('content',)
 
 
-class QuestionAdmin(admin.ModelAdmin):
+class QuestionAdmin(AdminResubmitMixin, admin.ModelAdmin):
     readonly_fields = ('id', )
     list_display = ('id', 'detail', 'exam',  'marks',)
     list_filter = ('exam', )
@@ -83,7 +116,7 @@ class QuestionStatusAdmin(admin.ModelAdmin):
     list_filter = ('question',)
 
 
-class OptionAdmin(admin.ModelAdmin):
+class OptionAdmin(AdminResubmitMixin, admin.ModelAdmin):
     readonly_fields = ('id', )
     list_display = ('id', 'question', 'detail', 'correct', 'marks',)
     list_filter = ('question',)
@@ -96,3 +129,4 @@ admin.site.register(MockExam, MockExamAdmin)
 admin.site.register(MCQExam, MCQExamAdmin)
 admin.site.register(GorkhapatraExam, GorkhapatraExamAdmin)
 admin.site.register(Option, OptionAdmin)
+admin.site.register(Officer, OfficerAdmin)

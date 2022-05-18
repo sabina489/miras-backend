@@ -11,7 +11,10 @@ class PartAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     list_display = ('id', 'name', 'course', 'price', 'detail',)
     list_filter = ('course',)
-    inlines = [NoteInline, RecordedVideoInline]
+    inlines = [
+        # NoteInline,
+        RecordedVideoInline
+    ]
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save(commit=False)

@@ -52,10 +52,17 @@ class Enrollment(models.Model):
         verbose_name = 'Enrollment'
         verbose_name_plural = 'Enrollments'
 
+    @classmethod
+    def export_resource_classes(cls):
+        from .resources import EnrollmentResource
+        return {
+            "enrollments": ("Enrollments resource", EnrollmentResource)
+        }
+
     def __str__(self):
         """Unicode representation of Enrollment."""
         # TODO: make this more readable for admin panel
-        return "{} at {}".format(self.student.__str__(), self.created_at)
+        return f"{self.student.__str__()} at {self.created_at}"
 # TODO: part status
 # TODO: notes status
 
@@ -68,6 +75,7 @@ class ExamStatus(models.Model):
         "exam"), related_name="exam_states", on_delete=models.CASCADE)
     score = models.DecimalField(
         _("score"), max_digits=5, decimal_places=2, default=Decimal("0.0"))
+    submitted = models.BooleanField(_("submitted"), default=False)
 
     class Meta:
         """Meta definition for ExamStatus."""
@@ -77,7 +85,4 @@ class ExamStatus(models.Model):
 
     def __str__(self):
         """Unicode representation of ExamStatus."""
-        return "enrollment {} for exam {}".format(
-            self.enrollment,
-            self.exam
-        )
+        return f"enrollment {self.enrollment} for exam {self.exam}"

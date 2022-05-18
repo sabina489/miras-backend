@@ -32,6 +32,7 @@ class CourseCategory(models.Model):
 
         verbose_name = 'CourseCategory'
         verbose_name_plural = 'CourseCategorys'
+        ordering = ["id"]
 
     def __str__(self):
         """Unicode representation of CourseCategory."""
@@ -60,10 +61,10 @@ class Course(models.Model):
     category = models.ForeignKey(CourseCategory, verbose_name=_(
         "category"), related_name="courses", on_delete=models.CASCADE)
     instructor = models.ForeignKey(User, verbose_name=_(
-        "instructor"), related_name="courses", on_delete=models.CASCADE)
-    link = models.URLField(_("link"), max_length=200)
+        "instructor"), related_name="courses", on_delete=models.CASCADE, blank=True, null=True)
+    link = models.URLField(_("link"), max_length=200, blank=True, null=True)
     password = models.CharField(_("password"), max_length=128, help_text=_(
-        "Use'[algo]$[salt]$[hexdigest]' or use the < a href=\"password/\">change password form</a>."))
+        "Use'[algo]$[salt]$[hexdigest]' or use the < a href=\"password/\">change password form</a>."), blank=True, null=True)
     status = models.CharField(
         _("status"), max_length=32, choices=CourseStatus.CHOICES,
         default=CourseStatus.UPCOMING)
@@ -73,7 +74,11 @@ class Course(models.Model):
     class_detail = models.TextField(_("class_detail"), null=True, blank=True)
     benefit_detail = models.TextField(
         _("benefit_detail"), null=True, blank=True)
-    video = models.URLField(_("video"), max_length=200, null=True, blank=True)
+    video = models.URLField(_("video"), null=True, blank=True)
+    how_to_pay = models.URLField(_("how_to_pay"), null=True, blank=True)
+    teachers_video = models.URLField(
+        _("teachers_video"), null=True, blank=True)
+
     price = models.DecimalField(_("price"), max_digits=7, decimal_places=2, default=Decimal("0.0"),
                                 validators=[validate_positive])
     start_date = models.DateField(
@@ -109,17 +114,26 @@ class CourseRequest(models.Model):
     """Model definition for CourseRequest."""
 
     course_name = models.CharField(_("Course Name"), max_length=200)
-    course_category = models.CharField(_("Course Category"), max_length=200)
-    requester_name = models.CharField(_("Requester Name"), max_length=200)
-    requester_email = models.EmailField(_("Requester Email"))
-    requester_phone = RegexValidator(
-        regex=r'^9\d{9}', message="Enter a valid phonenumber 9XXXXXXXXX")
+    course_category = models.ForeignKey(CourseCategory, verbose_name=_(
+        "category"), related_name="requests", on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, verbose_name=_(
+        "course"), related_name="requests", on_delete=models.CASCADE, blank=True, null=True)
     status = models.CharField(choices=CourseRequestStatus.CHOICES,
                               default=CourseRequestStatus.REQUEST, max_length=32)
     created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        User, verbose_name=_("created_by"), related_name="course_requests", on_delete=models.CASCADE)
+    voters = models.ManyToManyField(
+        User, related_name="course_requests_voters", blank=True)
 
     class Meta:
         ordering = ['created_at']
+
+    def number_of_votes(self):
+        return self.voters.count()
+
+    def has_voted(self, user):
+        return user in self.voters.all()
 
     def __str__(self):
         """Unicode representation of CourseRequest."""

@@ -46,5 +46,5 @@ class NoteSerializer(EnrolledSerializerMixin):
 
     def get_contents(self, obj):
         if self.get_is_enrolled_active(obj):
-            return ContentCourseListSerializer(obj.contents.all(), many=True).data
+            return ContentCourseListSerializer(obj.contents.all(), context=self.context, many=True).data
         return []

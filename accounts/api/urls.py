@@ -10,6 +10,7 @@ from accounts.api.views import (
     UserPasswordResetRequestAPIView,
     UserPasswordResetConfirmAPIView,
     UserResetPasswordOTPConfirmAPIView,
+    UserSendOTPAPIView,
 )
 
 
@@ -23,7 +24,11 @@ urlpatterns = [
     path('update/<int:pk>/', UserUpdateAPIView.as_view(), name='update'),
     path('get/<int:pk>/', UserRetrieveAPIView.as_view(), name='retrieve'),
     path('profile/', UserProfileAPIView.as_view(), name='profile'),
-    path('reset-password/', UserPasswordResetRequestAPIView.as_view(),name='reset-password'),
-    path('reset-password/confirm/', UserPasswordResetConfirmAPIView.as_view(),name='reset-password'),
-    path('reset-password/otp-confirm/', UserResetPasswordOTPConfirmAPIView.as_view(),name='reset-password'),
+    path('reset-password/', UserPasswordResetRequestAPIView.as_view(),
+         name='reset-password'),
+    path('reset-password/confirm/',
+         UserPasswordResetConfirmAPIView.as_view(), name='reset-password'),
+    path('reset-password/otp-confirm/',
+         UserResetPasswordOTPConfirmAPIView.as_view(), name='reset-password'),
+    path('send-otp/', UserSendOTPAPIView.as_view(), name='send-otp'),
 ]

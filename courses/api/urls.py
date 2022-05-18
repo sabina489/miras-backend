@@ -2,6 +2,10 @@ from django.urls import path
 
 from courses.api.views import (
     CourseListAPIView,
+    CourseRequestCreateAPIView,
+    CourseRequestListAPIView,
+    # CourseRequestViewCountAPIView,
+    CourseRequestVoteAPIView,
     CourseRetrieveAPIView,
     CourseCategoryListAPIView,
     CourseCategoryRetrieveAPIView,
@@ -13,5 +17,14 @@ urlpatterns = [
     path('list/', CourseListAPIView.as_view(), name='course-list-all'),
     path('categories/', CourseCategoryListAPIView.as_view(), name='category-list'),
     path('categories/<int:pk>', CourseCategoryRetrieveAPIView.as_view(),
-         name='category-retrieve')
+         name='category-retrieve'),
+]
+
+
+urlpatterns += [
+    path('request/create/', CourseRequestCreateAPIView.as_view(),
+         name='request-create'),
+    path('request/list/', CourseRequestListAPIView.as_view(), name='request-list'),
+    path('request/vote/<int:pk>/',
+         CourseRequestVoteAPIView.as_view(), name='request-vote'),
 ]

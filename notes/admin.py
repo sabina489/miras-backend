@@ -25,14 +25,19 @@ class NoteInline(admin.TabularInline):
 class NoteAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'created_by',)
     list_display = ('title', 'created_at',
-                    'price', 'courses', 'part')
-    list_filter = ('price', 'courses', 'part')
+                    'price', 'courses',
+                    # 'part'
+                    )
+    list_filter = (
+        'price',
+        'courses',
+        # 'part'
+    )
     inlines = [ContentInline, ]
 
     def save_model(self, request, obj, form, change):
-        if not change:
-            if not hasattr(obj, 'created_by'):
-                obj.created_by = request.user
+        if not change and not hasattr(obj, 'created_by'):
+            obj.created_by = request.user
         obj.save()
 
     def save_formset(self, request, form, formset, change):
@@ -44,5 +49,6 @@ class NoteAdmin(admin.ModelAdmin):
                 instance.created_by = request.user
             instance.save()
         formset.save_m2m()
+
 
 admin.site.register(Note, NoteAdmin)

@@ -133,7 +133,7 @@ class User(AbstractUser):
     @property
     def is_otp_time_valid(self):
         return self.otp_expiry > timezone.now()
-    
+
     @property
     def is_otp_reset_time_valid(self):
         return self.otp_reset_expiry > timezone.now()
@@ -143,6 +143,9 @@ class User(AbstractUser):
 
     def validate_otp_reset(self, value):
         return int(self.otp_reset) == value
+
+    def __str__(self):
+        return f"{self.phone}({self.get_full_name()})"
 
 
 def image_upload_location(instance, filename):
